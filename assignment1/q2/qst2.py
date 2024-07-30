@@ -4,6 +4,7 @@ import sys
 import numpy as np
 
 def add_noise(img, density):
+
     row, col, ch = img.shape
     
     num_pixels = int(density * row * col)
