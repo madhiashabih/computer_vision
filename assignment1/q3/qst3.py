@@ -9,12 +9,20 @@ def read_image(image):
 
 def save_image(image, path):
     output = Image.fromarray(image)
-    output.save(f'assignment1/q3/{path}')
-    
-img = cv2.imread('assignment1/q3/fruits.jpeg')
-blurImg = cv2.blur(img,(10,10))
+    output.save(f'{path}')
 
-img = read_image(img)
+### img = Image.open('/home/madhia/computer_vision/assignment1/q3/fruits.jpeg')    
+
+img = cv2.imread('fruits.jpeg')
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+### Grayscale
+gr_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+save_image(gr_img, 'gr.jpeg')
+
+blurImg = cv2.blur(gr_img,(10,10))
+
+img = read_image(gr_img)
 print(img)
 blurImg = read_image(blurImg)
 print(blurImg)
