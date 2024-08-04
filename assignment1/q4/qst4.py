@@ -2,31 +2,34 @@ import numpy as np
 from PIL import Image
 import cv2
 import math 
-### take a colour image as input and scale (resize) it by a given factor s
+import matplotlib.pyplot as plt
 
-### Read in input and store it as an array
-def read_image(image):
-    img_array = np.array(image)
-    return img_array
-
-def save_image(image, path):
-    output = Image.fromarray(image)
-    output.save(f'{path}')
+### Take a colour image as input and scale (resize) it by a given factor s. ###
 
 # Read in image
-img = cv2.imread('cat.jpeg')
-img = read_image(img)
+img = cv2.imread('fruits.jpeg', cv2.IMREAD_COLOR)
+
+k = 2
 
 height, width, channels = img.shape
 
-k = 2
-### Initialize scaled image
+# Set the size of the new image
+col = img.shape[1] * k
+row = img.shape[0] * k 
+
+# Initialize scaled image
 result = np.zeros((k*height, k*width, channels), dtype=np.uint8)
 
+# Nearest Neighbour Interpolation
 for i in range(height):
     for j in range(width):
-        result[k*i][k*j] = img[i][j] 
+        result[k*i][k*j] = img[i][j]
+        result[(k*i)-1][k*j] = img[i][j]
+        result[k*i][(k*j)-1] = img[i][j]
+        result[(k*i)-1][(k*j)-1] = img[i][j]
 
-# result = k * img 
+cv2.imwrite('output_fruit.jpeg', result)
 
-save_image(result, 'final.jpeg')
+
+
+
