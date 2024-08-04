@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 # Read in image
 img = cv2.imread('fruits.jpeg', cv2.IMREAD_COLOR)
 
-k = 2
+k = 3
 
 height, width, channels = img.shape
 
@@ -23,10 +23,11 @@ result = np.zeros((k*height, k*width, channels), dtype=np.uint8)
 # Nearest Neighbour Interpolation
 for i in range(height):
     for j in range(width):
-        result[k*i][k*j] = img[i][j]
-        result[(k*i)-1][k*j] = img[i][j]
-        result[k*i][(k*j)-1] = img[i][j]
-        result[(k*i)-1][(k*j)-1] = img[i][j]
+        for n in range(k):
+            result[k*i][k*j] = img[i][j]
+            # result[(k*i)-n][k*j] = img[i][j]
+            # result[k*i][(k*j)-n] = img[i][j]
+            # result[(k*i)-n][(k*j)-n] = img[i][j]
 
 cv2.imwrite('output_fruit.jpeg', result)
 
