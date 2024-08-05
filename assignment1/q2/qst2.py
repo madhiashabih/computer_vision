@@ -2,6 +2,27 @@ import cv2
 import numpy as np
 import sys
 
+def median_filter(image, w):
+    # Ensure w is odd
+    if w % 2 == 0:
+        w += 1
+    
+    # Pad the image
+    pad = w // 2
+    padded_image = np.pad(image, ((pad, pad), (pad, pad), (0, 0)), mode='reflect')
+    
+    # Create output image
+    output = np.zeros_like(image)
+    
+    # Apply median filter to each channel
+    for c in range(image.shape[2]):  # Iterate over channels
+        for i in range(image.shape[0]):
+            for j in range(image.shape[1]):
+                neighborhood = padded_image[i:i+w, j:j+w, c]
+                output[i, j, c] = np.median(neighborhood)
+    
+    return output
+
 def add_salt_and_pepper(image, density):
     noisy = np.copy(image)
     num_salt = np.ceil(density * image.size * 0.5).astype(int)
@@ -24,6 +45,14 @@ def process_image(image_path, density):
     # Process color
     noisy_color = cv2.merge([add_salt_and_pepper(channel, density) for channel in cv2.split(img)])
     cv2.imwrite('output_color.jpg', noisy_color)
+    
+    # Apply median filter
+    filtered_img = median_filter(noisy_color, 3)
+    
+    # Save the result
+    cv2.imwrite('median_filtered.jpg', filtered_img)
+
+    
 
 def main():
     if len(sys.argv) != 3:
