@@ -49,7 +49,7 @@ def bl_resize(original_img, new_h, new_w):
 			resized[i,j,:] = q
 	return resized.astype(np.uint8)
 
-img = cv2.imread('fruits.jpeg', cv2.IMREAD_COLOR)
+img = cv2.imread('cat.jpeg', cv2.IMREAD_COLOR)
 k = 2
 output = bl_resize(img, k * img.shape[0], k * img.shape[1])
 cv2.imwrite('output_bi.jpeg', output)
