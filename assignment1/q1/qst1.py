@@ -1,28 +1,18 @@
 import numpy as np
 from PIL import Image
 
-# Read in greenscreen image
-image_path = 'greenscreen.jpg'
-image = Image.open(image_path)
-img_array = np.array(image)
+def remove_greenscreen(fg_path, bg_path, output_path):
+    # Load images
+    fg = np.array(Image.open(fg_path).convert('RGB'))
+    bg = np.array(Image.open(bg_path).convert('RGB').resize(Image.open(fg_path).size))
 
-# Seperate the channels
-image = image.convert('RGB')
-r, g, b = img_array[:,:,0], img_array[:,:,1], img_array[:,:,2]
+    # Create mask
+    mask = (fg[:,:,1] >= 160) & (fg[:,:,0] < 60)
 
-mask = g >= 160
-mask = mask & (r < 60) 
-inverted_mask = ~mask
+    # Combine foreground and background
+    result = np.where(mask[:,:,np.newaxis], bg, fg)
 
-output = np.zeros_like(img_array)
-output[inverted_mask] = img_array[inverted_mask]
+    # Save result
+    Image.fromarray(result).save(output_path)
 
-background = Image.open('background.png')
-background = background.convert('RGB')
-background = background.resize(image.size)
-background_array = np.array(background)
-
-result_array = np.where(mask[:,:,np.newaxis], background_array, output)
-
-result = Image.fromarray(result_array)
-result.save('output.png')
+remove_greenscreen('greenscreen.jpg', 'background.png', 'output.png')

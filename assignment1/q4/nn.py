@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 # Read in image
 img = cv2.imread('fruits.jpeg', cv2.IMREAD_COLOR)
 
-k = 3
+k = 2
 
 height, width, channels = img.shape
 
@@ -25,11 +25,15 @@ for i in range(height):
     for j in range(width):
         for n in range(k):
             result[k*i][k*j] = img[i][j]
+            for l in range (k*i - (k-1), k*i):
+                for m in range (k*j - (k-1), k*j):
+                    print('l: {} and m: {}', l, m)
+                    result[l][m] = img[i][j]
             # result[(k*i)-n][k*j] = img[i][j]
             # result[k*i][(k*j)-n] = img[i][j]
             # result[(k*i)-n][(k*j)-n] = img[i][j]
 
-cv2.imwrite('output_fruit.jpeg', result)
+cv2.imwrite('output_nn.jpeg', result)
 
 
 
