@@ -1,58 +1,50 @@
-import random
 import cv2
-import sys
 import numpy as np
+import sys
 
-def add_noise(img, density):
+def add_salt_and_pepper(image, density):
+    noisy = np.copy(image)
+    num_salt = np.ceil(density * image.size * 0.5).astype(int)
+    coords = [np.random.randint(0, i - 1, num_salt) for i in image.shape]
+    noisy[tuple(coords)] = 255
+    coords = [np.random.randint(0, i - 1, num_salt) for i in image.shape]
+    noisy[tuple(coords)] = 0
+    return noisy
 
-    row, col, ch = img.shape
+def process_image(image_path, density):
+    img = cv2.imread(image_path)
+    if img is None:
+        raise FileNotFoundError(f"Cannot read image file: {image_path}")
     
-    num_pixels = int(density * row * col)
+    # Process grayscale
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    noisy_gray = add_salt_and_pepper(gray, density)
+    cv2.imwrite('output_gray.jpg', noisy_gray)
     
-    # Salt noise
-    salt_coords = [
-        (random.randint(0, row - 1), random.randint(0, col - 1))
-        for _ in range(num_pixels // 2)
-    ]
-    img[tuple(zip(*salt_coords))] = 255
-    
-    # Pepper noise
-    pepper_coords = [
-        (random.randint(0, row - 1), random.randint(0, col - 1))
-        for _ in range(num_pixels // 2)
-    ]
-    img[tuple(zip(*pepper_coords))] = 0
-    
-    return img
+    # Process color
+    noisy_color = cv2.merge([add_salt_and_pepper(channel, density) for channel in cv2.split(img)])
+    cv2.imwrite('output_color.jpg', noisy_color)
 
 def main():
     if len(sys.argv) != 3:
-        print("Usage: python script.py <noise_ratio> <input_image_path>")
+        print("Usage: python script.py <image_path> <noise_density>")
         sys.exit(1)
     
+    image_path = sys.argv[1]
     try:
-        density = float(sys.argv[1])
+        density = float(sys.argv[2])
         if not 0 <= density <= 1:
-            raise ValueError("Noise ratio must be between 0 and 1")
+            raise ValueError("Noise density must be between 0 and 1")
     except ValueError as e:
-        print(f"Invalid noise ratio: {e}")
+        print(f"Invalid noise density: {e}")
         sys.exit(1)
-    
-    input_path = sys.argv[2]
     
     try:
-        img = cv2.imread(input_path, cv2.IMREAD_COLOR)
-        if img is None:
-            raise FileNotFoundError(f"Could not read the image: {input_path}")
-    except Exception as e:
-        print(f"Error reading image: {e}")
+        process_image(image_path, density)
+        print("Processing complete. Check output_gray.jpg and output_color.jpg")
+    except FileNotFoundError as e:
+        print(e)
         sys.exit(1)
-    
-    noisy_img = add_noise(img, density)
-    
-    output_path = 'salt-and-pepper-output.jpg'
-    cv2.imwrite(output_path, noisy_img)
-    print(f"Noisy image saved as {output_path}")
 
 if __name__ == "__main__":
     main()
