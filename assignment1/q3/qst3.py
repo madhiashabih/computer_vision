@@ -38,31 +38,16 @@ def apply_unsharp_mask(image, blur_size=(2, 2), strength=1.0):
     # Clip values to valid range
     return np.clip(sharpened, 0, 255).astype(np.uint8), normalized_mask
 
-def main(input_path, output_path, mask_path, blur_size=(2, 2), strength=1.0):
-    try:
-        # Read image
-        img = read_image(input_path)
+blur_size=(2, 2) 
+strength=1.0
+   
+# Read image
+img = read_image('cat.jpeg')
 
-        # Apply unsharp mask
-        sharpened, mask = apply_unsharp_mask(img, blur_size, strength)
+# Apply unsharp mask
+sharpened, mask = apply_unsharp_mask(img, blur_size, strength)
 
-        # Save results
-        save_image(sharpened, output_path)
-        save_image(mask, mask_path)
+# Save results
+save_image(sharpened, 'output.jpg')
+save_image(mask, 'mask.jpg')
 
-        print(f"Sharpened image saved as {output_path}")
-        print(f"Mask image saved as {mask_path}")
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
-
-if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser(description="Apply unsharp mask to an image")
-    parser.add_argument("input", help="Path to input image")
-    parser.add_argument("output", help="Path for output sharpened image")
-    parser.add_argument("mask", help="Path for output mask image")
-    parser.add_argument("--blur", nargs=2, type=int, default=[2, 2], help="Blur kernel size (default: 2 2)")
-    parser.add_argument("--strength", type=float, default=1.0, help="Strength of sharpening effect (default: 1.0)")
-    args = parser.parse_args()
-
-    main(args.input, args.output, args.mask, tuple(args.blur), args.strength)
