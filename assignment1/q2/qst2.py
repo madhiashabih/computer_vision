@@ -9,34 +9,40 @@ def add_salt_and_pepper(image, density):
     return image
 
 def median_filter(image, w):
-    return cv2.medianBlur(image, w)
+    height, width = image.shape[:2]
+    pad = w // 2
+    padded_img = np.pad(image, ((pad, pad), (pad, pad), (0, 0)), mode='edge')
+    filtered_img = np.zeros_like(image)
+    
+    for i in range(height):
+        for j in range(width):
+            window = padded_img[i:i+w, j:j+w]
+            filtered_img[i, j] = np.median(window, axis=(0, 1))
+    
+    return filtered_img
 
 def process_image(image_path, density):
     img = cv2.imread(image_path)
     if img is None:
+    
         raise FileNotFoundError(f"Cannot read image file: {image_path}")
     
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     noisy_gray = add_salt_and_pepper(gray, density)
-    cv2.imwrite('output_gray.jpg', noisy_gray)
+    path = 'output_gray {:.2f}.jpg'.format(density)
+    cv2.imwrite(path, noisy_gray)
     
     noisy_color = np.apply_along_axis(lambda x: add_salt_and_pepper(x, density), 2, img)
-    cv2.imwrite('output_color.jpg', noisy_color)
+    path = 'output_color {:.2f}.jpg'.format(density)
+    cv2.imwrite(path, noisy_color)
     
-    filtered_img = median_filter(noisy_color, 3)
-    cv2.imwrite('median_filtered.jpg', filtered_img)
+    filter = 2
+    filtered_img = median_filter(noisy_color, filter)
+    path = 'output_filtered {:.2f} {:.2f}.jpg'.format(density, filter)
+    cv2.imwrite(path, filtered_img)
 
-def main():
-    if len(sys.argv) != 3:
-        print("Usage: python script.py <image_path> <noise_density>")
-        sys.exit(1)
-    
-    try:
-        process_image(sys.argv[1], float(sys.argv[2]))
-        print("Processing complete. Check output files.")
-    except (ValueError, FileNotFoundError) as e:
-        print(f"Error: {e}")
-        sys.exit(1)
-
-if __name__ == "__main__":
-    main()
+if len(sys.argv) != 2:
+    print("Usage: python script.py <noise_density>")
+    sys.exit(1)
+process_image('jean_weight.jpeg', float(sys.argv[1]))
+        
