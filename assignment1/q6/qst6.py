@@ -1,117 +1,86 @@
 import numpy as np
-from PIL import Image
 import cv2
-import math 
 import matplotlib.pyplot as plt
 
-# Source: https://meghal-darji.medium.com/implementing-bilinear-interpolation-for-image-resizing-357cbb2c2722
-
-def detect_features(image, nfeatures=500):
-    """
-    Detect ORB features in an image.
-    
-    Args:
-    image_path (str): Path to the input image.
-    nfeatures (int): Number of features to detect.
-    
-    Returns:
-    tuple: (keypoints, descriptors)
-    """
-    orb = cv2.ORB_create(nfeatures=nfeatures)
-    keypoints, descriptors = orb.detectAndCompute(image, None)
-    return keypoints, descriptors
-
-def match_features(desc1, desc2, threshold=0.7):
-    """
-    Match features between two sets of descriptors.
-    
-    Args:
-    desc1, desc2 (np.array): Descriptors from two images.
-    threshold (float): Ratio test threshold for good matches.
-    
-    Returns:
-    list: Good matches.
-    """
-    bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-    matches = bf.match(desc1, desc2)
-    matches = sorted(matches, key=lambda x: x.distance)
-    good_matches = matches[:int(len(matches) * threshold)]
-    return good_matches
-
-def visualize_matches(img1, img2, kp1, kp2, matches):
-    """
-    Visualize matching features between two images.
-    
-    Args:
-    img1_path, img2_path (str): Paths to the input images.
-    kp1, kp2 (list): Keypoints from two images.
-    matches (list): List of good matches.
-    """
-    
-    match_img = cv2.drawMatches(img1, kp1, img2, kp2, matches, None,
-                                flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-    
-    plt.figure(figsize=(20,10))
-    plt.imshow(match_img)
-    plt.axis('off')
-    plt.show()
-
 def bl_resize(original_img, new_h, new_w):
-	#get dimensions of original image
-	old_h, old_w, c = original_img.shape
-	#create an array of the desired shape. 
-	#We will fill-in the values later.
-	resized = np.zeros((new_h, new_w, c))
-	#Calculate horizontal and vertical scaling factor
-	w_scale_factor = (old_w ) / (new_w ) if new_h != 0 else 0
-	h_scale_factor = (old_h ) / (new_h ) if new_w != 0 else 0
-	for i in range(new_h):
-		for j in range(new_w):
-			#map the coordinates back to the original image
-			x = i * h_scale_factor
-			y = j * w_scale_factor
-			#calculate the coordinate values for 4 surrounding pixels.
-			x_floor = math.floor(x)
-			x_ceil = min( old_h - 1, math.ceil(x))
-			y_floor = math.floor(y)
-			y_ceil = min(old_w - 1, math.ceil(y))
+    old_h, old_w, c = original_img.shape
+    resized = np.zeros((new_h, new_w, c), dtype=np.uint8)
+    w_scale = old_w / new_w
+    h_scale = old_h / new_h
 
-			if (x_ceil == x_floor) and (y_ceil == y_floor):
-				q = original_img[int(x), int(y), :]
-			elif (x_ceil == x_floor):
-				q1 = original_img[int(x), int(y_floor), :]
-				q2 = original_img[int(x), int(y_ceil), :]
-				q = q1 * (y_ceil - y) + q2 * (y - y_floor)
-			elif (y_ceil == y_floor):
-				q1 = original_img[int(x_floor), int(y), :]
-				q2 = original_img[int(x_ceil), int(y), :]
-				q = (q1 * (x_ceil - x)) + (q2	 * (x - x_floor))
-			else:
-				v1 = original_img[x_floor, y_floor, :]
-				v2 = original_img[x_ceil, y_floor, :]
-				v3 = original_img[x_floor, y_ceil, :]
-				v4 = original_img[x_ceil, y_ceil, :]
+    for i in range(new_h):
+        for j in range(new_w):
+            x, y = i * h_scale, j * w_scale
+            x0, x1 = int(np.floor(x)), min(old_h - 1, int(np.ceil(x)))
+            y0, y1 = int(np.floor(y)), min(old_w - 1, int(np.ceil(y)))
 
-				q1 = v1 * (x_ceil - x) + v2 * (x - x_floor)
-				q2 = v3 * (x_ceil - x) + v4 * (x - x_floor)
-				q = q1 * (y_ceil - y) + q2 * (y - y_floor)
+            if x0 == x1 and y0 == y1:
+                q = original_img[x0, y0]
+            elif x0 == x1:
+                q = original_img[x0, y0] * (y1 - y) + original_img[x0, y1] * (y - y0)
+            elif y0 == y1:
+                q = original_img[x0, y0] * (x1 - x) + original_img[x1, y0] * (x - x0)
+            else:
+                q1 = original_img[x0, y0] * (x1 - x) + original_img[x1, y0] * (x - x0)
+                q2 = original_img[x0, y1] * (x1 - x) + original_img[x1, y1] * (x - x0)
+                q = q1 * (y1 - y) + q2 * (y - y0)
 
-			resized[i,j,:] = q
-	return resized.astype(np.uint8)
+            resized[i, j] = q
 
-A = cv2.imread('semper1.jpg', cv2.IMREAD_COLOR)
-k = 2
-B = bl_resize(A, k * A.shape[0], k * A.shape[1])
-cv2.imwrite('output.jpeg', B)
+    return resized
 
-# Detect features
-kp1, desc1 = detect_features(A, nfeatures=100)
-kp2, desc2 = detect_features(B, nfeatures=100)
-    
-# Match features
-good_matches = match_features(desc1, desc2, threshold=0.7)
-    
-# Visualize matches
-visualize_matches(A, B, kp1, kp2, good_matches)
+# Load the images
+query_img = cv2.imread('semper1.jpg')
+train_img = cv2.imread('semper2.jpg')
 
-print(f"Number of matches: {len(good_matches)}")
+# Convert to grayscale
+query_img_gray = cv2.cvtColor(query_img, cv2.COLOR_BGR2GRAY)
+
+# Initialize SIFT detector
+sift = cv2.SIFT_create()
+
+# Detect keypoints and compute descriptors in the original image
+queryKeypoints, queryDescriptors = sift.detectAndCompute(query_img_gray, None)
+
+# Create a BFMatcher
+matcher = cv2.BFMatcher()
+
+# Initialize a list to store the accuracy for each scale factor
+accuracy_list = []
+
+# Iterate over scale factors from 0.1 to 3.0 with a step of 0.1
+for scale in np.arange(0.1, 3.0, 0.1):
+    # Resize the image
+    img_resized = bl_resize(query_img, int(query_img.shape[0] * scale), int(query_img.shape[1] * scale))
+
+    # Detect keypoints and compute descriptors in the resized image
+    rescaleKeypoints, rescaleDescriptors = sift.detectAndCompute(img_resized, None)
+
+    # Match descriptors using BFMatcher
+    matches = matcher.match(queryDescriptors, rescaleDescriptors)
+
+    # Sort matches by distance (best matches first)
+    matches = sorted(matches, key=lambda x: x.distance)
+
+    # Initialize correct match count
+    correct_matches = 0
+
+    # Calculate the match accuracy
+    for match in matches[:100]:
+        # Get the keypoint locations
+        (x1, y1) = rescaleKeypoints[match.trainIdx].pt
+        (x2, y2) = queryKeypoints[match.queryIdx].pt
+        calculated = (x1 / scale, y1 / scale)
+        if np.sqrt((x2 - calculated[0])**2 + (y2 - calculated[1])**2) < 5:
+            correct_matches += 1
+
+    accuracy = correct_matches / len(matches[:100]) * 100
+    accuracy_list.append(accuracy)
+    print(f"Accuracy at scale {scale:.1f}: {accuracy:.2f}%")
+
+# Plot the accuracy as a function of scale factor
+plt.plot(np.arange(0.1, 3.0, 0.1), accuracy_list)
+plt.xlabel("Scale Factor")
+plt.ylabel("Accuracy (%)")
+plt.title("Match Accuracy vs Scale Factor")
+plt.show()

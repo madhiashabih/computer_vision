@@ -1,7 +1,7 @@
 import numpy as np
 from PIL import Image
 
-def nearest_neighbor_resize(image, scale_factor):
+def nn_resize(image, scale_factor):
     # Get original image dimensions
     height, width, channels = image.shape
     
@@ -27,19 +27,16 @@ def nearest_neighbor_resize(image, scale_factor):
     
     return resized
 
-# Example usage
-if __name__ == "__main__":
-    # Load an image
-    input_image = np.array(Image.open("fruits.jpeg"))
+
+# Load an image
+input_image = np.array(Image.open("fruits.jpeg"))
     
-    # Resize the image
-    scale_factor = 3 
-    resized_image = nearest_neighbor_resize(input_image, scale_factor)
+# Resize the image
+scale_factor = 3 
+resized_image = nn_resize(input_image, scale_factor)
     
-    # Save the resized image
-    Image.fromarray(resized_image).save("output_nn_{:.2f}.jpg".format(scale_factor))
+# Save the resized image
+Image.fromarray(resized_image).save("output_nn_{:.2f}.jpg".format(scale_factor))
     
-    print(f"Original size: {input_image.shape}")
-    print(f"Resized to: {resized_image.shape}")
 
 
