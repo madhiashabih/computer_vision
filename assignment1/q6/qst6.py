@@ -29,6 +29,28 @@ def bl_resize(original_img, new_h, new_w):
 
     return resized
 
+def calculate_accuracy(matches, queryKeypoints, rescaleKeypoints, scale):
+    correct_matches = 0
+
+    for match in matches:
+        # Get the keypoints from the match
+        query_idx = match.queryIdx
+        rescale_idx = match.trainIdx
+        
+        # Get the original and resized keypoints
+        query_pt = queryKeypoints[query_idx].pt
+        rescale_pt = rescaleKeypoints[rescale_idx].pt
+        
+        # Calculate the scaled keypoint position
+        scaled_query_pt = (query_pt[0] * scale, query_pt[1] * scale)
+        
+        # Check if the match is correct (within a certain threshold)
+        if np.linalg.norm(np.array(scaled_query_pt) - np.array(rescale_pt)) < 5:  # Threshold of 5 pixels
+            correct_matches += 1
+    
+    accuracy = correct_matches / len(matches) if matches else 0
+    return accuracy
+
 # Load the images
 query_img = cv2.imread('semper1.jpg')
 train_img = cv2.imread('semper2.jpg')
@@ -45,8 +67,9 @@ queryKeypoints, queryDescriptors = sift.detectAndCompute(query_img_gray, None)
 # Create a BFMatcher
 matcher = cv2.BFMatcher()
 
-# Initialize a list to store the accuracy for each scale factor
-accuracy_list = []
+# Lists to store scale factors and corresponding accuracies
+scales = []
+accuracies = []
 
 # Iterate over scale factors from 0.1 to 3.0 with a step of 0.1
 for scale in np.arange(0.1, 3.0, 0.1):
@@ -61,26 +84,39 @@ for scale in np.arange(0.1, 3.0, 0.1):
 
     # Sort matches by distance (best matches first)
     matches = sorted(matches, key=lambda x: x.distance)
+    
+    # Calculate accuracy
+    accuracy = calculate_accuracy(matches, queryKeypoints, rescaleKeypoints, scale)
+    
+    # Store the scale and accuracy
+    scales.append(scale)
+    accuracies.append(accuracy)
 
-    # Initialize correct match count
-    correct_matches = 0
+    print(f"Scale: {scale:.1f}, Accuracy: {accuracy:.2%}")
 
-    # Calculate the match accuracy
-    for match in matches[:100]:
-        # Get the keypoint locations
-        (x1, y1) = rescaleKeypoints[match.trainIdx].pt
-        (x2, y2) = queryKeypoints[match.queryIdx].pt
-        calculated = (x1 / scale, y1 / scale)
-        if np.sqrt((x2 - calculated[0])**2 + (y2 - calculated[1])**2) < 5:
-            correct_matches += 1
+# Visualize the top 10 matches
+img_matches = cv2.drawMatches(query_img, queryKeypoints, img_resized, rescaleKeypoints, matches[:10], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS,  singlePointColor=None, matchesMask=None, thickness=3)
 
-    accuracy = correct_matches / len(matches[:100]) * 100
-    accuracy_list.append(accuracy)
-    print(f"Accuracy at scale {scale:.1f}: {accuracy:.2f}%")
+# Convert BGR to RGB for displaying with matplotlib
+img_matches_rgb = cv2.cvtColor(img_matches, cv2.COLOR_BGR2RGB)
 
-# Plot the accuracy as a function of scale factor
-plt.plot(np.arange(0.1, 3.0, 0.1), accuracy_list)
-plt.xlabel("Scale Factor")
-plt.ylabel("Accuracy (%)")
-plt.title("Match Accuracy vs Scale Factor")
+# Display the matches
+plt.figure(figsize=(12, 6))
+plt.imshow(img_matches_rgb)
+plt.title(f"Keypoint Matches at Scale Factor {scale}")
+plt.show()  
+
+# Plotting the accuracy against scale factors
+plt.figure(figsize=(10, 6))
+plt.plot(scales, accuracies, marker='o', linestyle='-', color='b')
+plt.title('Accuracy vs Scale Factor')
+plt.xlabel('Scale Factor')
+plt.ylabel('Accuracy')
+plt.grid(True)
 plt.show()
+
+  
+    	
+   
+
+

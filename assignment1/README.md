@@ -18,3 +18,7 @@
 5. Question 5
 3.1. cd ~/q5
 3.2. Run 'python3 qst5.py'
+
+6. Question 6
+3.1. cd ~/q6
+3.2. Run 'python3 qst6.py'
