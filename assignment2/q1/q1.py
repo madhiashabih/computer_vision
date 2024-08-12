@@ -2,7 +2,7 @@ import numpy as np
 from applyhomography import applyhomography
 import math
 from PIL import Image
-import cv2 
+
 # Transforms a colour image of your choice with a few different similarities 
 # Equation: x = Hx,
 
@@ -11,32 +11,22 @@ import cv2
 image = Image.open('afghanGirl.jpg')
 image = np.array(image) 
 
-scale = np.array([
-    [2, 0, 0], 
-    [0, 2, 0],
-    [0, 0, 1]
-])
+s_vals = [0.5, 1, 2]
+tx_vals = [0.5, 1, 2]
+ty_vals = [0.5, 1, 2]
 
-translation = np.array([
-    [1, 0, 2],
-    [0, 1, 2],
-    [0, 0, 1]
-])
-rotation = ([
-    [math.cos(math.pi/4), -math.sin(math.pi/4), 0],
-    [math.sin(math.pi/4), math.cos(math.pi/4),  0],
-    [0, 0, 1]
-])
+for s in s_vals:
+    for tx in tx_vals:
+        for ty in ty_vals:
+            similarities = np.array([
+                [s*math.cos(math.pi/4), -s*math.sin(math.pi/4), tx],
+                [s*math.sin(math.pi/4), s*math.cos(math.pi/4),  ty],
+                [0, 0, 1]
+            ])
 
-scaled = applyhomography(image, scale)
-translated = applyhomography(image, translation)
-rotation = applyhomography(image, rotation)
+        transformed = applyhomography(image, similarities)
 
-output = Image.fromarray(scaled)
-output.save('scaled.jpg')
+        output = Image.fromarray(transformed.astype('uint8'))
+        output.save(f'similar_{s}_{tx}_{ty}.jpg')
 
-output = Image.fromarray(translated)
-output.save('translated.jpg')
 
-output = Image.fromarray(rotation)
-output.save('rotation.jpg')
