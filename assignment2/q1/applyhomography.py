@@ -19,7 +19,6 @@ def applyhomography(A,H):
            located at point (1-minx, 1-miny) in the output image (why?).
         
     '''
-    
     # cast the input image to double precision floats
     A = A.astype(float)
     

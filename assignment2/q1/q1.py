@@ -2,14 +2,15 @@ import numpy as np
 from applyhomography import applyhomography
 import math
 from PIL import Image
+import cv2 
 # Transforms a colour image of your choice with a few different similarities 
 # Equation: x = Hx,
 
 # https://ryansblog2718281.medium.com/image-processing-projective-transformation-c6795af1c11
 
 image = Image.open('afghanGirl.jpg')
-image = image.convert('RGB')
-#image = np.array(image) 
+image = np.array(image) 
+
 scale = np.array([
     [2, 0, 0], 
     [0, 2, 0],
@@ -27,8 +28,15 @@ rotation = ([
     [0, 0, 1]
 ])
 
-output = applyhomography(scale, image)
+scaled = applyhomography(image, scale)
+translated = applyhomography(image, translation)
+rotation = applyhomography(image, rotation)
 
-#output = Image.fromarray(output)
-output.save('output.jpg')
+output = Image.fromarray(scaled)
+output.save('scaled.jpg')
 
+output = Image.fromarray(translated)
+output.save('translated.jpg')
+
+output = Image.fromarray(rotation)
+output.save('rotation.jpg')
