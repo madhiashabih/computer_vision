@@ -27,6 +27,6 @@ for s in s_vals:
         transformed = applyhomography(image, similarities)
 
         output = Image.fromarray(transformed.astype('uint8'))
-        output.save(f'similar_{s}_{tx}_{ty}.jpg')
+        output.save(f'output/similar_{s}_{tx}_{ty}.jpg')
 
 
