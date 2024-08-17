@@ -1,7 +1,7 @@
 # Fdb version 3
-["pdflatex"] 1723478246 "/home/madhia/computer_vision/assignment2/report.tex" "report.pdf" "report" 1723478247
+["pdflatex"] 1723926780 "/home/madhia/computer_vision/assignment2/report.tex" "report.pdf" "report" 1723926780
   "/etc/texmf/web2c/texmf.cnf" 1710496023 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/madhia/computer_vision/assignment2/report.tex" 1723478230 2972 15f1e4baffa91ebd295a58b1a26a5835 ""
+  "/home/madhia/computer_vision/assignment2/report.tex" 1723926780 6885 8cbdf345fca17e7baaf953533ebbb575 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbr10.tfm" 1136768653 1304 95ad082f6791446dc43df559d5c79878 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbr17.tfm" 1136768653 1292 864850248589e7d3af41afc829d0eaf3 ""
@@ -62,8 +62,15 @@
   "q1/output/similar_2_0.5_2.jpg" 1723471679 347829 e4895b1b01d84bd9fc0ef8e4006d8568 ""
   "q1/output/similar_2_1_2.jpg" 1723471738 347344 f6fa50ade59e42394607ae0aa0de5d4c ""
   "q1/output/similar_2_2_2.jpg" 1723471800 347322 66f833322dc7d3a50ecc914a8fa3bfca ""
-  "report.aux" 1723478247 645 352fb9a2b2330bdc1ab75a97b5fd9788 "pdflatex"
-  "report.tex" 1723478230 2972 15f1e4baffa91ebd295a58b1a26a5835 ""
+  "q2/amuse.jpg" 1723738602 444141 87ebda8956eb67072f96f1e12ccacac4 ""
+  "q2/output/output.jpg" 1723918591 62051 b2eba16cf1697c75b8297494c84f4507 ""
+  "q2/output/output_same.jpg" 1723925330 60512 edb14cd10544fa2d2cfa94588e80d0e4 ""
+  "q2/output/output_small.jpg" 1723925411 58775 0e67b7fb18cd4573452db79f6e113c91 ""
+  "q2/output/transform.jpg" 1723918591 22432 b31d29edfc2015412e0a1090abc32cfe ""
+  "q2/output/transform_same.jpg" 1723925330 21040 8dc27b50a78aa947eee44bfdebb5c891 ""
+  "q2/output/transform_small.jpg" 1723925411 19178 b5c858a3bbcac9069ddc6ba051666662 ""
+  "report.aux" 1723926780 1619 c224c733cd9fc75696e9ec8b2cc8b666 "pdflatex"
+  "report.tex" 1723926780 6885 8cbdf345fca17e7baaf953533ebbb575 ""
   (generated)
   "report.aux"
   "report.log"

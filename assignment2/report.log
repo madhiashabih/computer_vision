@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.7.27)  12 AUG 2024 17:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.7.27)  17 AUG 2024 22:33
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -187,7 +187,20 @@ LaTeX Info: Redefining \LaTeXe on input line 139.
 LaTeX Font Info:    Trying to load font information for OT1+cmbr on input line 144.
  (/usr/share/texlive/texmf-dist/tex/latex/cmbright/ot1cmbr.fd
 File: ot1cmbr.fd 2005/04/13 v8.1 (WaS)
-)) (./report.aux)
+)) (./report.aux
+
+LaTeX Warning: Label `fig 1' multiply defined.
+
+
+LaTeX Warning: Label `sub@fig 1' multiply defined.
+
+
+LaTeX Warning: Label `fig 1' multiply defined.
+
+
+LaTeX Warning: Label `sub@fig 1' multiply defined.
+
+)
 \openout1 = `report.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 44.
@@ -326,6 +339,22 @@ LaTeX Font Info:    Trying to load font information for OT1+cmtl on input line 1
  (/usr/share/texlive/texmf-dist/tex/latex/cmbright/ot1cmtl.fd
 File: ot1cmtl.fd 2005/04/13 v8.1 (WaS)
 )
+<q2/amuse.jpg, id=10, 1405.25pt x 2007.5pt>
+File: q2/amuse.jpg Graphic file (type jpg)
+<use q2/amuse.jpg>
+Package pdftex.def Info: q2/amuse.jpg  used on input line 116.
+(pdftex.def)             Requested size: 140.53323pt x 200.76175pt.
+<q2/output/transform.jpg, id=11, 283.0575pt x 499.8675pt>
+File: q2/output/transform.jpg Graphic file (type jpg)
+<use q2/output/transform.jpg>
+Package pdftex.def Info: q2/output/transform.jpg  used on input line 121.
+(pdftex.def)             Requested size: 28.3074pt x 49.98967pt.
+<q2/output/output.jpg, id=12, 529.98pt x 706.64pt>
+File: q2/output/output.jpg Graphic file (type jpg)
+<use q2/output/output.jpg>
+Package pdftex.def Info: q2/output/output.jpg  used on input line 128.
+(pdftex.def)             Requested size: 158.99521pt x 211.99364pt.
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 12.49998pt, for example:
@@ -335,20 +364,58 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
- <./q1/output/similar_0.5_0.5_2.jpg> <./q1/output/similar_0.5_1_2.jpg> <./q1/output/similar_0.5_2_2.jpg> <./q1/output/similar_1_0.5_2.jpg> <./q1/output/similar_1_1_2.jpg> <./q1/output/similar_1_2_2.jpg> <./q1/output/similar_2_0.5_2.jpg> <./q1/output/similar_2_1_2.jpg> <./q1/output/similar_2_2_2.jpg>] (./report.aux) ) 
+ <./q1/output/similar_0.5_0.5_2.jpg> <./q1/output/similar_0.5_1_2.jpg> <./q1/output/similar_0.5_2_2.jpg> <./q1/output/similar_1_0.5_2.jpg> <./q1/output/similar_1_1_2.jpg> <./q1/output/similar_1_2_2.jpg> <./q1/output/similar_2_0.5_2.jpg> <./q1/output/similar_2_1_2.jpg> <./q1/output/similar_2_2_2.jpg>]
+LaTeX Font Info:    Font shape `OT1/cmbr/b/n' in size <10> not available
+(Font)              Font shape `OT1/cmbr/bx/n' tried instead on input line 137.
+ [2 <./q2/amuse.jpg> <./q2/output/transform.jpg> <./q2/output/output.jpg>]
+<q2/output/transform_same.jpg, id=26, 283.0575pt x 499.8675pt>
+File: q2/output/transform_same.jpg Graphic file (type jpg)
+<use q2/output/transform_same.jpg>
+Package pdftex.def Info: q2/output/transform_same.jpg  used on input line 163.
+(pdftex.def)             Requested size: 141.5284pt x 249.93314pt.
+<q2/output/output_same.jpg, id=27, 529.98pt x 706.64pt>
+File: q2/output/output_same.jpg Graphic file (type jpg)
+<use q2/output/output_same.jpg>
+Package pdftex.def Info: q2/output/output_same.jpg  used on input line 168.
+(pdftex.def)             Requested size: 264.98933pt x 353.31914pt.
+
+Overfull \hbox (119.87881pt too wide) in paragraph at lines 168--169
+ [][] 
+ []
+
+<q2/output/transform_small.jpg, id=28, 282.05376pt x 500.87125pt>
+File: q2/output/transform_small.jpg Graphic file (type jpg)
+<use q2/output/transform_small.jpg>
+Package pdftex.def Info: q2/output/transform_small.jpg  used on input line 180.
+(pdftex.def)             Requested size: 141.02652pt x 250.435pt.
+<q2/output/output_small.jpg, id=29, 529.98pt x 706.64pt>
+File: q2/output/output_small.jpg Graphic file (type jpg)
+<use q2/output/output_small.jpg>
+Package pdftex.def Info: q2/output/output_small.jpg  used on input line 185.
+(pdftex.def)             Requested size: 264.98933pt x 353.31914pt.
+
+Overfull \hbox (119.87881pt too wide) in paragraph at lines 185--186
+ [][] 
+ []
+
+[3 <./q2/output/transform_same.jpg> <./q2/output/output_same.jpg>] [4 <./q2/output/transform_small.jpg> <./q2/output/output_small.jpg>] (./report.aux)
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
 Here is how much of TeX's memory you used:
- 4146 strings out of 478287
- 76979 string characters out of 5849289
- 458385 words of memory out of 5000000
- 22305 multiletter control sequences out of 15000+600000
- 473982 words of font info for 44 fonts, out of 8000000 for 9000
+ 4201 strings out of 478287
+ 78337 string characters out of 5849289
+ 459449 words of memory out of 5000000
+ 22352 multiletter control sequences out of 15000+600000
+ 474277 words of font info for 45 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  68i,11n,77p,342b,490s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hftl10.pfb>
-Output written on report.pdf (1 page, 1555294 bytes).
+Output written on report.pdf (4 pages, 2260167 bytes).
 PDF statistics:
- 42 PDF objects out of 1000 (max. 8388607)
- 19 compressed objects within 1 object stream
+ 58 PDF objects out of 1000 (max. 8388607)
+ 25 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 46 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 81 words of extra memory for PDF output out of 10000 (max. 10000000)
 
