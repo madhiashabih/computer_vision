@@ -51,6 +51,7 @@ def find_homography(pts_src, pts_dst):
         A.append([-x, -y, -1, 0, 0, 0, u*x, u*y, u])
         A.append([0, 0, 0, -x, -y, -1, v*x, v*y, v])
     A = np.array(A)
+    print(A)
     _, _, Vh = np.linalg.svd(A)
     L = Vh[-1, :] / Vh[-1, -1]
     return L.reshape(3, 3)
@@ -64,7 +65,7 @@ building = np.array(Image.open('griest.jpg'))
 # n_h = 350
 # resized_poster = poster.resize((n_w, n_h), Image.Resampling.LANCZOS)
 
-poster = np.array(resized_poster)
+poster = np.array(poster)
 
 h, w, _ = poster.shape
 
@@ -72,6 +73,7 @@ pts_dst = np.array([[106, 246], [315, 124], [35, 621], [313, 561]])
 pts_src = np.array([[0, 0], [w-1, 0], [0, h-1], [w-1, h-1]])
 
 H = find_homography(pts_src, pts_dst)
+print(H)
 transformed = apply_homography(poster, H)
 
 # Compensate the paste operation using the offset
