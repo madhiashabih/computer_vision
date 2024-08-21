@@ -1,94 +1,9 @@
-# import cv2
-# import numpy as np
-# from estimate_homography_ransac import estimate_homography_ransac
-# # from applyhomography import a
-# from plot_inliers import plot_inliers
-
-# data = []
-# with open('peroldsift12.txt', 'r') as file:
-#     for line in file:
-#         row = [float(x) for x in line.strip().split()]
-#         data.append(row)
-
-# src_pts = np.array([[x,y] for x, y, x_, y_ in data], dtype=np.float32)
-# dst_pts = np.array([[x_,y_] for x, y, x_, y_ in data], dtype=np.float32)
-
-# src_img = cv2.imread('perold1.jpg')
-# dst_img = cv2.imread('perold2.jpg')
-
-# combined_img = np.hstack((src_img, dst_img))
-
-# for i, (x, y, x_, y_) in enumerate(data):
-#     cv2.line(combined_img, (int(x), int(y)), (int(x_) + src_img.shape[1], int(y_)), (0, 255, 0), 1)
-
-# cv2.imwrite('output.jpg', combined_img)
-
-# H, inliers = estimate_homography_ransac(src_pts, dst_pts)
-
-# for i in inliers:
-#     x, y, x_, y_ = data[i]
-#     cv2.line(combined_img, (int(x), int(y)), (int(x_) + src_img.shape[1], int(y_)), (0, 255, 0), 1)
-    
-# cv2.imwrite('output_2.jpg', combined_img)
-
 import cv2
 import matplotlib.pyplot as plt 
 import numpy as np
 import random
 plt.rcParams['figure.figsize'] = [15, 15]
 
-# Read image and convert it to gray 
-def read_image(path):
-    img = cv2.imread(path)
-    img_gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    return img_gray, img, img_rgb
-
-left_gray, left_origin, left_rgb = read_image('perold1.jpg')
-right_gray, right_origin, right_rgb = read_image('perold2.jpg')
-
-def SIFT(img):
-    siftDetector = cv2.SIFT_create()
-    kp, des = siftDetector.detectAndCompute(img, None)
-    return kp, des
-
-def plot_sift(gray, rgb, kp):
-    tmp = rgb.copy()
-    img = cv2.drawKeypoints(gray, kp, tmp, flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-    return img
-
-kp_left, des_left = SIFT(left_gray)
-kp_right, des_right = SIFT(right_gray)
-
-kp_left_img = plot_sift(left_gray, left_rgb, kp_left)
-kp_right_img = plot_sift(right_gray, right_rgb, kp_right)
-
-plt.figure(figsize=(15, 15))
-plt.subplot(1, 2, 1)
-plt.imshow(kp_left_img)
-plt.subplot(1, 2, 2)
-plt.imshow(kp_right_img)
-plt.show()
-
-def matcher(kp1, des1, img1, kp2, des2, img2, threshold):
-    # BFMatcher with default params
-    bf = cv2.BFMatcher()
-    matches = bf.knnMatch(des1,des2, k=2)
-
-    # Apply ratio test
-    good = []
-    for m,n in matches:
-        if m.distance < threshold*n.distance:
-            good.append([m])
-
-    matches = []
-    for pair in good:
-        matches.append(list(kp1[pair[0].queryIdx].pt + kp2[pair[0].trainIdx].pt))
-
-    matches = np.array(matches)
-    return matches     
-
-matches = matcher(kp_left, des_left, left_rgb, kp_right, des_right, right_rgb, 0.5)
 def plot_matches(matches, total_img):
     match_img = total_img.copy()
     offset = total_img.shape[1]/2
@@ -104,8 +19,6 @@ def plot_matches(matches, total_img):
 
     plt.show()
     
-total_img = np.concatenate((left_rgb, right_rgb), axis=1)
-plot_matches(matches, total_img) # Good mathces
 def homography(pairs):
     rows = []
     for i in range(pairs.shape[0]):
@@ -139,6 +52,26 @@ def get_error(points, H):
 
     return errors
 
+# Read the data from the text file
+data = []
+with open('peroldsift12.txt', 'r') as file:
+    for line in file:
+        row = [float(x) for x in line.strip().split()]
+        data.append(row)
+
+# Extract the (x, y) and (x', y') coordinates
+src_pts = np.array([[x, y] for x, y, x_, y_ in data], dtype=np.float32)
+dst_pts = np.array([[x_, y_] for x, y, x_, y_ in data], dtype=np.float32)
+
+# Load the source and destination images
+src_img = cv2.imread('perold1.jpg')
+dst_img = cv2.imread('perold2.jpg')
+matches = np.hstack((src_pts, dst_pts))
+
+# Create a combined image with the source and destination images side-by-side
+combined_img = np.hstack((src_img, dst_img))
+plot_matches(matches, combined_img)
+
 def ransac(matches, threshold, iters):
     num_best_inliers = 0
     
@@ -164,5 +97,5 @@ def ransac(matches, threshold, iters):
     return best_inliers, best_H
 
 inliers, H = ransac(matches, 0.5, 2000)
-plot_matches(inliers, total_img) # show inliers matches
+plot_matches(inliers, combined_img) 
 
