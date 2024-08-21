@@ -256,62 +256,80 @@
 \maketitle
 \section{Question 1}
 
-\texttt{q1.py} performs a series of projective transformations (specifically similarity transformations) on an image. The key steps and functionality are as follows:
+\texttt{q1.py} performs a series of similarity transformations on an image. The key steps and functionality are as follows:
 
 \begin{itemize}
-    \item The necessary libraries are imported, including \texttt{numpy} for numerical operations, \texttt{applyhomography} for applying homography transformations, \texttt{math} for mathematical operations, and \texttt{PIL} (Python Imaging Library) for image processing.
-    \item The image \texttt{afghanGirl.jpg} is loaded and converted to a NumPy array.
-    \item Three lists of scaling factors ($s$), and translation values ($tx$ and $ty$) are defined.
+    \item The image is loaded and converted to a NumPy array.
+    \item Four lists of scaling factors ($s$), translation values ($tx$ and $ty$) and dividing values ($d$) are defined.
     \item The code iterates over all combinations of these values to create a series of similarity transformation matrices using the following formula:
     \[
     H = \begin{bmatrix}
-    s \cos(\pi/4) & -s \sin(\pi/4) & tx \\
-    s \sin(\pi/4) & s \cos(\pi/4) & ty \\
+    s \cos(\pi/d) & -s \sin(\pi/d) & tx \\
+    s \sin(\pi/d) & s \cos(\pi/d) & ty \\
     0 & 0 & 1
     \end{bmatrix}
     \]
     \item For each transformation matrix $H$, the \texttt{applyhomography} function is applied to the image to produce a transformed image.
-    \item The transformed images are saved with filenames indicating the parameters used in the transformation, such as \texttt{output/similar\_s\_tx\_ty.jpg}.
 \end{itemize}
 
 \begin{figure}[H]
     \centering
     \begin{subfigure}{.3\textwidth}
         \centering
-        \includegraphics[scale=0.04]{q1/output/similar_0.5_0.5_2.jpg}
-        \subcaption{x-translation value of 0.5}
+        \includegraphics[scale=0.04]{q1/output/similar_d:_3_s:_0.5.jpg}
+        \subcaption{Scaling factor of 0.5}
     \end{subfigure}
     \begin{subfigure}{.3\textwidth}
         \centering
-        \includegraphics[scale=0.04]{q1/output/similar_0.5_1_2.jpg}
-        \subcaption{x-translation value of 1}
+        \includegraphics[scale=0.04]{q1/output/similar_d:_3_s:_1.jpg}
+        \subcaption{Scaling factor of 1}
     \end{subfigure}
     \begin{subfigure}{.3\textwidth}
         \centering
-        \includegraphics[scale=0.04]{q1/output/similar_0.5_2_2.jpg}
-        \subcaption{x-translation value of 2}
+        \includegraphics[scale=0.04]{q1/output/similar_d:_3_s:_2.jpg}
+        \subcaption{Scaling factor of 2}
     \end{subfigure}
-    \caption{Scaling factor of 0.5 and y-translation value of 2}
+    \caption{Rotation by \(\pi/3\) with translations of 1 unit in both the \(x\) and \(y\) directions}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \begin{subfigure}{.3\textwidth}
         \centering
-        \includegraphics[scale=0.04]{q1/output/similar_1_0.5_2.jpg}
-        \subcaption{x-translation value of 0.5}
+        \includegraphics[scale=0.04]{q1/output/similar_d:_4_s:_0.5.jpg}
+        \subcaption{Scaling factor of 0.5}
     \end{subfigure}
     \begin{subfigure}{.3\textwidth}
         \centering
-        \includegraphics[scale=0.04]{q1/output/similar_1_1_2.jpg}
-        \subcaption{x-translation value of 1}
+        \includegraphics[scale=0.04]{q1/output/similar_d:_4_s:_1.jpg}
+        \subcaption{Scaling factor of 1}
     \end{subfigure}
     \begin{subfigure}{.3\textwidth}
         \centering
-        \includegraphics[scale=0.04]{q1/output/similar_1_2_2.jpg}
-        \subcaption{x-translation value of 2}
+        \includegraphics[scale=0.04]{q1/output/similar_d:_4_s:_2.jpg}
+        \subcaption{Scaling factor of 2}
     \end{subfigure}
-    \caption{Scaling factor of 1 and y-translation value of 2}
+    \caption{Rotation by \(\pi/4\) with translations of 1 unit in both the \(x\) and \(y\) directions}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{.3\textwidth}
+        \centering
+        \includegraphics[scale=0.04]{q1/output/similar_d:_6_s:_0.5.jpg}
+        \subcaption{Scaling factor of 0.5}
+    \end{subfigure}
+    \begin{subfigure}{.3\textwidth}
+        \centering
+        \includegraphics[scale=0.04]{q1/output/similar_d:_6_s:_1.jpg}
+        \subcaption{Scaling factor of 1}
+    \end{subfigure}
+    \begin{subfigure}{.3\textwidth}
+        \centering
+        \includegraphics[scale=0.04]{q1/output/similar_d:_6_s:_2.jpg}
+        \subcaption{Scaling factor of 2}
+    \end{subfigure}
+    \caption{Rotation by \(\pi/6\) with translations of 1 unit in both the \(x\) and \(y\) directions}
 \end{figure}
 
 \begin{figure}[H]
@@ -319,32 +337,31 @@
     \begin{subfigure}{.3\textwidth}
         \centering
         \includegraphics[scale=0.04]{q1/output/similar_2_0.5_2.jpg}
-        \subcaption{x-translation value of 0.5}
+        \subcaption{0.5 translation in x direction}
     \end{subfigure}
     \begin{subfigure}{.3\textwidth}
         \centering
         \includegraphics[scale=0.04]{q1/output/similar_2_1_2.jpg}
-        \subcaption{x-translation value of 1}
+        \subcaption{1 translation in x direction}
     \end{subfigure}
     \begin{subfigure}{.3\textwidth}
         \centering
         \includegraphics[scale=0.04]{q1/output/similar_2_2_2.jpg}
-        \subcaption{x-translation value of 2}
+        \subcaption{2 translation in x direction}
     \end{subfigure}
-    \caption{Scaling factor of 2 and y-translation value of 2}
+    \caption{Rotation by \(\pi/4\), scaling factor of 2 and translation of 1 unit in the \(y\) direction}
 \end{figure}
 
 \subsection{Interpretation}
 The \texttt{applyhomography.py} function is designed to compensate for the shift in the output image's origin. The code transforms the four corners of the input image using the homography matrix H. 
 It then finds the minimum and maximum x and y coordinates. The size of the output image is then set to encompass all these points. 
-This is why we do not see an impact of the translations on the image. 
+This is why we do not see an impact of the translations on the images. 
 
 %%%%%%%%%%%%%%%%%%%%
 \section{Question 2}
 \texttt{q2.py} performs a homography transformation on an image and pastes it onto another image. Below is a detailed breakdown:
 
 \begin{itemize}
-    \item \textbf{Libraries Used:} The code utilizes \texttt{numpy}, \texttt{numpy.linalg}, and \texttt{PIL.Image} for numerical operations, linear algebra, and image processing, respectively.
     
     \item \textbf{apply\_homography Function:} 
     \begin{itemize}
@@ -360,14 +377,13 @@ This is why we do not see an impact of the translations on the image.
         \item It sets up a system of linear equations and solves it using Singular Value Decomposition (SVD) to find the homography matrix.
     \end{itemize}
     
-    \item \textbf{Image Processing:}
+    \item 
     \begin{itemize}
         \item The code loads a poster image and a building image.
         \item It defines source points from the poster and corresponding destination points on the building image.
         \item The homography matrix is calculated using these points.
         \item The poster is transformed using the homography matrix, and the resulting image is then pasted onto the building image.
         \item A mask is created to ensure only non-white pixels of the transformed image are pasted.
-        \item The final composite image is saved as \texttt{output.jpg}, and the transformed poster is saved as \texttt{transform.jpg}.
     \end{itemize}
 \end{itemize}
 
@@ -390,6 +406,7 @@ This is why we do not see an impact of the translations on the image.
         \caption{Building with Movie Poster}  
         \label{fig 2}
     \end{subfigure}
+    \caption{Pasting a transformed movie poster onto a building}
 \end{figure}
 
 \subsection{Interpretation}
@@ -412,25 +429,25 @@ shift by 35 and 124 units respectively. This offset ensures that the transformed
 % output. Experiment with this idea, and include in your report a short explanation of the issue of aliasing
 % in image interpolation.
 
+\subsection{Experimentation}
 The original image is of size 1400 x 2000 and the building image is of size 528 x 704. 
 \subsubsection{Case 1 : Large Input Image}
-As one can observe in \ref{fig 1} and \ref{fig 2}. 
-As one can observe, there are aliasing artifacts such as jagged edges and loss of fine detail. The downscaling process during the transformation 
-fails to adequately capture the high frequency content. 
+I mantain the original poster size as it is already quite large. As one can observe, there are aliasing artifacts such as jagged edges and loss of fine detail. The downscaling process during the transformation 
+fails to capture the high frequency content. 
 
 \subsubsection{Case 2 : Input Image of Same Size}
-The input image was changed to 528 x 704 to resemble the size of the output image.
+I changed the input image to a size of 528 x 704 to resemble the size of the output image.
 As one can observe, the image suffers from minimal aliasing. 
 
 \subsubsection{Case 3 : Small Input Image}
-The input image was now 250 x 350. The output poster is more blurred, but there are not as much aliasing 
+The input image was now 250 x 350. The output poster is more blurred, but there is not as much aliasing 
 artifacts as there were when the image was larger.
 
 \begin{figure}[H]\centering
     \begin{tikzpicture}[
         zoomboxarray,black and white=cycle,
     ]
-        \node [image node] { \includegraphics[width=0.45\textwidth]{q2/output/output.jpg} };
+        \node [image node] { \includegraphics[width=0.4\textwidth]{q2/output/output.jpg} };
         \zoombox{0.5,0.5}
         \zoombox[color code=red,magnification=6]{0.3,0.3}
         \zoombox{0.42,0.45}
@@ -442,7 +459,7 @@ artifacts as there were when the image was larger.
     \begin{tikzpicture}[
         zoomboxarray,black and white=cycle,
     ]
-        \node [image node] { \includegraphics[width=0.45\textwidth]{q2/output/output_same.jpg} };
+        \node [image node] { \includegraphics[width=0.4\textwidth]{q2/output/output_same.jpg} };
         \zoombox{0.5,0.5}
         \zoombox[color code=red,magnification=6]{0.3,0.3}
         \zoombox{0.42,0.45}
@@ -454,7 +471,7 @@ artifacts as there were when the image was larger.
     \begin{tikzpicture}[
         zoomboxarray,black and white=cycle,
     ]
-        \node [image node] { \includegraphics[width=0.45\textwidth]{q2/output/output_small.jpg} };
+        \node [image node] { \includegraphics[width=0.4\textwidth]{q2/output/output_small.jpg} };
         \zoombox{0.5,0.5}
         \zoombox[color code=red,magnification=6]{0.3,0.3}
         \zoombox{0.42,0.45}
@@ -466,16 +483,37 @@ artifacts as there were when the image was larger.
 
 %%%%%%%%%%%%%%%%%%%%
 \section{Question 3}
+\texttt{q3.py} changes the perspective we view the 3D art in \texttt{bricks.jpg} so that we view it as if we were viewing it from the top.
+The \texttt{find\_homography} function computes the homography matrix used to transform points from a source image to a destination image.
+
+\begin{itemize}
+    \item \textbf{Matrix Construction:} The function creates a matrix \texttt{A} from the source and destination points. Each pair of corresponding points generates two rows of \texttt{A}, based on specific linear equations.
+    \item \textbf{Singular Value Decomposition (SVD):} The matrix \texttt{A} is decomposed using SVD. The last row of the resulting matrix \texttt{Vh} provides the components needed to calculate the homography matrix.
+    \item \textbf{Homography Matrix:} The final homography matrix is obtained from the last row of \texttt{Vh}, normalized by its last element. This matrix is reshaped into a $3 \times 3$ format.
+\end{itemize}
+
+\subsection*{Applying the Homography}
+
+The code then performs the following steps:
+
+\begin{itemize}
+    \item \textbf{Read and Convert Image:} The input image is read using OpenCV and converted to the RGB color space.
+    \item \textbf{Define Points:} Source and destination points are defined for the homography transformation.
+    \item \textbf{Compute Homography:} The homography matrix is computed using the previously defined function.
+    \item \textbf{Apply Homography:} The image is transformed using the computed homography matrix.
+    \item \textbf{Save Output:} The transformed image is saved after converting it back to the BGR color space.
+\end{itemize}
+
 \begin{figure}[H]
     \centering
     \begin{subfigure}{.3\textwidth}
         \centering
-        \includegraphics[scale=0.2]{q3/bricks.jpg}
+        \includegraphics[width=\textwidth]{q3/bricks.jpg}
         \subcaption{Original Image}
     \end{subfigure}
     \begin{subfigure}{.3\textwidth}
         \centering
-        \includegraphics[scale=0.2]{q3/output.jpg}
+        \includegraphics[width=\textwidth]{q3/output.jpg}
         \subcaption{Perspective of 3D Art from above}  
         \label{fig 1}
     \end{subfigure}
