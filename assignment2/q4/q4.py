@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 plt.rcParams['figure.figsize'] = [15, 15]
+from applyhomography import applyhomography
+from PIL import Image 
 
 def plot_matches(matches, total_img):
     match_img = total_img.copy()
@@ -64,13 +66,16 @@ src_pts = np.array([[x, y] for x, y, x_, y_ in data], dtype=np.float32)
 dst_pts = np.array([[x_, y_] for x, y, x_, y_ in data], dtype=np.float32)
 
 # Load the source and destination images
-src_img = cv2.imread('perold1.jpg')
-dst_img = cv2.imread('perold2.jpg')
+src_img = cv2.imread('perold1.jpg', cv2.IMREAD_COLOR)
+src_img = cv2.cvtColor(src_img, cv2.COLOR_BGR2RGB)
+dst_img = cv2.imread('perold2.jpg', cv2.IMREAD_COLOR)
+dst_img = cv2.cvtColor(dst_img, cv2.COLOR_BGR2RGB)
+
 matches = np.hstack((src_pts, dst_pts))
 
 # Create a combined image with the source and destination images side-by-side
 combined_img = np.hstack((src_img, dst_img))
-plot_matches(matches, combined_img)
+#plot_matches(matches, combined_img)
 
 def ransac(matches, threshold, iters):
     num_best_inliers = 0
@@ -97,5 +102,26 @@ def ransac(matches, threshold, iters):
     return best_inliers, best_H
 
 inliers, H = ransac(matches, 0.5, 2000)
-plot_matches(inliers, combined_img) 
+#plot_matches(inliers, combined_img) 
+
+### Stitching
+# Transform the destination image 
+minx, miny, transformed = applyhomography(src_img, H)
+transformed = cv2.convertScaleAbs(transformed)
+
+minx = int(640 + minx)
+miny = int(480 + miny)
+
+
+# Create a new image with the size of the base image
+#result = np.zeros_like(dst_img)
+
+# Copy the base image onto the result
+#result[:] = dst_img
+
+crop_img = transformed[0:transformed.shape[0], minx:transformed.shape[1]]
+
+# Save the result
+cv2.imwrite("cropped.jpg", crop_img)
+
 

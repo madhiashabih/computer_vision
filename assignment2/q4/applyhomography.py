@@ -67,4 +67,4 @@ def applyhomography(A,H):
                             +  (xp - xpf)*(yp - ypf)*A[ypc,xpc,:] \
 
 
-    return B.astype(np.uint8)
+    return minx, miny, B.astype(np.uint8)
