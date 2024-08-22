@@ -542,9 +542,8 @@ Applying the homography warps the trapezium to fit into the square region, trans
 
 %%%%%%%%%%%%%%%%%%%%
 \section{Question 4}
-\section*{Code Explanation}
 
-\texttt{q4.py} performs image stitching using homography estimation and the RANSAC algorithm.
+\texttt{q4.py} performs image stitching using homography estimation and the RANSAC algorithm. The key steps are as follows: 
 
 \begin{itemize}
 
@@ -568,8 +567,7 @@ Applying the homography warps the trapezium to fit into the square region, trans
 
     \item \textbf{Image Stitching:}
     \begin{itemize}
-        \item Apply the computed homography to the source image, crop it, and stitch it with the destination image.
-        \item Save the transformed and stitched images.
+        \item Overlay the destination image onto the transformed image.
     \end{itemize}
 \end{itemize}
 
@@ -609,8 +607,9 @@ The final output is a stitched image combining the transformed source and destin
 The raw set of matches in the feature matching contains both correct and incorrect correspondences.
 RANSAC (Random Sample Consensus) eliminates the number of outliers. The remaining inlier matches is 
 a reliable basis for computing the homography. I also ensured the correct handling of the transformed 
-image's origin, so the stitched image appears as a natrual extension of the scene without awkward
-cropping or misallignment.
+image's origin using \texttt{minx} and \texttt{miny}. I placed the transformed image onto a newly initialized image.
+I placed the destination image beginning at the point \texttt{x-offset}. I adjusted the destination image 
+upwards by the \texttt{y-offset}. This helped the stitched image appears as a natural extension.
 
 \nocite{*}
 \bibliographystyle{plain}

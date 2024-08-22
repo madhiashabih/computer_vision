@@ -120,11 +120,8 @@ stitched = np.zeros((max_y, max_x, 3), dtype=np.uint8)
 
 y_offset = max(0, -int(miny))
 
-#stitched[y_offset:y_offset+dst_img.shape[0], :dst_img.shape[1]] = dst_img
 stitched[:transformed.shape[0], 0:transformed.shape[1]] = transformed
 stitched[y_offset:y_offset+dst_img.shape[0], crop_img.shape[1]:] = dst_img
-#stitched[:crop_img.shape[0], 0:crop_img.shape[1]] = crop_img
-
 
 # Change black pixels to white
 black_pixels = np.all(stitched == [0, 0, 0], axis=-1)
