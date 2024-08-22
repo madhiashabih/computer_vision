@@ -6,6 +6,7 @@ plt.rcParams['figure.figsize'] = [15, 15]
 from applyhomography import applyhomography
 from PIL import Image 
 
+# https://gist.github.com/tigercosmos/90a5664a3b698dc9a4c72bc0fcbd21f4
 def plot_matches(matches, total_img):
     match_img = total_img.copy()
     offset = total_img.shape[1]/2
@@ -67,9 +68,9 @@ dst_pts = np.array([[x_, y_] for x, y, x_, y_ in data], dtype=np.float32)
 
 # Load the source and destination images
 src_img = cv2.imread('perold1.jpg', cv2.IMREAD_COLOR)
-src_img = cv2.cvtColor(src_img, cv2.COLOR_BGR2RGB)
+#src_img = cv2.cvtColor(src_img, cv2.COLOR_BGR2RGB)
 dst_img = cv2.imread('perold2.jpg', cv2.IMREAD_COLOR)
-dst_img = cv2.cvtColor(dst_img, cv2.COLOR_BGR2RGB)
+#dst_img = cv2.cvtColor(dst_img, cv2.COLOR_BGR2RGB)
 
 matches = np.hstack((src_pts, dst_pts))
 
@@ -104,39 +105,33 @@ def ransac(matches, threshold, iters):
 inliers, H = ransac(matches, 0.5, 2000)
 #plot_matches(inliers, combined_img) 
 
-### Stitching
+### Stitching ###
 # Transform the destination image 
 minx, miny, transformed = applyhomography(src_img, H)
 transformed = cv2.convertScaleAbs(transformed)
 
 minx = int(640 + minx)
-miny = int(480 + miny)
 
 crop_img = transformed[0:transformed.shape[0], 0:minx]
 
 max_y = max(crop_img.shape[0], dst_img.shape[0])
-print(max_y)
 max_x = crop_img.shape[1] + dst_img.shape[1]
-print(max_x)
-
 stitched = np.zeros((max_y, max_x, 3), dtype=np.uint8)
 
+y_offset = max(0, -int(miny))
 
-#stitched = np.zeros((max(crop_img.shape[0], dst_img.shape[0]), crop_img.shape[1] + dst_img.shape[1], 3), dtype=np.uint8)
-# Place the transformed image
-stitched[0:crop_img.shape[0], 0:crop_img.shape[1]] = crop_img
+#stitched[y_offset:y_offset+dst_img.shape[0], :dst_img.shape[1]] = dst_img
+stitched[:transformed.shape[0], 0:transformed.shape[1]] = transformed
+stitched[y_offset:y_offset+dst_img.shape[0], crop_img.shape[1]:] = dst_img
+#stitched[:crop_img.shape[0], 0:crop_img.shape[1]] = crop_img
 
-# Place the destination image
-stitched[0:dst_img.shape[0], crop_img.shape[1]:] = dst_img
-# Create a new image with the size of the base image
-#result = np.zeros_like(dst_img)
 
-# Copy the base image onto the result
-#result[:] = dst_img
+# Change black pixels to white
+black_pixels = np.all(stitched == [0, 0, 0], axis=-1)
+stitched[black_pixels] = [255, 255, 255]
 
-# Save the result
-cv2.imwrite("cropped.jpg", crop_img)
+cv2.imwrite("output/transformed.jpg", transformed)
 
-cv2.imwrite("stitched.jpg", stitched)
+cv2.imwrite("output/stitched.jpg", stitched)
 
 
