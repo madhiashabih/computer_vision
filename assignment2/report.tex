@@ -255,7 +255,7 @@
 \maketitle
 \section{Question 1}
 
-\texttt{q1.py} performs a series of similarity transformations on an image. The key steps and functionality are as follows:
+\texttt{q1.py} performs a series of similarity transformations on an image. The key steps are as follows:
 
 \begin{itemize}
     \item The image is loaded and converted to a NumPy array.
@@ -348,17 +348,18 @@
         \includegraphics[scale=0.04]{q1/output/similar_2_2_2.jpg}
         \subcaption{2 translation in x direction}
     \end{subfigure}
+    \label{fig:4}
     \caption{Rotation by \(\pi/4\), scaling factor of 2 and translation of 1 unit in the \(y\) direction}
 \end{figure}
 
 \subsection{Interpretation}
 The \texttt{applyhomography.py} function is designed to compensate for the shift in the output image's origin. The code transforms the four corners of the input image using the homography matrix H. 
 It then finds the minimum and maximum x and y coordinates. The size of the output image is then set to encompass all these points. 
-This is why we do not see an impact of the translations on the images. 
+This is why we do not see an impact of the translations on the images (see Figure 4). 
 
 %%%%%%%%%%%%%%%%%%%%
 \section{Question 2}
-\texttt{q2.py} performs a homography transformation on an image and pastes it onto another image. Below is a detailed breakdown:
+\texttt{q2.py} performs a homography transformation on an image and pastes it onto another image. The key steps are as follows:
 
 \begin{itemize}
     
@@ -432,15 +433,15 @@ shift by 35 and 124 units respectively. This offset ensures that the transformed
 The original image is of size 1400 x 2000 and the building image is of size 528 x 704. 
 \subsubsection{Case 1 : Large Input Image}
 I mantain the original poster size as it is already quite large. As one can observe, there are aliasing artifacts such as jagged edges and loss of fine detail. The downscaling process during the transformation 
-fails to capture the high frequency content. 
+fails to capture the high frequency content (see Figure 6). 
 
 \subsubsection{Case 2 : Input Image of Same Size}
 I changed the input image to a size of 528 x 704 to resemble the size of the output image.
-As one can observe, the image suffers from minimal aliasing. 
+As one can observe, the image suffers from minimal aliasing (see Figure 7). 
 
 \subsubsection{Case 3 : Small Input Image}
 The input image was now 250 x 350. The output poster is more blurred, but there is not as much aliasing 
-artifacts as there were when the image was larger.
+artifacts as there were when the image was larger (see Figure 8).
 
 \begin{figure}[H]\centering
     \begin{tikzpicture}[
@@ -482,25 +483,24 @@ artifacts as there were when the image was larger.
 
 %%%%%%%%%%%%%%%%%%%%
 \section{Question 3}
-\texttt{q3.py} changes the perspective we view the 3D art in \texttt{bricks.jpg} so that we view it as if we were viewing it from the top.
-The \texttt{find\_homography} function computes the homography matrix used to transform points from a source image to a destination image.
+\texttt{q3.py} changes the perspective we view the 3D art in \texttt{bricks.jpg} so that we view it as if we were viewing it from the top. The key steps are as follows: 
 
 \begin{itemize}
-    \item \textbf{Matrix Construction:} The function creates a matrix \texttt{A} from the source and destination points. Each pair of corresponding points generates two rows of \texttt{A}, based on specific linear equations.
-    \item \textbf{Singular Value Decomposition (SVD):} The matrix \texttt{A} is decomposed using SVD. The last row of the resulting matrix \texttt{Vh} provides the components needed to calculate the homography matrix.
-    \item \textbf{Homography Matrix:} The final homography matrix is obtained from the last row of \texttt{Vh}, normalized by its last element. This matrix is reshaped into a $3 \times 3$ format.
+    \item The \texttt{find\_homography} function computes the homography matrix used to transform points from a source image to a destination image.
+    \item The function creates a matrix \texttt{A} from the source and destination points. Each pair of corresponding points generates two rows of \texttt{A}, based on specific linear equations.
+    \item The matrix \texttt{A} is decomposed using SVD. The last row of the resulting matrix \texttt{Vh} provides the components needed to calculate the homography matrix.
+    \item The final homography matrix is obtained from the last row of \texttt{Vh}, normalized by its last element. This matrix is reshaped into a $3 \times 3$ format.
 \end{itemize}
 
-\subsection*{Applying the Homography}
 
 The code then performs the following steps:
 
 \begin{itemize}
-    \item \textbf{Read and Convert Image:} The input image is read using OpenCV and converted to the RGB color space.
-    \item \textbf{Define Points:} Source and destination points are defined for the homography transformation.
-    \item \textbf{Compute Homography:} The homography matrix is computed using the previously defined function.
-    \item \textbf{Apply Homography:} The image is transformed using the computed homography matrix.
-    \item \textbf{Save Output:} The transformed image is saved after converting it back to the BGR color space.
+    \item The input image is read using OpenCV and converted to the RGB color space.
+    \item Source and destination points are defined for the homography transformation.
+    \item The homography matrix is computed using the previously defined function.
+    \item The image is transformed using the computed homography matrix.
+    \item The transformed image is saved after converting it back to the BGR color space.
 \end{itemize}
 
 \begin{figure}[H]
@@ -517,34 +517,111 @@ The code then performs the following steps:
         \label{fig 1}
     \end{subfigure}
 \end{figure}
+% \subsection{Interpretation}
+% Given the source co-ordinates of the trapezium which are:
+% \newline{}
+% \texttt{[[344,499],[30,721],[847,531],[789,824]]}
+% \newline{}
+% and the destination co-ordinates of the square region we want to transform it into:
+% \newline{}
+% \texttt{[[0, 0], [0, 900], [900, 0], [900, 900]]}
+% When I applied the homography, the trapezium image is warped to fit into the square (as the tile covered by
+%  the artwork is square).
 \subsection{Interpretation}
-Given the source co-ordinates of the trapezium which are:
-\newline{}
-\texttt{[[344,499],[30,721],[847,531],[789,824]]}
-\newline{}
-and the destination co-ordinates of the square region we want to transform it into:
-\newline{}
-\texttt{[[0, 0], [0, 900], [900, 0], [900, 900]]}
-When I applied the homography, the trapezium image is warped to fit into the square (as the tile covered by
- the artwork is square).
+Given the source coordinates of the trapezium:
+\[
+\begin{bmatrix}
+344 & 499 \\
+30 & 721 \\
+847 & 531 \\
+789 & 824
+\end{bmatrix}
+\]
+and the destination coordinates of the square region:
+\[
+\begin{bmatrix}
+0 & 0 \\
+0 & 900 \\
+900 & 0 \\
+900 & 900
+\end{bmatrix}
+\]
+Applying the homography warps the trapezium to fit into the square region, transforming the trapezoidal shape into a square. This process is necessary as the target area covered by the artwork is square.
+
 
 % https://tikz.net/zoom/
 
 %%%%%%%%%%%%%%%%%%%%
 \section{Question 4}
-\begin{figure}[H]
-    \centering
-    \includegraphics[trim={5cm 5cm 5cm 5cm},clip,width=\textwidth]{q4/output_1.png}
-    \caption{}
-\end{figure}
+\section*{Code Explanation}
+
+\texttt{q4.py} performs image stitching using homography estimation and the RANSAC algorithm.
+
+\begin{itemize}
+
+    \item \textbf{Helper Functions:}
+    \begin{itemize}
+        \item \texttt{plot\_matches}: Plots matching points between source and destination images.
+        \item \texttt{homography}: Computes the homography matrix using corresponding point pairs.
+        \item \texttt{random\_point}: Selects $k$ random point pairs.
+        \item \texttt{get\_error}: Calculates geometric error between transformed and actual points.
+    \end{itemize}
+
+    \item \textbf{Data Preparation:}
+    \begin{itemize}
+        \item Load point correspondences from a file and images using \texttt{cv2}.
+    \end{itemize}
+
+    \item \textbf{RANSAC Algorithm:}
+    \begin{itemize}
+        \item \texttt{ransac}: Estimates the homography matrix $H$ by iteratively selecting random point sets, computing $H$, and finding inliers based on a geometric error threshold.
+    \end{itemize}
+
+    \item \textbf{Image Stitching:}
+    \begin{itemize}
+        \item Apply the computed homography to the source image, crop it, and stitch it with the destination image.
+        \item Save the transformed and stitched images.
+    \end{itemize}
+\end{itemize}
+
+The final output is a stitched image combining the transformed source and destination images.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[trim={5cm 5cm 5cm 5cm},clip,width=\textwidth]{q4/ouput_3.png}
-    \caption{Original Image}
+    \includegraphics[trim={2cm 17cm 2cm 17cm},clip,width=\textwidth]{q4/output/output_1.png}
+    \caption{Feature Matches}
 \end{figure}
-
+\begin{figure}[H]
+    \centering
+    \includegraphics[trim={3cm 3cm 3cm 3cm},clip,width=\textwidth]{q4/output/output_2.png}
+    \caption{Inlier Matches}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{q4/output/transformed.jpg}
+        \subcaption{Transformed Image}
+    \end{subfigure}
+    \begin{subfigure}{.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{q4/perold2.jpg}
+        \subcaption{Destination Image}  
+        \label{fig 1}
+    \end{subfigure}
+    \caption{Process of Image Stitching}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{q4/output/stitched.jpg}
+    \caption{Stitched Image}
+\end{figure}
 \subsection{Interpretation}
+The raw set of matches in the feature matching contains both correct and incorrect correspondences.
+RANSAC (Random Sample Consensus) eliminates the number of outliers. The remaining inlier matches is 
+a reliable basis for computing the homography. I also ensured the correct handling of the transformed 
+image's origin, so the stitched image appears as a natrual extension of the scene without awkward
+cropping or misallignment.
 
 \end{document}
 

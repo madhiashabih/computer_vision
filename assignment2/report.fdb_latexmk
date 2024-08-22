@@ -1,7 +1,7 @@
 # Fdb version 3
-["pdflatex"] 1724262096 "/home/madhia/computer_vision/assignment2/report.tex" "report.pdf" "report" 1724262097
+["pdflatex"] 1724350392 "/home/madhia/computer_vision/assignment2/report.tex" "report.pdf" "report" 1724350393
   "/etc/texmf/web2c/texmf.cnf" 1710496023 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/madhia/computer_vision/assignment2/report.tex" 1724262095 21725 d374523dd3d6aa3e0ab2ad265d472a57 ""
+  "/home/madhia/computer_vision/assignment2/report.tex" 1724350392 24491 18bfa7b07c1abdefada5fd4debfa6e35 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbr10.tfm" 1136768653 1304 95ad082f6791446dc43df559d5c79878 ""
@@ -227,11 +227,14 @@
   "q2/output/transform.jpg" 1723918591 22432 b31d29edfc2015412e0a1090abc32cfe ""
   "q3/bricks.jpg" 1722331569 447107 d52877703995fb47529fd28980140686 ""
   "q3/output.jpg" 1724141693 186604 86bc6d1e075feca0ccd00db062206673 ""
-  "q4/ouput_3.png" 1724260923 1739303 cfe59bd21a22ee93e5aba4a69c10c17e ""
-  "q4/output_1.png" 1724260893 1128948 b1c8922cf64d7431765f706a7f9ad88e ""
-  "report.aux" 1724262097 5284 6b184c450bd6f917261f1e0e1167fe32 "pdflatex"
-  "report.out" 1724262097 1704 f6a3c07408d143db6008b2f04837cc19 "pdflatex"
-  "report.tex" 1724262095 21725 d374523dd3d6aa3e0ab2ad265d472a57 ""
+  "q4/output/output_1.png" 1724315576 577868 0f54e141ffbc12b95d956cb0b61d424a ""
+  "q4/output/output_2.png" 1724315591 1739926 64389306e2e33c3570f13f82ccb8dc71 ""
+  "q4/output/stitched.jpg" 1724347654 262474 b87ef535665070a630832986494d7080 ""
+  "q4/output/transformed.jpg" 1724347654 179669 17cce5040cfdcfb5cc2e68c750f9c6e9 ""
+  "q4/perold2.jpg" 1271230448 290104 66b6086db7657d74e9921f498231b1ee ""
+  "report.aux" 1724350393 5840 0a245e2838cbda4b6866849953e1a395 "pdflatex"
+  "report.out" 1724350393 1704 f6a3c07408d143db6008b2f04837cc19 "pdflatex"
+  "report.tex" 1724350392 24491 18bfa7b07c1abdefada5fd4debfa6e35 ""
   (generated)
   "report.aux"
   "report.log"
