@@ -112,16 +112,31 @@ transformed = cv2.convertScaleAbs(transformed)
 minx = int(640 + minx)
 miny = int(480 + miny)
 
+crop_img = transformed[0:transformed.shape[0], 0:minx]
 
+max_y = max(crop_img.shape[0], dst_img.shape[0])
+print(max_y)
+max_x = crop_img.shape[1] + dst_img.shape[1]
+print(max_x)
+
+stitched = np.zeros((max_y, max_x, 3), dtype=np.uint8)
+
+
+#stitched = np.zeros((max(crop_img.shape[0], dst_img.shape[0]), crop_img.shape[1] + dst_img.shape[1], 3), dtype=np.uint8)
+# Place the transformed image
+stitched[0:crop_img.shape[0], 0:crop_img.shape[1]] = crop_img
+
+# Place the destination image
+stitched[0:dst_img.shape[0], crop_img.shape[1]:] = dst_img
 # Create a new image with the size of the base image
 #result = np.zeros_like(dst_img)
 
 # Copy the base image onto the result
 #result[:] = dst_img
 
-crop_img = transformed[0:transformed.shape[0], minx:transformed.shape[1]]
-
 # Save the result
 cv2.imwrite("cropped.jpg", crop_img)
+
+cv2.imwrite("stitched.jpg", stitched)
 
 
