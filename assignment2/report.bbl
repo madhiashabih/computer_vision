@@ -1,0 +1,24 @@
+\begin{thebibliography}{1}
+
+\bibitem{tikzZoom}
+Tikz: Zooming.
+\newblock \url{https://tikz.net/zoom/}, 2024.
+\newblock \url{https://tikz.net/zoom/}.
+
+\bibitem{ryanBlog}
+{Ryan's Blog}.
+\newblock Image processing: Projective transformation.
+\newblock
+  \url{https://ryansblog2718281.medium.com/image-processing-projective-transformation-c6795af1c11},
+  2024.
+\newblock Accessed: August 22, 2024.
+
+\bibitem{gistTigercosmos}
+Tigercosmos.
+\newblock Python implementation of homography.
+\newblock
+  \url{https://gist.github.com/tigercosmos/90a5664a3b698dc9a4c72bc0fcbd21f4},
+  2024.
+\newblock Accessed: August 22, 2024.
+
+\end{thebibliography}

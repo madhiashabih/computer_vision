@@ -1,4 +1,5 @@
 \documentclass{article}
+\usepackage{natbib}
 \usepackage[utf8]{inputenc}
 \usepackage{geometry}
  \geometry{
@@ -517,16 +518,7 @@ The code then performs the following steps:
         \label{fig 1}
     \end{subfigure}
 \end{figure}
-% \subsection{Interpretation}
-% Given the source co-ordinates of the trapezium which are:
-% \newline{}
-% \texttt{[[344,499],[30,721],[847,531],[789,824]]}
-% \newline{}
-% and the destination co-ordinates of the square region we want to transform it into:
-% \newline{}
-% \texttt{[[0, 0], [0, 900], [900, 0], [900, 900]]}
-% When I applied the homography, the trapezium image is warped to fit into the square (as the tile covered by
-%  the artwork is square).
+
 \subsection{Interpretation}
 Given the source coordinates of the trapezium:
 \[
@@ -547,9 +539,6 @@ and the destination coordinates of the square region:
 \end{bmatrix}
 \]
 Applying the homography warps the trapezium to fit into the square region, transforming the trapezoidal shape into a square. This process is necessary as the target area covered by the artwork is square.
-
-
-% https://tikz.net/zoom/
 
 %%%%%%%%%%%%%%%%%%%%
 \section{Question 4}
@@ -622,6 +611,10 @@ RANSAC (Random Sample Consensus) eliminates the number of outliers. The remainin
 a reliable basis for computing the homography. I also ensured the correct handling of the transformed 
 image's origin, so the stitched image appears as a natrual extension of the scene without awkward
 cropping or misallignment.
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{ref}
 
 \end{document}
 

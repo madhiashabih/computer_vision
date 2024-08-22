@@ -1,7 +1,14 @@
 # Fdb version 3
-["pdflatex"] 1724350392 "/home/madhia/computer_vision/assignment2/report.tex" "report.pdf" "report" 1724350393
+["bibtex report"] 1724352348 "report.aux" "report.bbl" "report" 1724352349
+  "/usr/share/texlive/texmf-dist/bibtex/bst/base/plain.bst" 1292289607 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
+  "ref.bib" 1724351903 714 119360622427b1a8e52b15b3a882eed8 ""
+  "report.aux" 1724352349 6047 0869db3ab632e5f44183c48078ac4864 "pdflatex"
+  (generated)
+  "report.bbl"
+  "report.blg"
+["pdflatex"] 1724352348 "/home/madhia/computer_vision/assignment2/report.tex" "report.pdf" "report" 1724352349
   "/etc/texmf/web2c/texmf.cnf" 1710496023 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/madhia/computer_vision/assignment2/report.tex" 1724350392 24491 18bfa7b07c1abdefada5fd4debfa6e35 ""
+  "/home/madhia/computer_vision/assignment2/report.tex" 1724352346 24086 9ab7305990f1c2ee4301cb83c5070cb0 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbr10.tfm" 1136768653 1304 95ad082f6791446dc43df559d5c79878 ""
@@ -186,6 +193,7 @@
   "/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg" 1585170648 1830 e31effa752c61538383451ae21332364 ""
   "/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty" 1585170648 80964 64e57373f36316e4a09b517cbf1aba2e ""
   "/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty" 1585170648 77022 ee25ce086f4a79d8cf73bac6f94c02a5 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty" 1644012257 45458 f1c6cb3edd91174e966cbbaf88993bcf ""
   "/usr/share/texlive/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty" 1601326656 1090 bae35ef70b3168089ef166db3e66f5b2 ""
   "/usr/share/texlive/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty" 1601326656 410 615550c46f918fcbee37641b02a862d9 ""
   "/usr/share/texlive/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty" 1601326656 21013 f4ff83d25bb56552493b030f27c075ae ""
@@ -232,9 +240,10 @@
   "q4/output/stitched.jpg" 1724347654 262474 b87ef535665070a630832986494d7080 ""
   "q4/output/transformed.jpg" 1724347654 179669 17cce5040cfdcfb5cc2e68c750f9c6e9 ""
   "q4/perold2.jpg" 1271230448 290104 66b6086db7657d74e9921f498231b1ee ""
-  "report.aux" 1724350393 5840 0a245e2838cbda4b6866849953e1a395 "pdflatex"
-  "report.out" 1724350393 1704 f6a3c07408d143db6008b2f04837cc19 "pdflatex"
-  "report.tex" 1724350392 24491 18bfa7b07c1abdefada5fd4debfa6e35 ""
+  "report.aux" 1724352349 6047 0869db3ab632e5f44183c48078ac4864 "pdflatex"
+  "report.bbl" 1724352348 636 7899569cd37e645a38a19587c22ed272 "bibtex report"
+  "report.out" 1724352349 1704 f6a3c07408d143db6008b2f04837cc19 "pdflatex"
+  "report.tex" 1724352346 24086 9ab7305990f1c2ee4301cb83c5070cb0 ""
   (generated)
   "report.aux"
   "report.log"
