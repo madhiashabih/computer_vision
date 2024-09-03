@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
+from decomposeP import decomposeP
 
-def read_excel_data(file_path, sheet_name='Sheet1'):
+def read_excel_data(file_path, sheet_name):
     """Read data from an Excel file and convert it to a numpy array."""
     try:
         sheet_data = pd.read_excel(file_path, sheet_name=sheet_name)
@@ -35,6 +36,18 @@ def main():
         
     print("\nHomography matrix P:")
     print(P)
+
+    K, R, c = decomposeP(P)
+
+    scaling_factor = K[2, 2]
+    K_scaled = K / scaling_factor
+
+    print("\nIntrinsic matrix K:")
+    print(K_scaled)
+    print("\nRotation matrix R:")
+    print(R)
+    print("\nCamera center C:")
+    print(c)
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 from decomposeP import decomposeP
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 def read_excel_data(file_path, sheet_name):
     """Read data from an Excel file and convert it to a numpy array."""
@@ -27,24 +29,49 @@ def find_homography(pts_src, pts_dst):
     L = Vh[-1, :] / Vh[-1, -1]
     return L.reshape(3, 4)
 
+
 def main():
     file_path = 'cv_3.xlsx'
     src_pts = read_excel_data(file_path, 'Sheet3')
     dst_pts = read_excel_data(file_path, 'Sheet4') 
         
-    P = find_homography(src_pts, dst_pts)
+    P2 = find_homography(src_pts, dst_pts)
         
     print("\nHomography matrix P:")
-    print(P)
+    print(P2)
 
-    K, R, c = decomposeP(P)
+    K2, R2, c2 = decomposeP(P2)
+
+    scaling_factor = K2[2,2]
+    K2_scaled = K2/scaling_factor 
 
     print("\nIntrinsic matrix K:")
-    print(K)
+    print(K2_scaled)
     print("\nRotation matrix R:")
-    print(R)
+    print(R2)
     print("\nCamera center C:")
-    print(c)
+    print(c2)
+    
+    file_path = 'cv_3.xlsx'
+    src_pts = read_excel_data(file_path, 'Sheet1')
+    dst_pts = read_excel_data(file_path, 'Sheet2') 
+        
+    P1 = find_homography(src_pts, dst_pts)
+        
+    print("\nHomography matrix P:")
+    print(P1)
 
+    K1, R1, c1 = decomposeP(P1)
+
+    scaling_factor = K1[2,2]
+    K1_scaled = K1/scaling_factor
+
+    print("\nIntrinsic matrix K:")
+    print(K1_scaled)
+    print("\nRotation matrix R:")
+    print(R1)
+    print("\nCamera center C:")
+    print(c1)
+    
 if __name__ == "__main__":
     main()
