@@ -29,6 +29,35 @@ def find_homography(pts_src, pts_dst):
     L = Vh[-1, :] / Vh[-1, -1]
     return L.reshape(3, 4)
 
+def plot_3d_points_and_camera_axes(world_points, K1, R1, c1, K2, R2, c2):
+    """Plot the 3D world points and camera axes."""
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+
+    # Plot world points
+    ax.scatter(world_points[:, 0], world_points[:, 1], world_points[:, 2], c='b', marker='o', label='World Points')
+
+    # Plot camera 1 axes
+    camera1_axes = R1.T  # Use the transpose to switch from camera to world coordinates
+    ax.quiver(c1[0], c1[1], c1[2], camera1_axes[0, 0], camera1_axes[1, 0], camera1_axes[2, 0], color='r', label='Camera 1 X-axis')
+    ax.quiver(c1[0], c1[1], c1[2], camera1_axes[0, 1], camera1_axes[1, 1], camera1_axes[2, 1], color='g', label='Camera 1 Y-axis')
+    ax.quiver(c1[0], c1[1], c1[2], camera1_axes[0, 2], camera1_axes[1, 2], camera1_axes[2, 2], color='b', label='Camera 1 Z-axis')
+
+    # Plot camera 2 axes
+    camera2_axes = R2.T
+    ax.quiver(c2[0], c2[1], c2[2], camera2_axes[0, 0], camera2_axes[1, 0], camera2_axes[2, 0], color='m', label='Camera 2 X-axis')
+    ax.quiver(c2[0], c2[1], c2[2], camera2_axes[0, 1], camera2_axes[1, 1], camera2_axes[2, 1], color='y', label='Camera 2 Y-axis')
+    ax.quiver(c2[0], c2[1], c2[2], camera2_axes[0, 2], camera2_axes[1, 2], camera2_axes[2, 2], color='c', label='Camera 2 Z-axis')
+
+    # Set equal scaling for all axes
+    ax.set_box_aspect([1, 1, 1])  # Ensures equal unit length along each axis
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    ax.legend()
+
+    plt.show()
+
 
 def main():
     file_path = 'cv_3.xlsx'
@@ -72,6 +101,12 @@ def main():
     print(R1)
     print("\nCamera center C:")
     print(c1)
+    
+    # Assuming src_pts are world points
+    world_points = read_excel_data(file_path, 'Sheet5')
+
+    # Plot points and camera axes
+    plot_3d_points_and_camera_axes(world_points, K1, R1, c1, K2, R2, c2)
     
 if __name__ == "__main__":
     main()
