@@ -1,5 +1,28 @@
 import numpy as np
 
+def calculate_camera_matrix(K, R, C):
+    """
+    Calculate the camera matrix P = KR[I | -C]
+    
+    Args:
+    K (np.array): 3x3 camera intrinsic matrix
+    R (np.array): 3x3 rotation matrix
+    C (np.array): 3x1 camera center
+
+    Returns:
+    np.array: 3x4 camera matrix P
+    """
+    # Create the identity matrix
+    I = np.eye(3)
+    
+    # Create [I | -C]
+    IC = np.hstack((I, -C))
+    
+    # Calculate KR[I | -C]
+    P = K @ R @ IC
+    
+    return P
+
 # Define the matrices
 K = np.array([
     [7.03606595e+03, 1.55093658e+02, 4.04916599e+03],
@@ -19,19 +42,15 @@ C = np.array([
     [321.63665888]
 ])
 
+# Calculate camera matrix
+P = calculate_camera_matrix(K, R, C)
 
-# Create the identity matrix
+# Print results
+print("Camera Matrix P = KR[I | -C]:")
+print(P)
+
+# Print the [I | -C] matrix for verification
 I = np.eye(3)
-
-join = np.hstack((I, -C))
-
-# Calculate KR[I - C]
-result = K @ R @ (join)
-
-print(join)
-
-#scaling_factor = result[2,2]
-#result_scaled = result/ scaling_factor
-
-print("KR[I | - C] =")
-print(result)
+IC = np.hstack((I, -C))
+print("\n[I | -C] matrix:")
+print(IC)
