@@ -111,6 +111,31 @@ def main():
     print(c1)
     
     plot_3D(dst_pts_1, dst_pts_2, R1, R2, c1, c2)
-    
+
+    # Question 4
+    # a
+    c1 = np.append(c1, 1)
+    c2 = np.append(c2, 1)
+
+    e1 = np.dot(P1, c2.T)
+    e2 = np.dot(P2, c1.T)
+
+    # Dehomogenize
+    e1 = e1[:-1]/e1[-1]
+    e2 = e2[:-1]/e2[-1]
+
+    print("e1: ")
+    print(e1)
+    print("e2: ")
+    print(e2)
+
+    # b
+    P_pinv = np.linalg.pinv(P1) # pseudo-inverse of P1
+    dot = np.dot(P2, P_pinv)
+    print("dot: ")
+    print(dot)
+    F = np.cross(e2, dot)
+    print("F:")
+    print(F)
 if __name__ == "__main__":
     main()
