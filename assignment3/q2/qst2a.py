@@ -25,6 +25,7 @@ def calculate_angle(R1, R2):
     
     # Convert theta to degrees
     theta_deg = np.degrees(theta_rad)
+    theta_deg = 180 - theta_deg
     
     return theta_deg
 
@@ -42,7 +43,7 @@ R2 = np.array([
 ])
 
 # Calculate the angle
-angle = calculate_angle(R1[:1], R2[:1])
+angle = calculate_angle(R1[:2], R2[:2])
 
 print(f"The angle between R1 and R2 is approximately {angle:.4f} degrees.")
 
