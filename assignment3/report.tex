@@ -138,6 +138,7 @@ P =
 % \(R\) is orthogonal, and \(KR[I - \tilde{C}]\) equals \(P\).
 The upper triangular matrix has all the elements below the diagonal as zero. As one can observe (see \ref{sec:1c}), this is the case with the intrinsic matrix \(K\). 
 \newline
+
 A square matrix with real numbers or elements is said to be an orthogonal matrix if its transpose is equal to its inverse matrix. 
 The inverse and transpose of the rotation matrix \( R \) are: 
 
@@ -288,7 +289,36 @@ Analyze the differences between the two matrices and what they imply about the r
 
 \subsection{2b: 3D Plot of Camera Positions and World Points}
 \textbf{Results:} \\
-Include the 3D plot with labeled axes and camera positions. Provide different views to show the camera orientations.
+\begin{figure}[h]
+  \centering
+  \begin{minipage}{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth,  trim=350 0 350 0, clip]{Figure_1.png}
+      \label{fig:image1}
+  \end{minipage}\hfill
+  \begin{minipage}{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth,  trim=350 0 350 0, clip]{Figure_2.png}
+      \label{fig:image2}
+  \end{minipage}
+  \caption{Different views of 3D plot.}
+  \label{fig:side_by_side}
+\end{figure}
+\begin{figure}[h]
+  \centering
+  \begin{minipage}{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth,  trim=350 0 350 0, clip]{Figure_3.png}
+      \label{fig:image1}
+  \end{minipage}\hfill
+  \begin{minipage}{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth,  trim=350 0 350 0, clip]{Figure_4.png}
+      \label{fig:image2}
+  \end{minipage}
+  \caption{Different views of 3D plot.}
+  \label{fig:side_by_side}
+\end{figure}
 
 \textbf{Discussion:} \\
 Discuss how the plot clarifies the relative positions and orientations of the cameras.
@@ -316,8 +346,23 @@ Its image is $\mathbf{P} \cdot [0 \; 0 \; 0 \; 1]^T = \mathbf{p}_4$.
 
 
 \textbf{Results:} \\
-Demonstrate these statements using the two computed camera matrices. Include the plots of projected world axes overlaid on the images.
-
+% Demonstrate these statements using the two computed camera matrices. Include the plots of projected world axes overlaid on the images.
+\begin{figure}[h]
+  \centering
+  \begin{minipage}{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{Figure_5.png}
+      \caption{Projected world axes overlaid on lego 2.}
+      \label{fig:image1}
+  \end{minipage}\hfill
+  \begin{minipage}{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{Figure_6.png}
+      \caption{Projected world axes overlaid on lego 2.}
+      \label{fig:image2}
+  \end{minipage}
+  \label{fig:side_by_side}
+\end{figure}
 \textbf{Discussion:} \\
 Interpret the results and any observations.
 
