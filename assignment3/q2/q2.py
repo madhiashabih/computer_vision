@@ -126,10 +126,10 @@ def main():
     print(f"e1:\n{e1}")
     print(f"e2:\n{e2}")
 
-    F = skew_symmetric(e2) @ P2 @ np.linalg.pinv(P1)
-    print(f"F:\n{F}")
+    F_1 = skew_symmetric(e2) @ P2 @ np.linalg.pinv(P1)
+    print(f"F:\n{F_1}")
     
-    x = np.array([
+    x_1 = np.array([
         [1548, 1840, 1],
         [1553, 1681, 1],
         [1552, 1516, 1],
@@ -139,11 +139,25 @@ def main():
         [1565,  851, 1]
     ])
 
-    print(f"x.T[:,0]:\n{x.T[:,0]}")
+    print(f"x.T[:,0]:\n{x_1.T[:,0]}")
     
-    line = F @ x.T
+    line = F_1 @ x_1.T
     print(f"l:\n{line}")
     plot_lines(line, 'lego2.jpg')
 
+    x_2 = np.array([
+        [989, 1770, 1],
+        [991, 1625, 1],
+        [992, 1478, 1],
+        [992, 1329, 1],
+        [993, 1179, 1],
+        [995, 1027, 1],
+        [996, 875, 1]
+    ])
+    
+    F_2 = skew_symmetric(e1) @ P1 @ np.linalg.pinv(P2)
+    line = F_2 @ x_2.T
+    plot_lines(line, 'lego1.jpg')
+    
 if __name__ == "__main__":
     main()
