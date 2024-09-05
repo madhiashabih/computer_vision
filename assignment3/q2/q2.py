@@ -3,6 +3,8 @@ import numpy as np
 from decomposeP import decomposeP
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from PIL import Image
+from matplotlib import image
 
 def read_excel_data(file_path, sheet_name):
     """Read data from an Excel file and convert it to a numpy array."""
@@ -67,6 +69,43 @@ def plot_3D(dst_pts_1, dst_pts_2, R1, R2, c1, c2):
 
     plt.show()
 
+def plot_lines(line, image_path):
+    # Open and convert the image to a numpy array
+    img = Image.open(image_path)
+    img_array = np.array(img)
+    width, height = img.size
+    
+    # Extract line coefficients
+    a, b, c = line
+    
+    # Define the x range for plotting (from 0 to width of the image)
+    x_values = np.linspace(0, width, 100)
+    print("x_values: ")
+    print(x_values)
+    
+    # Compute the corresponding y values using the line equation
+    y_values = (-a * x_values + c) / b
+    print("y_values: ")
+    print(y_values)
+
+    data = image.imread(image_path)
+
+    # Plot the image
+    # plt.figure(figsize=(10, 8))
+    # plt.imshow(img_array, extent=[0, width, height, 0])
+    
+    # Plot the line
+    plt.plot(x_values, y_values, color='red', linewidth=2)
+    
+    # Add labels and legend
+    # plt.xlabel('x')
+    # plt.ylabel('y')
+    # plt.grid(True)
+    
+    plt.imshow(data)
+    # Show plot
+    plt.show()
+
 def main():
     file_path = 'cv_3.xlsx'
     src_pts = read_excel_data(file_path, 'Sheet3')
@@ -112,17 +151,23 @@ def main():
     
     plot_3D(dst_pts_1, dst_pts_2, R1, R2, c1, c2)
 
-    # Question 4
+    ########## Question 4 ##########
     # a
     c1 = np.append(c1, 1)
     c2 = np.append(c2, 1)
+    print("c1: ")
+    print(c1)
 
     e1 = np.dot(P1, c2.T)
     e2 = np.dot(P2, c1.T)
-
+   
+    print("e1: ")
+    print(e1)
+    print("e2: ")
+    print(e2)
     # Dehomogenize
-    e1 = e1[:-1]/e1[-1]
-    e2 = e2[:-1]/e2[-1]
+    e1 = e1 / e1[2]
+    e2 = e2 / e2[2]
 
     print("e1: ")
     print(e1)
@@ -137,5 +182,24 @@ def main():
     F = np.cross(e2, dot)
     print("F:")
     print(F)
+    
+    x = np.array([[1548, 1840, 1],
+       [1553, 1681, 1],
+       [1552, 1516, 1],
+       [1556, 1352, 1],
+       [1560, 1188, 1],
+       [1564, 1022, 1],
+       [1565,  851, 1]])
+
+    print("x.T: ")
+    print(x.T)
+    
+    line = np.dot(F, x.T[:,0])
+#   line = line[:-1]/line[-1]
+    print("l: ")
+    print(line)
+    path = 'lego2.jpg'
+    plot_lines(line, path)
+
 if __name__ == "__main__":
     main()
