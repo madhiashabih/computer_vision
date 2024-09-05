@@ -74,37 +74,63 @@ def plot_lines(line, image_path):
     img = Image.open(image_path)
     img_array = np.array(img)
     width, height = img.size
-    
-    # Extract line coefficients
-    a, b, c = line
-    
-    # Define the x range for plotting (from 0 to width of the image)
-    x_values = np.linspace(0, width, 100)
-    print("x_values: ")
-    print(x_values)
-    
-    # Compute the corresponding y values using the line equation
-    y_values = (-a * x_values + c) / b
-    print("y_values: ")
-    print(y_values)
-
     data = image.imread(image_path)
+    # # Extract line coefficients
+    # for i in range 0, line.shape[1]
+    # a, b, c = line[:,i]
+    # print("a: ")
+    # print(a)
+    
+    # # Compute the corresponding y values using the line equation
+    # y_1 = -1*(((-a/b)*width) + (c/b))
+    # y_2 = -1*(c/b)
+    
+    # print("y_1: ")
+    # print(y_1)
+
+    # print("y_2: ")
+    # print(y_2)
+    # data = image.imread(image_path)
+    
+    # # Plot the line
+    # plt.plot((0, width),(y_1, y_2), color='red', linewidth=1)
+    
+    # plt.imshow(data)
+    # # Show plot
+    # plt.show()
+
+     # Extract line coefficients and plot each line
+    for i in range(line.shape[1]):
+        a, b, c = line[:, i]
+        print("a:", a)
+        print("b:", b)
+        print("c:", c)
+        
+        # Compute the corresponding y values using the line equation
+        y_1 = -((a * width + c) / b)
+        y_2 = -(c / b)
+        
+        print("y_1:", y_1)
+        print("y_2:", y_2)
+        
+        # Plot the line
+        plt.plot((0, width), (y_2, y_1), color='red', linewidth=1)
 
     # Plot the image
-    # plt.figure(figsize=(10, 8))
-    # plt.imshow(img_array, extent=[0, width, height, 0])
-    
-    # Plot the line
-    plt.plot(x_values, y_values, color='red', linewidth=2)
-    
-    # Add labels and legend
-    # plt.xlabel('x')
-    # plt.ylabel('y')
-    # plt.grid(True)
-    
     plt.imshow(data)
+    
     # Show plot
+    plt.axis('off')  # Optionally hide axes
     plt.show()
+
+def skew_symmetric(a):
+
+    a1, a2, a3 = a
+    return np.array([
+        [0, -a3, a2],
+        [a3, 0, -a1],
+        [-a2, a1, 0]
+    ])
 
 def main():
     file_path = 'cv_3.xlsx'
@@ -155,16 +181,10 @@ def main():
     # a
     c1 = np.append(c1, 1)
     c2 = np.append(c2, 1)
-    print("c1: ")
-    print(c1)
 
     e1 = np.dot(P1, c2.T)
     e2 = np.dot(P2, c1.T)
    
-    print("e1: ")
-    print(e1)
-    print("e2: ")
-    print(e2)
     # Dehomogenize
     e1 = e1 / e1[2]
     e2 = e2 / e2[2]
@@ -176,10 +196,7 @@ def main():
 
     # b
     P_pinv = np.linalg.pinv(P1) # pseudo-inverse of P1
-    dot = np.dot(P2, P_pinv)
-    print("dot: ")
-    print(dot)
-    F = np.cross(e2, dot)
+    F = np.dot(skew_symmetric(e2), np.dot(P2, P_pinv))
     print("F:")
     print(F)
     
@@ -191,10 +208,10 @@ def main():
        [1564, 1022, 1],
        [1565,  851, 1]])
 
-    print("x.T: ")
-    print(x.T)
+    print("x.T[:,0]: ")
+    print(x.T[:,0])
     
-    line = np.dot(F, x.T[:,0])
+    line = np.dot(F, x.T)
 #   line = line[:-1]/line[-1]
     print("l: ")
     print(line)

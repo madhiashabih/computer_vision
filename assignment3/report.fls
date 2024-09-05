@@ -992,11 +992,6 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbrbx10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbr10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbrbx10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbrbx10.tfm
-INPUT ./axis.png
-INPUT ./axis.png
-INPUT axis.png
-INPUT ./axis.png
-INPUT ./axis.png
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbr8.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbr8.tfm
 INPUT /usr/share/texlive/texmf-dist/tex/latex/cmbright/omlcmbrm.fd
@@ -1015,6 +1010,11 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbrsy8.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbrsy8.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
+INPUT ./axis.png
+INPUT ./axis.png
+INPUT axis.png
+INPUT ./axis.png
+INPUT ./axis.png
 INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbr8.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbr8.tfm
@@ -1036,5 +1036,6 @@ INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr17.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr8.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrbx10.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrmi10.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrmi8.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrsy10.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrsy8.pfb

@@ -15,23 +15,28 @@ def read_excel_data(file_path, sheet_name):
         return None
 
 def find_homography(pts_src, pts_dst):
+    n = pts_src.shape[0]
+    print("n: ")
+    print(n) 
+
     A = []
-    for i in range(4):
+    for i in range(n):
         x, y = pts_src[i][0], pts_src[i][1]
         X, Y, Z = pts_dst[i][0], pts_dst[i][1], pts_dst[i][2]
-        A.append([0, 0, 0, 0, -X, -Y, -Z, 1, y*X, y*Y, y*Z, y])
+        A.append([0, 0, 0, 0, -X, -Y, -Z, -1, y*X, y*Y, y*Z, y])
         A.append([X, Y, Z, 1, 0, 0, 0, 0, -x*X, -x*Y, -x*Z, -x])
     A = np.array(A)
-    print(A)
     _, _, Vh = np.linalg.svd(A)
-    L = Vh[-1, :] / Vh[-1, -1]
-    return L.reshape(3, 4)
+    return Vh[-1].reshape(3, 4)
 
 def main():
     file_path = 'cv_3.xlsx'
     src_pts = read_excel_data(file_path, 'Sheet1')
     dst_pts = read_excel_data(file_path, 'Sheet2') 
         
+    print(src_pts)
+    print(dst_pts)
+
     P = find_homography(src_pts, dst_pts)
         
     print("\nHomography matrix P:")

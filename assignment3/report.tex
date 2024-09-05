@@ -55,7 +55,7 @@
 \usepackage{cmbright}
 
 \title{Computer Vision Report: Camera Matrix and Epipolar Geometry}
-\author{Your Name}
+\author{Madhia Shabih}
 \date{\today}
 
 \begin{document}
@@ -67,13 +67,10 @@
 \textbf{Description:} \\
 % Explain how you chose the world coordinate axes and identified at least 28 corner points on the object in "lego1.jpg". 
 % Describe the method used to determine the 2D image coordinates and 3D world coordinates. Include a table of correspondences if necessary.
-Figure \ref{fig:lego1} below describes how I chose the world coordinate axes and Table 1 below includes the table of correspondences.  
-\begin{figure}[H] % The [H] option places the figure exactly here
-    \centering
-    \includegraphics[width=0.3\textwidth]{axis.png} % Adjust the width as needed
-    \caption{3D world co-ordinate system}
-    \label{fig:lego1}
-\end{figure}
+Figure \ref{fig:lego1} below describes how I chose the world coordinate axes and Table 1 below includes the table of correspondences which I 
+determined. I calculated the 2D image coordinates by selecting 28 corners of the legos. I then converted it to 3D world coordinates,
+allowing the intersection on the X-, Y- and Z- coordinate to be (0, 0, 0) and then incrementing the respective amount in mm to the point where 
+I had selected a corner.
 
 \begin{table}[H]
     \centering
@@ -114,65 +111,101 @@ Figure \ref{fig:lego1} below describes how I chose the world coordinate axes and
     \caption{2D Image Coordinates in Pixels and Corresponding 3D World Coordinates in mm}
     \end{table}
 
+    \begin{figure}[H] % The [H] option places the figure exactly here
+      \centering
+      \includegraphics[width=0.3\textwidth]{axis.png} % Adjust the width as needed
+      \caption{3D world co-ordinate system}
+      \label{fig:lego1}
+  \end{figure}
+
 \textbf{Results:} \\
 % Present the calculated camera matrix \(P\). Use the formula and explain briefly.
 Below is the calculated P matrix: 
 
+\subsection*{Homography Matrix \( P \)}
 \[
-P = \begin{bmatrix}
--6.26805785 \times 10^{12} & 2.24941247 \times 10^{8} & 4.52730087 \times 10^{-3} & 1.54665375 \times 10^{3} \\
--9.78591444 \times 10^{8}  & 3.66656339 \times 10^{8} & -8.62146328 & -1.83848493 \times 10^{3} \\
-0 & 2.09637702 \times 10^{5} & -8.64770899 \times 10^{-5} & 1 
+P =
+\begin{bmatrix}
+2.75416038 \times 10^{-3} & -2.87589499 \times 10^{-3} & 5.85201094 \times 10^{-6} & 6.39998608 \times 10^{-1} \\
+-2.34030798 \times 10^{-4} & -3.53935397 \times 10^{-4} & -3.46138168 \times 10^{-3} & 7.68357719 \times 10^{-1} \\
+4.74050139 \times 10^{-7} & 1.15244558 \times 10^{-7} & -5.01027097 \times 10^{-8} & 4.22797122 \times 10^{-4}
 \end{bmatrix}
 \]
 
-\textbf{Discussion:} \\
-Interpret the results, including any challenges encountered or assumptions made.
-
 \subsection{1b: Proof of Camera Matrix Decomposition}
 \textbf{Description:} \\
-Outline the proof that the camera matrix decomposition algorithm returns \(K\), \(R\), and \(\tilde{C}\) such that \(K\) is upper-triangular, \(R\) is orthogonal, and \(KR[I - \tilde{C}]\) equals \(P\).
+% Outline the proof that the camera matrix decomposition algorithm returns \(K\), \(R\), and \(\tilde{C}\) such that \(K\) is upper-triangular, 
+% \(R\) is orthogonal, and \(KR[I - \tilde{C}]\) equals \(P\).
+The upper triangular matrix has all the elements below the diagonal as zero. As one can observe (see \ref{sec:1c}), this is the case with the intrinsic matrix \(K\). 
+\newline
+A square matrix with real numbers or elements is said to be an orthogonal matrix if its transpose is equal to its inverse matrix. 
+The inverse and transpose of the rotation matrix \( R \) are: 
+
+\[
+R^{-1} = \begin{bmatrix}
+  0.24363231 & -0.966366 & 0.08234101 \\
+  -0.07937672 & -0.10448198 & -0.99135405 \\
+  0.966614 & 0.23498992 & -0.10216215
+  \end{bmatrix}
+\]
+
+\[
+R^T = \begin{bmatrix}
+  0.24363231 & -0.966366 & 0.08234101 \\
+  -0.07937672 & -0.10448198 & -0.99135405 \\
+  0.966614 & 0.23498992 & -0.10216215
+  \end{bmatrix}
+\]
+
+As one can see, these are identical and hence \( R \) is orthogonal. \\
+
+
 
 \textbf{Discussion:} \\
 Comment on the extent of uniqueness in the decomposition and its importance.
 
-\subsection{1c: Camera Matrix Decomposition for lego1.jpg}
+\subsection{1c: Camera Matrix Decomposition for Lego 1}
 \textbf{Results:} \\
 % Show the decomposition of matrix \(P\) into \(K\), \(R\), and \(\tilde{C}\). Scale \(K\) such that its bottom-right entry is 1. Include the necessary calculations and matrices.
-\subsection*{Intrinsic Matrix \(K\)}
+\subsection*{Intrinsic Matrix \( K_1 \)}
 \[
-K = 
+K_1 =
 \begin{bmatrix}
-2.58795903 \times 10^{-1} & 2.98994779 \times 10^{7} & 1.07299996 \times 10^{3} \\
-0 & 4.66801265 \times 10^{3} & 1.74899999 \times 10^{3} \\
+7.03606595 \times 10^3 & 1.55093658 \times 10^2 & 4.04916599 \times 10^3 \\
+0 & 7.11020543 \times 10^3 & 9.01944958 \times 10^1 \\
 0 & 0 & 1
 \end{bmatrix}
 \]
 
-\subsection*{Rotation Matrix \(R\)}
+\subsection*{Rotation Matrix \( R_1 \)}
+\label{sec:1c}
 \[
-R = \begin{bmatrix}
--8.65551697 \times 10^{-9} & 4.12507336 \times 10^{-10} & 1 \\
--1 & 2.22044605 \times 10^{-16} & -8.65551697 \times 10^{-9} \\
-0 & 1 & -4.12507336 \times 10^{-10}
+R_1 =
+\begin{bmatrix}
+0.24363231 & -0.966366 & 0.08234101 \\
+-0.07937672 & -0.10448198 & -0.99135405 \\
+0.966614 & 0.23498992 & -0.10216215
 \end{bmatrix}
 \]
 
-\subsection*{Camera Center \(C\)}
+\subsection*{Camera Center \( C_1 \)}
 \[
-C = \begin{bmatrix}
-6.89902951 \times 10^{-11} \\
--4.94485147 \times 10^{-6} \\
--4.23549166 \times 10^{2}
+C_1 =
+\begin{bmatrix}
+-739.8902994 \\
+-485.37784529 \\
+321.63665888
 \end{bmatrix}
 \]
 
 \textbf{Discussion:} \\
 Discuss the significance of the decomposed components.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \section{Problem 2: Computing a Second Camera Matrix}
 
-\subsection{2a: Repeating the Calculations for lego2.jpg}
+\subsection{2a: Repeating the Calculations for Lego 2}
 \textbf{Description:} \\
 
 \begin{table}[h!]
@@ -204,55 +237,51 @@ Discuss the significance of the decomposed components.
     2447 & 625 & 240 & 0 & 124.8 \\
     \hline
     \end{tabular}
-    \caption{2D coordinates and their corresponding 3D coordinates}
+    \caption{2D Image Coordinates in Pixels and Corresponding 3D World Coordinates in mm}
     \end{table}
 
-\subsubsection*{Homography Matrix}
+\textbf{Results:} \\
+% Present the new camera matrix and the distance between the two camera centers and the angle between their principal axes.
 
-The homography matrix \( P \) is given by:
+\subsection*{Homography Matrix \( P \)}
 \[
-P = \begin{bmatrix}
--3.73942007 \times 10^{-3} & 6.00696271 \times 10^{-4} & 2.09880695 \times 10^{-15} & -1.15333684 \times 10^{-1} \\
--7.14513566 \times 10^{-3} & 6.10214747 \times 10^{-4} & 8.90213106 \times 10^{-14} & 1.17161231 \times 10^{-1} \\
-0 & -5.20833333 \times 10^{-3} & 8.68057066 \times 10^{-18} & 1
+P =
+\begin{bmatrix}
+-3.45737581 \times 10^{-3} & 1.84680728 \times 10^{-3} & -1.34003533 \times 10^{-5} & -4.87876478 \times 10^{-1} \\
+2.22192346 \times 10^{-4} & 3.96427196 \times 10^{-4} & 3.84370894 \times 10^{-3} & -8.72895156 \times 10^{-1} \\
+-2.06695621 \times 10^{-7} & -3.04302600 \times 10^{-7} & 4.29616113 \times 10^{-8} & -4.94925813 \times 10^{-4}
 \end{bmatrix}
 \]
 
-\subsubsection*{Intrinsic Matrix}
-
-The intrinsic matrix \( K \) is given by:
+\subsection*{Intrinsic Matrix \( K_2 \)}
 \[
-K = \begin{bmatrix}
-8.54211707 \times 10^{-12} & 7.17968654 \times 10^{-1} & -1.15333684 \times 10^{-1} \\
-0 & 1.37186605 & -1.17161231 \times 10^{-1} \\
+K_2 =
+\begin{bmatrix}
+1.05251026 \times 10^4 & -5.99949679 \times 10^1 & 1.10856424 \times 10^3 \\
+0 & 1.04504974 \times 10^4 & -1.04111217 \times 10^1 \\
 0 & 0 & 1
 \end{bmatrix}
 \]
 
-\subsubsection*{Rotation Matrix}
-
-The rotation matrix \( R \) is given by:
+\subsection*{Rotation Matrix \( R_2 \)}
 \[
-R = \begin{bmatrix}
--1.24591515 \times 10^{-11} & -1.66666957 \times 10^{-15} & -1.00000000 \\
--1.00000000 & 0 & 1.24591515 \times 10^{-11} \\
-0 & -1.00000000 & 1.66666957 \times 10^{-15}
+R_2 =
+\begin{bmatrix}
+-0.82783123 & 0.5608882 & -0.00999388 \\
+0.05685095 & 0.10160475 & 0.9931991 \\
+-0.55808908 & -0.82163307 & 0.11599862
 \end{bmatrix}
 \]
 
-\subsubsection*{Camera Center}
-
-The camera center \( C \) is given by:
+\subsection*{Camera Center \( C_2 \)}
 \[
-C = \begin{bmatrix}
--1.54781397 \\
-1.91995406 \times 10^2 \\
--2.75640741 \times 10^{12}
+C_2 =
+\begin{bmatrix}
+-721.05444208 \\
+-1082.93989766 \\
+380.46969249
 \end{bmatrix}
 \]
-
-\textbf{Results:} \\
-Present the new camera matrix and the distance between the two camera centers and the angle between their principal axes.
 
 \textbf{Discussion:} \\
 Analyze the differences between the two matrices and what they imply about the relative camera positions.
@@ -264,9 +293,27 @@ Include the 3D plot with labeled axes and camera positions. Provide different vi
 \textbf{Discussion:} \\
 Discuss how the plot clarifies the relative positions and orientations of the cameras.
 
+\newpage
 \section{Problem 3: The Image of the World Coordinate System}
 \textbf{Description:} \\
-Prove that \(p_4\) is a homogeneous representation of the image of the world origin, and \(p_1, p_2, p_3\) are the images of the vanishing points of the world X, Y, and Z axes. Include mathematical derivations.
+%Reference: https://engineering.purdue.edu/kak/computervision/ECE661Folder/Lecture19.pdf
+%Prove that \(p_4\) is a homogeneous representation of the image of the world origin, and \(p_1, p_2, p_3\) are the images of the vanishing points of the world X, Y, and Z axes. Include mathematical derivations.
+
+Let's express the $3 \times 4$ matrix $\mathbf{P}$ as
+\[
+\mathbf{P} = [\mathbf{p}_1 \; \mathbf{p}_2 \; \mathbf{p}_3 \; \mathbf{p}_4].
+\]
+Here, $\mathbf{p}_4$ is a homogeneous representation of the image of the world origin, and $\mathbf{p}_1$, $\mathbf{p}_2$, and $\mathbf{p}_3$ are the images of the vanishing points of the world $X$-, $Y$-, and $Z$-axes, respectively. Note that the ideal point along the world $x$-axis is given by
+\[
+[1 \; 0 \; 0 \; 0]^T.
+\]
+Since $\mathbf{P} \cdot [1 \; 0 \; 0 \; 0]^T = \mathbf{p}_1$, we have that the image of the ideal point is formed at the pixel whose homogeneous representation is $\mathbf{p}_1$. By the same reasoning, $\mathbf{p}_2$ is the image pixel for the ideal point along the $y$-axis, and $\mathbf{p}_3$ is the image pixel for the ideal point along the $z$-axis. The last column, $\mathbf{p}_4$, is the image of the world origin. The homogeneous representation of the world origin is
+\[
+[0 \; 0 \; 0 \; 1]^T.
+\]
+Its image is $\mathbf{P} \cdot [0 \; 0 \; 0 \; 1]^T = \mathbf{p}_4$.
+
+
 
 \textbf{Results:} \\
 Demonstrate these statements using the two computed camera matrices. Include the plots of projected world axes overlaid on the images.
