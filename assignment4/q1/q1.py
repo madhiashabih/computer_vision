@@ -85,7 +85,8 @@ def ransac(matches, threshold, iters):
         if num_inliers > num_best_inliers:
             best_inliers = inliers.copy()
             num_best_inliers = num_inliers
-            best_H = H.copy()
+            #best_H = H.copy()
+            best_H = homography(best_inliers)
 
     print("inliers/matches: {}/{}".format(num_best_inliers, len(matches)))
     return best_inliers, best_H
@@ -107,12 +108,38 @@ src_img = cv2.imread('ET/et1.jpg', cv2.IMREAD_COLOR)
 matches = np.hstack((src_pts, dst_pts))
 
 # Create a combined image with the source and destination images side-by-side
-max_distance = 10
+max_distance = 50
 plot_matches(src_img, matches, max_distance)
+
+###### 1b ######
 
 inliers, H = ransac(matches, 0.5, 2000)
 plot_matches(src_img, inliers, 1000)
 
+###### 1c ######
+
 K = np.loadtxt('ET/K.txt')
 E = K.T @ H @ K 
 print(E)
+
+# Perform Singular Value Decomposition
+U, S, Vt = np.linalg.svd(E)
+
+det_U = np.linalg.det(U)
+det_V = np.linalg.det(Vt.T)
+
+if (det_U > 0) and (det_V < 0):
+    E = -E
+    Vt = - Vt
+
+elif (det_U < 0) and (det_V > 0):
+    E = -E
+    U = -U
+print("Matrix U:")
+print(U)
+
+print("\nSingular values (S):")
+print(S)
+
+print("\nMatrix V^T:")
+print(Vt)
