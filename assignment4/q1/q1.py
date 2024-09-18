@@ -91,6 +91,56 @@ def ransac(matches, threshold, iters):
     print("inliers/matches: {}/{}".format(num_best_inliers, len(matches)))
     return best_inliers, best_H
 
+def find_homography(pts_src: np.ndarray, pts_dst: np.ndarray) -> np.ndarray:
+    """Calculate the homography matrix using SVD."""
+    n = pts_src.shape[0]
+    A = np.zeros((2*n, 12))
+    
+    for i in range(n):
+        x, y = pts_src[i]
+        X, Y, Z = pts_dst[i]
+        A[2*i] = [0, 0, 0, 0, -X, -Y, -Z, -1, y*X, y*Y, y*Z, y]
+        A[2*i+1] = [X, Y, Z, 1, 0, 0, 0, 0, -x*X, -x*Y, -x*Z, -x]
+    
+    _, _, Vh = np.linalg.svd(A)
+    return Vh[-1].reshape(3, 4)
+
+def decomposeP(P):
+    '''
+        The input P is assumed to be a 3-by-4 homogeneous camera matrix.
+        The function returns a homogeneous 3-by-3 calibration matrix K,
+        a 3-by-3 rotation matrix R and a 3-by-1 vector c such that
+        K*R*[eye(3), -c] = P.
+
+    '''
+
+    W = np.array([[0, 0, 1],
+                  [0, 1, 0],
+                  [1, 0, 0]])
+
+    # calculate K and R up to sign
+    Qt, Rt = np.linalg.qr((W.dot(P[:,0:3])).T)
+    K = W.dot(Rt.T.dot(W))
+    R = W.dot(Qt.T)
+
+    # correct for negative focal length(s) if necessary
+    D = np.array([[1, 0, 0],
+                  [0, 1, 0],
+                  [0, 0, 1]])
+    if K[0,0] < 0:
+        D[0,0] = -1
+    if K[1,1] < 0:
+        D[1,1] = -1
+    if K[2,2] < 0:
+        D[2,2] = -1
+    K = K.dot(D)
+    R = D.dot(R)
+
+    # calculate c
+    c = -R.T.dot(np.linalg.inv(K).dot(P[:,3]))
+
+    return K, R, c
+
 # Read the data from the text file
 data = []
 with open('ET/matches.txt', 'r') as file:
@@ -116,8 +166,10 @@ plot_matches(src_img, matches, max_distance)
 inliers, H = ransac(matches, 0.5, 2000)
 plot_matches(src_img, inliers, 1000)
 
-###### 1c ######
+print("\nH:")
+print(H)
 
+###### 1c ######
 K = np.loadtxt('ET/K.txt')
 E = K.T @ H @ K 
 print(E)
@@ -143,3 +195,32 @@ print(S)
 
 print("\nMatrix V^T:")
 print(Vt)
+
+###### 1d ######
+
+I = np.eye(3)
+column = np.array([[0], [0], [0]])
+P = np.dot(K, np.hstack((I, column))) 
+print("\nP")
+print(P)
+# Calculate R's
+R1 = np.array([[1, 0, 0],
+               [0, 1, 0],
+               [0, 0, 1]])
+C1 = np.array([0, 0, 0])
+
+n1 = np.dot(R1.T, [0, 0, 1])
+
+R2 = np.dot(U, np.dot(S, Vt))
+n2 = np.dot(R2, [0, 0, 1])
+
+#K2, R2, C2 = decomposeP(H)
+
+print("###### 1d ######")
+print("R1:")
+print(R1)
+print("\nC1:")
+print(C1)
+print("\nn1:")
+print(n1)
+
