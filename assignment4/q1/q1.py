@@ -112,3 +112,7 @@ plot_matches(src_img, matches, max_distance)
 
 inliers, H = ransac(matches, 0.5, 2000)
 plot_matches(src_img, inliers, 1000)
+
+K = np.loadtxt('ET/K.txt')
+E = K.T @ H @ K 
+print(E)
