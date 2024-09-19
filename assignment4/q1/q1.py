@@ -141,6 +141,49 @@ def decomposeP(P):
 
     return K, R, c
 
+def triangulate_point(P1, P2, x1, x2):
+    """
+    Triangulate a 3D point from two 2D correspondences and projection matrices.
+    
+    Args:
+    - P1: 3x4 projection matrix of the first camera
+    - P2: 3x4 projection matrix of the second camera
+    - x1: 2D point in the first image (shape: (2,))
+    - x2: 2D point in the second image (shape: (2,))
+    
+    Returns:
+    - X: Triangulated 3D point (homogeneous coordinates)
+    """
+    
+    # Build the system of equations (Ax = 0)
+    A = np.zeros((4, 4))
+    A[0] = x1[0] * P1[2] - P1[0]  # x1[0] * P1's 3rd row - P1's 1st row
+    A[1] = x1[1] * P1[2] - P1[1]  # x1[1] * P1's 3rd row - P1's 2nd row
+    A[2] = x2[0] * P2[2] - P2[0]  # x2[0] * P2's 3rd row - P2's 1st row
+    A[3] = x2[1] * P2[2] - P2[1]  # x2[1] * P2's 3rd row - P2's 2nd row
+
+    # Solve using SVD (Ax = 0 -> Use SVD to find the solution for X)
+    _, _, V = np.linalg.svd(A)
+    X = V[-1]  # The solution is the last row of V
+
+    # Convert X from homogeneous coordinates to 3D by dividing by X[3]
+    X = X / X[3]
+    
+    return X[:3]
+
+def check_chirality(X, n1, C1, n2, C2):
+    print("\nX.T:")
+    print(X.reshape(-1,1))
+    print("\nC1")
+    print(C1)
+    print("\nn1.T:")
+    print(n1)
+
+    test1 = np.dot(n1.T, (X.reshape(-1,1)-C1)) > 0
+    test2 = np.dot(n2.T, (X.reshape(-1,1)-C2)) > 0
+    print(test1)
+    return test1 and test2
+
 data = []
 with open('ET/matches.txt', 'r') as file:
     for line in file:
@@ -208,15 +251,35 @@ W = np.array([[1, -1, 0],
               [1, 0, 0],
               [0, 0, 1]])
 u3 = U[:,2]
-print("\nu3:")
-print(u3)
 
-result = U @ W @ Vt
-print("result:")
-print(result)
+UWVt = U @ W @ Vt
+UWtVt = U @ W.T @ Vt
 
 u3 = u3.reshape(-1,1)
-x = np.hstack([result, u3]) 
-print("\nx:")
-print(x)
-P1 = K @ x
+x1 = np.hstack([UWVt, u3])
+x2 = np.hstack([UWVt, -u3])
+x3 = np.hstack([UWtVt, u3])
+x4 = np.hstack([UWtVt, -u3])
+#print("\nx:")
+#print(x)
+
+P1 = K @ x1
+P2 = K @ x2
+P3 = K @ x3
+P4 = K @ x4
+
+n1 = np.eye(3) @ np.array([[0],[0],[1]])
+n2_1 = UWVt @  np.array([[0],[0],[1]])
+n2_2 = UWtVt @  np.array([[0],[0],[1]])
+
+C1 = np.array([[0],[0],[0]])
+
+K2_1, R2_1, C2_1 = decomposeP(P1)
+K2_2, R2_2, C2_2 = decomposeP(P2)
+K2_3, R2_3, C2_3 = decomposeP(P3)
+K2_4, R2_4, C2_4 = decomposeP(P4)
+
+X = triangulate_point(P, P1, src_pts[0], dst_pts[0])
+
+front = check_chirality(X, n1, C1, n2_1, C2_1)
+print(front)
