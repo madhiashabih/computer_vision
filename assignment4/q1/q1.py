@@ -141,23 +141,19 @@ def decomposeP(P):
 
     return K, R, c
 
-# Read the data from the text file
 data = []
 with open('ET/matches.txt', 'r') as file:
     for line in file:
         row = [float(x) for x in line.strip().split()]
         data.append(row)
 
-# Extract the (x, y) and (x', y') coordinates
 src_pts = np.array([[x, y] for x, y, x_, y_ in data], dtype=np.float32)
 dst_pts = np.array([[x_, y_] for x, y, x_, y_ in data], dtype=np.float32)
 
-# Load the source and destination images
 src_img = cv2.imread('ET/et1.jpg', cv2.IMREAD_COLOR)
 
 matches = np.hstack((src_pts, dst_pts))
 
-# Create a combined image with the source and destination images side-by-side
 max_distance = 50
 plot_matches(src_img, matches, max_distance)
 
@@ -171,10 +167,11 @@ print(H)
 
 ###### 1c ######
 K = np.loadtxt('ET/K.txt')
+print("\nK:")
+print(K)
 E = K.T @ H @ K 
 print(E)
 
-# Perform Singular Value Decomposition
 U, S, Vt = np.linalg.svd(E)
 
 det_U = np.linalg.det(U)
@@ -197,30 +194,11 @@ print("\nMatrix V^T:")
 print(Vt)
 
 ###### 1d ######
+I_O = np.array([[1, 0, 0, 0], 
+       [0, 1, 0, 0],
+       [0, 0, 1, 0]])
 
-I = np.eye(3)
-column = np.array([[0], [0], [0]])
-P = np.dot(K, np.hstack((I, column))) 
-print("\nP")
+P = K @ I_O
+print("\nP:")
 print(P)
-# Calculate R's
-R1 = np.array([[1, 0, 0],
-               [0, 1, 0],
-               [0, 0, 1]])
-C1 = np.array([0, 0, 0])
-
-n1 = np.dot(R1.T, [0, 0, 1])
-
-R2 = np.dot(U, np.dot(S, Vt))
-n2 = np.dot(R2, [0, 0, 1])
-
-#K2, R2, C2 = decomposeP(H)
-
-print("###### 1d ######")
-print("R1:")
-print(R1)
-print("\nC1:")
-print(C1)
-print("\nn1:")
-print(n1)
 
