@@ -194,6 +194,7 @@ print("\nMatrix V^T:")
 print(Vt)
 
 ###### 1d ######
+# Calculate P
 I_O = np.array([[1, 0, 0, 0], 
        [0, 1, 0, 0],
        [0, 0, 1, 0]])
@@ -202,3 +203,20 @@ P = K @ I_O
 print("\nP:")
 print(P)
 
+# Calculate P'
+W = np.array([[1, -1, 0],
+              [1, 0, 0],
+              [0, 0, 1]])
+u3 = U[:,2]
+print("\nu3:")
+print(u3)
+
+result = U @ W @ Vt
+print("result:")
+print(result)
+
+u3 = u3.reshape(-1,1)
+x = np.hstack([result, u3]) 
+print("\nx:")
+print(x)
+P1 = K @ x
