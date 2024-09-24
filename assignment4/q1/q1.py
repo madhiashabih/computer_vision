@@ -332,7 +332,8 @@ def homography(pairs: np.ndarray) -> np.ndarray:
 
 def plot_matches(src_img: np.ndarray, matches: np.ndarray, max_distance: float):
     gray_img = cv2.cvtColor(src_img, cv2.COLOR_BGR2GRAY)
-    filtered_matches = filter_matches(matches, max_distance)
+    #filtered_matches = filter_matches(matches, max_distance)
+    filtered_matches = matches 
     
     fig, ax = plt.subplots(figsize=(15, 15))
     ax.imshow(gray_img, cmap='gray')
