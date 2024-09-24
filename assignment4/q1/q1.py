@@ -332,8 +332,8 @@ def homography(pairs: np.ndarray) -> np.ndarray:
 
 def plot_matches(src_img: np.ndarray, matches: np.ndarray, max_distance: float):
     gray_img = cv2.cvtColor(src_img, cv2.COLOR_BGR2GRAY)
-    #filtered_matches = filter_matches(matches, max_distance)
-    filtered_matches = matches 
+    filtered_matches = filter_matches(matches, max_distance)
+    #filtered_matches = matches 
     
     fig, ax = plt.subplots(figsize=(15, 15))
     ax.imshow(gray_img, cmap='gray')
@@ -470,7 +470,7 @@ def main():
     ]
     
     # Check chirality condition
-    n1 = np.array([0, 0, 1]).reshape(-1, 1)
+    n1 = np.eye(3).T @ np.array([0, 0, 1]).reshape(-1, 1) # result: 3x1 array
     C1 = np.zeros((3, 1))
     
     for i, P_prime in enumerate(potential_P_primes):
@@ -478,7 +478,24 @@ def main():
         n2 = P_prime[:, :3] @ np.array([0, 0, 1]).reshape(-1, 1)
         
         X = triangulate_point(P, P_prime, src_pts[0], dst_pts[0])
-        if check_chirality(X, n1, C1, n2, C2):
+        
+        
+        print("\n X:")
+        print(X)
+        
+        print("\n n1.T:")
+        print(n1.T)
+        
+        print("\n C1:")
+        print(C1)
+        
+        print("\n n2.T:")
+        print(n2.T)
+        
+        print("\n C2:")
+        print(C2.reshape(-1, 1))
+        
+        if check_chirality(X.reshape(-1, 1), n1, C1, n2, C2.reshape(-1, 1)):
             print(f"\nValid P' found (option {i+1}):")
             print(P_prime)
             break
