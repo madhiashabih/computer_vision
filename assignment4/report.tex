@@ -7,8 +7,14 @@
  left=20mm,
  top=20mm,
  }
- \usepackage{graphicx}
- \usepackage{titling}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{xcolor}
 
  \title{Computer Vision Assignment 4
 }
@@ -38,14 +44,138 @@
 \maketitle
 
 \noindent\begin{tabular}{@{}ll}
-    Student & \theauthor\\
+    Student & \author\\
      
 \end{tabular}
 
-\section*{Positioning of the thesis}
+\section{Estimating a Camera Matrix Pair and Reconstructing 3D Features}
 
-\section*{Objectives}
+\subsection{Problem Description}
+%Describe the task of estimating camera matrices from the image pair, including the use of SIFT feature matches and the provided calibration matrix. 
+Estimating camera matrices from an image pair involves determining the relative positions and orientations of the cameras that captured the images. 
+This is done using corresponding feature points between the two images, detected through SIFT (Scale-Invariant Feature Transform) feature matching. 
+The provided 3x3 calibration matrix, which describes the intrinsic parameters of the cameras (such as focal length and optical center), is used to refine the estimation process.
+By accurately estimating these camera matrices, the 3D structure of the scene can be inferred from the 2D image pair.
+\textbf{Aim}: Estimate the spatial relationship between cameras and reconstruct the 3D coordinates of features.
 
-\section*{Plan}
+\subsection{Part (a): Feature Matches}
+\textbf{Description}: %Explain how feature matches were displayed and how obvious errors were removed.
+In the file \texttt{q1.py}, in the function \texttt{plot\_matches}, I visualize feature matches between two images. 
+I first convert the input image to grayscale using OpenCV. Then I filter the matches based on a maximum allowed distance between matched points using a helper function called \texttt{filter\_matches}. 
+I use a distance of 50. A matplotlib figure is created to display the grayscale image, and for each pair of matched coordinates (x1, y1) and (x2, y2), 
+a red line is drawn between the points, while a blue circle is placed at the first point (x1, y1) for clarity.
+
+\textbf{Discussion}: Justify why a lenient threshold was used to retain incorrect matches. Discuss implications for further steps.
+
+\begin{figure}[h!]
+    \centering
+    % First subfigure
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[trim={15cm 0 15cm 0}, clip, width=\textwidth]{Figure_1.png}
+        \caption{All feature matches.}
+        \label{fig:first}
+    \end{subfigure}
+    \hfill
+    % Second subfigure
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[   trim={15cm 0 15cm 0}, clip, width=\textwidth]{Figure_2.png}
+        \caption{Feature matches within a maximum distance of 50.}
+        \label{fig:second}
+    \end{subfigure}
+    
+    \caption{Feature matches displayed on greyscale image.}
+    \label{fig:overall}
+\end{figure}
+
+\subsection{Part (b): Estimating the Fundamental Matrix using RANSAC}
+\textbf{Description}: %Explain the RANSAC procedure to estimate the fundamental matrix.
+RANSAC is used to enhance the accuracy by estimating the best fundamental matrix from the noisy data which means defining the inliers. 
+\textbf{Results}: Present the final inlier matches after RANSAC, and explain why the fundamental matrix is re-estimated with all inliers.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[trim={15cm 0 15cm 0}, clip, width=0.8\textwidth]{Figure_3.png}
+    \caption{Inlier matches after RANSAC.}
+\end{figure}
+
+\textbf{Discussion}: Discuss the rationale behind re-estimating the fundamental matrix using all inliers.
+
+\subsection{Part (c): Essential Matrix and SVD Decomposition}
+\textbf{Description}: Explain how the essential matrix is computed from the fundamental matrix and calibration matrix.
+
+\textbf{Results}: Show the singular values of the essential matrix and discuss any discrepancies from the theoretical expectation.
+
+\begin{lstlisting}[language=Matlab, caption={SVD Calculation of the Essential Matrix}, label={lst:svd}]
+% Example code for SVD decomposition
+[U, S, V] = svd(E);
+disp(diag(S)); % Display the singular values
+\end{lstlisting}
+
+\textbf{Discussion}: Discuss how the SVD algorithm may return orthogonal matrices with undesirable reflections and how the correction was applied.
+
+\subsection{Part (d): Determining Camera Matrices}
+\textbf{Description}: Explain how two camera matrices are determined from the essential matrix.
+
+\textbf{Results}: Present the two camera matrices.
+
+\textbf{Discussion}: Briefly discuss how these matrices relate to the camera positions and orientations.
+
+\subsection{Part (e): Triangulation and 3D Reconstruction}
+\textbf{Description}: Describe the triangulation process to determine 3D coordinates of inlier matches.
+
+\textbf{Results}: Showcase your 3D reconstruction, including the positions of the cameras and the 3D points.
+
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{3d_reconstruction.png}
+%     \caption{3D reconstruction of the scene.}
+% \end{figure}
+
+\textbf{Discussion}: Discuss any challenges with the reconstruction, such as inaccuracies with points far from the cameras.
+
+\section{Rectifying an Image Pair}
+
+\subsection{Problem Description}
+Describe the process of rectifying an image pair using the camera matrices obtained in the previous section.
+
+\textbf{Aim}: Align the two images such that matching points have the same vertical coordinates.
+
+\subsection{Part (a): Image Rectification}
+\textbf{Description}: Explain how the camera matrices were used to rectify the images.
+
+\textbf{Results}: Present the rectified images.
+
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{rectified_image.png}
+%     \caption{Rectified images.}
+% \end{figure}
+
+\textbf{Discussion}: Discuss any challenges encountered during rectification, such as changes to the image coordinate system.
+
+\subsection{Part (b): Drawing Epipolar Lines}
+\textbf{Description}: Explain how epipolar lines were drawn on the rectified images.
+
+\textbf{Results}: Show images with epipolar lines.
+
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{epipolar_lines.png}
+%     \caption{Epipolar lines on rectified images.}
+% \end{figure}
+
+\textbf{Discussion}: Discuss why epipolar lines should be horizontal in rectified images and any challenges in ensuring alignment.
+
+\section{Verifying Solutions on Another Dataset}
+\subsection{Problem Description}
+Describe how the methods were applied to the "fountain" dataset. Briefly discuss any changes made.
+
+\subsection{Results}
+Present the key results, including fundamental matrix estimation, 3D reconstruction, and rectification.
+
+\subsection{Discussion}
+Briefly discuss how the results differ from the initial dataset and any challenges encountered.
 
 \end{document}
