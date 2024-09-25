@@ -1,7 +1,7 @@
 # Fdb version 3
-["pdflatex"] 1727171457 "/home/madhia/computer_vision/assignment4/report.tex" "report.pdf" "report" 1727171457
+["pdflatex"] 1727204386 "/home/madhia/computer_vision/assignment4/report.tex" "report.pdf" "report" 1727204386
   "/etc/texmf/web2c/texmf.cnf" 1710496023 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/madhia/computer_vision/assignment4/report.tex" 1727171457 7228 1ca95b89604b13593402d7650921ca6b ""
+  "/home/madhia/computer_vision/assignment4/report.tex" 1727204386 8109 0981078351938f948d1a239685ef9337 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbr10.tfm" 1136768653 1304 95ad082f6791446dc43df559d5c79878 ""
@@ -23,7 +23,10 @@
   "/usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr17.pfb" 1136849748 29717 7eae3d614cd1357c57ce1187d436cac8 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr9.pfb" 1136849748 29940 d7adc248aa5c4a656f827108cd8ea45e ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrbx10.pfb" 1136849748 26264 a52e03c805d428a50490261d87706e8d ""
+  "/usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrmi10.pfb" 1136849748 34889 a5ba8b20a45b3437534c87396d980b48 ""
+  "/usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrmi8.pfb" 1136849748 34876 8d4b38ed6a8c31221cdb5873a0ca9f5c ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrsl10.pfb" 1136849748 31940 2dffcb910be0e3f90e841577f7e3bf6f ""
+  "/usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrsy8.pfb" 1136849748 41671 840970fb437fbd0481bc0a18eff9ce7a ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hftl10.pfb" 1136849748 41802 c0a9ab74266c935689e26c58127c114e ""
   "/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty" 1583617216 6501 4011d89d9621e0b0901138815ba5ff29 ""
@@ -73,8 +76,8 @@
   "Figure_1.png" 1727169984 999809 23003c51d4e044aaa2eb05994ad2f0d2 ""
   "Figure_2.png" 1727169499 559638 7a74b4bd647892a99caa8803c8f6c3d5 ""
   "Figure_3.png" 1727169512 497948 f78a846b273b0c76cc8a86d80a34dea9 ""
-  "report.aux" 1727171457 2555 c4d0d7a88e452386e71ae9df5fb83851 "pdflatex"
-  "report.tex" 1727171457 7228 1ca95b89604b13593402d7650921ca6b ""
+  "report.aux" 1727204386 2555 4585709dc4810c61fb26e6ff14c2b926 "pdflatex"
+  "report.tex" 1727204386 8109 0981078351938f948d1a239685ef9337 ""
   (generated)
   "report.aux"
   "report.log"

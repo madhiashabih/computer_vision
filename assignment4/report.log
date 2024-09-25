@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.7.27)  24 SEP 2024 11:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.7.27)  24 SEP 2024 20:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -359,40 +359,39 @@ File: ot1cmtl.fd 2005/04/13 v8.1 (WaS)
 <Figure_1.png, id=1, 1383.2478pt x 685.1196pt>
 File: Figure_1.png Graphic file (type png)
 <use Figure_1.png>
-Package pdftex.def Info: Figure_1.png  used on input line 75.
+Package pdftex.def Info: Figure_1.png  used on input line 78.
 (pdftex.def)             Requested size: 217.6621pt x 281.549pt.
 <Figure_2.png, id=4, 1383.2478pt x 685.1196pt>
 File: Figure_2.png Graphic file (type png)
 <use Figure_2.png>
-Package pdftex.def Info: Figure_2.png  used on input line 83.
+Package pdftex.def Info: Figure_2.png  used on input line 86.
 (pdftex.def)             Requested size: 217.6621pt x 281.549pt.
- [1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./Figure_1.png> <./Figure_2.png>]
-<Figure_3.png, id=20, 1383.2478pt x 685.1196pt>
+<Figure_3.png, id=6, 1383.2478pt x 685.1196pt>
 File: Figure_3.png Graphic file (type png)
 <use Figure_3.png>
-Package pdftex.def Info: Figure_3.png  used on input line 99.
+Package pdftex.def Info: Figure_3.png  used on input line 102.
 (pdftex.def)             Requested size: 386.95894pt x 500.5304pt.
- (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+ [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./Figure_1.png> <./Figure_2.png>] [2 <./Figure_3.png>] (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2020/03/24 1.8d listings language file
 )
 LaTeX Font Info:    Font shape `OT1/cmbr/m/it' in size <10> not available
-(Font)              Font shape `OT1/cmbr/m/sl' tried instead on input line 111.
- [2 <./Figure_3.png>] [3] (./report.aux) ) 
+(Font)              Font shape `OT1/cmbr/m/sl' tried instead on input line 122.
+ [3] (./report.aux) ) 
 Here is how much of TeX's memory you used:
  7678 strings out of 478287
  119730 string characters out of 5849289
- 677881 words of memory out of 5000000
+ 679025 words of memory out of 5000000
  25806 multiletter control sequences out of 15000+600000
  476244 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  68i,8n,77p,284b,1650s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrsl10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hftl10.pfb>
-Output written on report.pdf (3 pages, 2174595 bytes).
+</usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrsl10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hftl10.pfb>
+Output written on report.pdf (3 pages, 2198591 bytes).
 PDF statistics:
- 57 PDF objects out of 1000 (max. 8388607)
- 30 compressed objects within 1 object stream
+ 72 PDF objects out of 1000 (max. 8388607)
+ 39 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  34 words of extra memory for PDF output out of 10000 (max. 10000000)
 

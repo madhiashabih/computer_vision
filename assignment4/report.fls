@@ -402,12 +402,12 @@ INPUT ./Figure_2.png
 INPUT Figure_2.png
 INPUT ./Figure_2.png
 INPUT ./Figure_2.png
-INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
 INPUT ./Figure_3.png
 INPUT ./Figure_3.png
 INPUT Figure_3.png
 INPUT ./Figure_3.png
 INPUT ./Figure_3.png
+INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
 INPUT /usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
@@ -418,5 +418,8 @@ INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr10.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr17.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr9.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrbx10.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrmi10.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrmi8.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrsl10.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrsy8.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hftl10.pfb

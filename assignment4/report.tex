@@ -65,7 +65,10 @@ I first convert the input image to grayscale using OpenCV. Then I filter the mat
 I use a distance of 50. A matplotlib figure is created to display the grayscale image, and for each pair of matched coordinates (x1, y1) and (x2, y2), 
 a red line is drawn between the points, while a blue circle is placed at the first point (x1, y1) for clarity.
 
-\textbf{Discussion}: Justify why a lenient threshold was used to retain incorrect matches. Discuss implications for further steps.
+\textbf{Discussion}: %Justify why a lenient threshold was used to retain incorrect matches. Discuss implications for further steps.
+Since further refinement techniques, such as the RANSAC algorithm, will filter out incorrect matches, its more effective to start with a larger set of matches.
+This could reduce the accuracy of the final camera matrix estimation and 3D reconstruction. Hence, is more critical to preserve as many potentially correct matches than 
+prematurely discarding data. 
 
 \begin{figure}[h!]
     \centering
@@ -92,7 +95,7 @@ a red line is drawn between the points, while a blue circle is placed at the fir
 \subsection{Part (b): Estimating the Fundamental Matrix using RANSAC}
 \textbf{Description}: %Explain the RANSAC procedure to estimate the fundamental matrix.
 RANSAC is used to enhance the accuracy by estimating the best fundamental matrix from the noisy data which means defining the inliers. 
-\textbf{Results}: Present the final inlier matches after RANSAC, and explain why the fundamental matrix is re-estimated with all inliers.
+\textbf{Results}: %Present the final inlier matches after RANSAC, and explain why the fundamental matrix is re-estimated with all inliers.
 
 \begin{figure}[h!]
     \centering
@@ -100,10 +103,18 @@ RANSAC is used to enhance the accuracy by estimating the best fundamental matrix
     \caption{Inlier matches after RANSAC.}
 \end{figure}
 
-\textbf{Discussion}: Discuss the rationale behind re-estimating the fundamental matrix using all inliers.
+\textbf{Discussion}: %Discuss the rationale behind re-estimating the fundamental matrix using all inliers.
+The inlier matches are those that define the relationship defined by the fundamental matrix with minimal error. The fundamental matrix is re-estimated using all the inliers
+because the initial estimation using RANSAC is based on a subset of points. 
+Re-estimating the fundamental matrix using all inliers ensures that it is refined using the full set of reliable correspondences.
 
 \subsection{Part (c): Essential Matrix and SVD Decomposition}
-\textbf{Description}: Explain how the essential matrix is computed from the fundamental matrix and calibration matrix.
+\textbf{Description}: %Explain how the essential matrix is computed from the fundamental matrix and calibration matrix.
+The essential matrix is computed as follows:
+\[
+E = K'^{T} F K
+\]
+where $K$ is the calibration matrix and $F$ is the fundamental matrix.
 
 \textbf{Results}: Show the singular values of the essential matrix and discuss any discrepancies from the theoretical expectation.
 

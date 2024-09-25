@@ -190,7 +190,7 @@ def main():
     matches = np.hstack((src_pts, dst_pts))
     
     # Plot matches
-    filtered_matches = plot_matches(src_img, matches, max_distance=150)
+    filtered_matches = plot_matches(src_img, matches, max_distance=400)
     
     # RANSAC
     inliers, H = ransac(filtered_matches, threshold=0.5, iters=2000)
@@ -199,12 +199,13 @@ def main():
     print(H)
     
     # Load camera matrix K
-    K = np.loadtxt('fountain/K1.txt')
+    K1 = np.loadtxt('fountain/K1.txt')
+    K2 = np.loadtxt('fountain/K2.txt')
     print("\nCamera matrix K:")
-    print(K)
+    print(K1)
     
     # Calculate Essential matrix E
-    E = K.T @ H @ K
+    E = K1.T @ H @ K1
     print("\nEssential matrix E:")
     print(E)
     
@@ -223,7 +224,7 @@ def main():
     print(Vt)
     
     # Calculate projection matrices
-    P = K @ np.hstack([np.eye(3), np.zeros((3, 1))])
+    P = K1 @ np.hstack([np.eye(3), np.zeros((3, 1))])
     print("\nProjection matrix P:")
     print(P)
     
@@ -231,10 +232,10 @@ def main():
     u3 = U[:, 2].reshape(-1, 1)
     
     potential_P_primes = [
-        K @ np.hstack([U @ W @ Vt, u3]),
-        K @ np.hstack([U @ W @ Vt, -u3]),
-        K @ np.hstack([U @ W.T @ Vt, u3]),
-        K @ np.hstack([U @ W.T @ Vt, -u3])
+        K2 @ np.hstack([U @ W @ Vt, u3]),
+        K2 @ np.hstack([U @ W @ Vt, -u3]),
+        K2 @ np.hstack([U @ W.T @ Vt, u3]),
+        K2 @ np.hstack([U @ W.T @ Vt, -u3])
     ]
     
     # Check chirality condition
@@ -252,7 +253,7 @@ def main():
             print(P_prime)
             
             # Plot 3D graph 
-            X = triangulate_point_array(P, P_prime, src_pts, dst_pts)
+            # X = triangulate_point_array(P, P_prime, src_pts, dst_pts)
             
             break
     else:
