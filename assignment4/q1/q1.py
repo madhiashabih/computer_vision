@@ -4,35 +4,42 @@ import numpy as np
 from typing import List, Tuple
 plt.rcParams['figure.figsize'] = [15, 15]
 from mpl_toolkits.mplot3d import Axes3D
+import random
 
 def calculate_distance(x1: float, y1: float, x2: float, y2: float) -> float:
     return np.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
 def filter_matches(matches: np.ndarray, max_distance: float) -> np.ndarray:
+    print("Shape of matches:", matches.shape)
     return matches[np.linalg.norm(matches[:, :2] - matches[:, 2:], axis=1) <= max_distance]
 
-def random_point(matches: np.ndarray, k: int = 8) -> np.ndarray:
-    return matches[np.random.choice(len(matches), k, replace=False)]
+def random_point(matches, k=8):
+    idx = random.sample(range(len(matches)), k)
+    point = [matches[i] for i in idx ]
+    return np.array(point)
 
-def get_error(points: np.ndarray, H: np.ndarray) -> np.ndarray:
+def get_error(points, H):
     num_points = len(points)
-    all_p1 = np.hstack((points[:, :2], np.ones((num_points, 1))))
-    all_p2 = points[:, 2:]
-    
-    estimate_p2 = (H @ all_p1.T).T
-    estimate_p2 = estimate_p2[:, :2] / estimate_p2[:, 2:]
-    
-    return np.sum((all_p2 - estimate_p2)**2, axis=1)
+    all_p1 = np.concatenate((points[:, 0:2], np.ones((num_points, 1))), axis=1)
+    all_p2 = points[:, 2:4]
+    estimate_p2 = np.zeros((num_points, 2))
+    for i in range(num_points):
+        temp = np.dot(H, all_p1[i])
+        estimate_p2[i] = (temp/temp[2])[0:2] # set index 2 to 1 and slice the index 0, 1
+    # Compute error
+    errors = np.linalg.norm(all_p2 - estimate_p2 , axis=1) ** 2
 
-def homography(pairs: np.ndarray) -> np.ndarray:
-    A = np.zeros((2*len(pairs), 9))
-    for i, (x1, y1, x2, y2) in enumerate(pairs):
-        A[2*i] = [-x1, -y1, -1, 0, 0, 0, x2*x1, x2*y1, x2]
-        A[2*i+1] = [0, 0, 0, -x1, -y1, -1, y2*x1, y2*y1, y2]
+    return errors
+
+def fundamental(pairs: np.ndarray) -> np.ndarray:
+    A = []
+    for i, (x, y, x_prime, y_prime) in enumerate(pairs):
+        A.append([x*x_prime, y*x_prime, x_prime, x*y_prime, y*y_prime, y_prime, x, y, 1])
     
+    A = np.array(A)
     _, _, V = np.linalg.svd(A)
     # Let F be the last column of V
-    f = V[-1, :]
+    f = V[-1]
     # Pack the elements of f into matrix f_hat
     f_hat = f.reshape((3, 3))
     
@@ -69,26 +76,31 @@ def plot_matches(src_img: np.ndarray, matches: np.ndarray, max_distance: float):
 
 def ransac(matches: np.ndarray, threshold: float, iters: int) -> Tuple[np.ndarray, np.ndarray]:
     best_inliers = np.array([])
-    best_H = None
+    best_F = None
     max_inliers = 0
     
     for _ in range(iters):
         points = random_point(matches)
-        H = homography(points)
+        F = fundamental(points)
         
-        if np.linalg.matrix_rank(H) < 2:
+        print("\n F:")
+        print(F)
+        
+        if np.linalg.matrix_rank(F) < 2:
             continue
         
-        errors = get_error(matches, H)
-        inliers = matches[errors < threshold]
+        errors = get_error(matches, F)
+        idx = np.where(errors < threshold)[0]
+        inliers = matches[idx]
         
         if len(inliers) > max_inliers:
             best_inliers = inliers
             max_inliers = len(inliers)
-            best_H = homography(best_inliers)
+            # best_F = fundamental(best_inliers)
+            best_F = F 
 
     print(f"inliers/matches: {max_inliers}/{len(matches)}")
-    return best_inliers, best_H
+    return best_inliers, best_F
 
 def find_homography(pts_src: np.ndarray, pts_dst: np.ndarray) -> np.ndarray:
     n = pts_src.shape[0]
@@ -207,7 +219,9 @@ def main():
     filtered_matches = plot_matches(src_img, matches, max_distance=200)
     
     # RANSAC
-    inliers, H = ransac(filtered_matches, threshold=1, iters=2000)
+    inliers, H = ransac(filtered_matches, threshold=1000000, iters=2000)
+    print("\n inliers:")
+    print(inliers)
     plot_matches(src_img, inliers, max_distance=1000)
     print("\nHomography matrix H:")
     print(H)
