@@ -96,7 +96,7 @@ def ransac(matches: np.ndarray, threshold: float, iters: int) -> Tuple[np.ndarra
         if len(inliers) > max_inliers:
             best_inliers = inliers
             max_inliers = len(inliers)
-            # best_F = fundamental(best_inliers)
+            best_F = fundamental(best_inliers)
             best_F = F 
 
     print(f"inliers/matches: {max_inliers}/{len(matches)}")
