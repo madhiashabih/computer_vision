@@ -20,18 +20,6 @@ def random_points(A_matches, B_matches, k=8):
 
     return A_points, B_points
 
-def get_error(points, H):
-    num_points = len(points)
-    all_p1 = np.concatenate((points[:, 0:2], np.ones((num_points, 1))), axis=1)
-    all_p2 = points[:, 2:4]
-    estimate_p2 = np.zeros((num_points, 2))
-    for i in range(num_points):
-        temp = np.dot(H, all_p1[i])
-        estimate_p2[i] = (temp/temp[2])[0:2] # set index 2 to 1 and slice the index 0, 1
-    # Compute error
-    errors = np.linalg.norm(all_p2 - estimate_p2 , axis=1) ** 2
-
-    return errors
 
 def sampson_distance(F, x1, x2):
     F = np.array(F)
@@ -79,13 +67,11 @@ def fundamental(pair_1: np.ndarray, pair_2: np.ndarray) -> np.ndarray:
     
 def plot_matches(src_img: np.ndarray, matches: np.ndarray, max_distance: float):
     gray_img = cv2.cvtColor(src_img, cv2.COLOR_BGR2GRAY)
-    filtered_matches = filter_matches(matches, max_distance)
-    #filtered_matches = matches 
     
     fig, ax = plt.subplots(figsize=(15, 15))
     ax.imshow(gray_img, cmap='gray')
     
-    for x1, y1, x2, y2 in filtered_matches:
+    for x1, y1, x2, y2 in matches:
         ax.plot([x1, x2], [y1, y2], 'r-', linewidth=0.5)
         ax.plot(x1, y1, 'bo', markersize=5)
     
@@ -94,7 +80,6 @@ def plot_matches(src_img: np.ndarray, matches: np.ndarray, max_distance: float):
     plt.tight_layout()
     plt.show()
     
-    return filtered_matches
 
 def ransac(matches: np.ndarray, threshold: float, iters: int) -> Tuple[np.ndarray, np.ndarray]:
     best_inliers_1 = np.array([])
@@ -191,7 +176,7 @@ def triangulate_point_array(P, P_prime, src_pts, dst_pts):
         # Normalize the 3D point (convert to inhomogeneous)
         X[i] = X_homogeneous / X_homogeneous[-1]
     
-    return X[:, :3]  # Return the inhomogeneous 3D points
+    return X # Return the inhomogeneous 3D points
 
 def check_chirality(X: np.ndarray, n1: np.ndarray, C1: np.ndarray, n2: np.ndarray, C2: np.ndarray) -> bool:
     test1 = np.dot(n1.T, (X - C1)) > 0
@@ -223,3 +208,11 @@ def plot_camera(ax, P, label, color):
     camera_center = -np.linalg.inv(P[:, :3]) @ P[:, 3]
     ax.scatter(camera_center[0], camera_center[1], camera_center[2], c=color, marker='^', label=label)
     # Optionally, draw the direction of the camera
+    
+def is_point_in_front(P, X):
+    R = P[:, :3]
+    C = -np.linalg.inv(R) @ P[:, 3]
+    
+    n = R.T @ np.array([0, 0, 1])
+    
+    return n.T @ (X[:3] - C) > 0
