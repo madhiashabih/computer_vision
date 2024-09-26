@@ -19,15 +19,12 @@ def main():
     
     # Plot matches
     filtered_matches = plot_matches(src_img, matches, max_distance=150)
-    print("\nFiltered matches:")
-    print(filtered_matches)
     
     ########## Q1b ##########
     # RANSAC
-    inliers, F = ransac(filtered_matches, threshold=1, iters=2000)
-    print("\n inliers:")
-    print(inliers)
-    plot_matches(src_img, inliers, max_distance=1000)
+    inliers_1, inliers_2, F = ransac(filtered_matches, threshold=1, iters=2000)
+    inliers = np.hstack((inliers_1, inliers_2))
+    plot_matches(src_img, inliers, max_distance=150)
     print("\nFundamental matrix F:")
     print(F)
     
@@ -56,8 +53,7 @@ def main():
     print("\nMatrix V^T:")
     print(Vt)
     
-    ########## Q1d ##########
-    
+    ########## Q1d ##########  
     # Calculate projection matrices
     P = K @ np.hstack([np.eye(3), np.zeros((3, 1))])
     print("\nProjection matrix P:")

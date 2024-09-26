@@ -13,10 +13,12 @@ def filter_matches(matches: np.ndarray, max_distance: float) -> np.ndarray:
     print("Shape of matches:", matches.shape)
     return matches[np.linalg.norm(matches[:, :2] - matches[:, 2:], axis=1) <= max_distance]
 
-def random_point(matches, k=8):
-    idx = random.sample(range(len(matches)), k)
-    point = [matches[i] for i in idx ]
-    return np.array(point)
+def random_points(A_matches, B_matches, k=8):
+    idx = random.sample(range(len(A_matches)), k)
+    A_points = [A_matches[i] for i in idx]
+    B_points = [B_matches[i] for i in idx]
+
+    return A_points, B_points
 
 def get_error(points, H):
     num_points = len(points)
@@ -31,24 +33,27 @@ def get_error(points, H):
 
     return errors
 
-def sampson_distance(F, points):
-    x1 = points[:, :2]
-    x2 = points[:, 2:]
+def sampson_distance(F, x1, x2):
+    F = np.array(F)
+    x1 = np.array(x1).reshape(3, 1)
+    x2 = np.array(x2).reshape(3, 1)
     
-    x1_homogeneous = np.column_stack((x1, np.ones(len(x1))))
-    x2_homogeneous = np.column_stack((x2, np.ones(len(x2))))
+    Fx1 = np.dot(F, x1)
+    Ftx2 = np.dot(F.T, x2)
     
-    Fx1 = np.dot(F, x1_homogeneous.T).T
-    Ftx2 = np.dot(F.T, x2_homogeneous.T).T
+    x2tFx1 = np.dot(x2.T, Fx1)
     
-    numerator = np.sum(x2_homogeneous * np.dot(F, x1_homogeneous.T).T, axis=1)**2
-    denominator = Fx1[:, 0]**2 + Fx1[:, 1]**2 + Ftx2[:, 0]**2 + Ftx2[:, 1]**2
+    denom1 = Fx1[0]**2 + Fx1[1]**2
+    denom2 = Ftx2[0]**2 + Ftx2[1]**2
     
-    return numerator / denominator
+    sampson_dist = x2tFx1**2 / (denom1 + denom2)
+    sampson_dist = float(sampson_dist[0, 0])
+    
+    return sampson_dist
 
-def fundamental(pairs: np.ndarray) -> np.ndarray:
+def fundamental(pair_1: np.ndarray, pair_2: np.ndarray) -> np.ndarray:
     A = []
-    for i, (x, y, x_prime, y_prime) in enumerate(pairs):
+    for (x, y), (x_prime, y_prime) in zip(pair_1, pair_2):
         A.append([x*x_prime, y*x_prime, x_prime, x*y_prime, y*y_prime, y_prime, x, y, 1])
     
     A = np.array(A)
@@ -56,18 +61,20 @@ def fundamental(pairs: np.ndarray) -> np.ndarray:
     # Let F be the last column of V
     f = V[-1]
     # Pack the elements of f into matrix f_hat
-    f_hat = f.reshape((3, 3))
+    F = f.reshape((3, 3))
     
-    U_F, Sigma_F, V_T_F = np.linalg.svd(f_hat)
+    # U_F, Sigma_F, V_T_F = np.linalg.svd(f_hat)
 
-    # Adjust singular values to force rank 2
-    Sigma_F[2] = 0
+    # # Adjust singular values to force rank 2
+    # Sigma_F[2] = 0
 
-    # Reconstruct F with rank 2
-    F = U_F @ np.diag(Sigma_F) @ V_T_F
+    # # Reconstruct F with rank 2
+    # F = U_F @ np.diag(Sigma_F) @ V_T_F
     
     #H = V[-1].reshape(3, 3)
     #return H / H[2, 2]
+    F = F / F[2, 2]
+    
     return F
     
 def plot_matches(src_img: np.ndarray, matches: np.ndarray, max_distance: float):
@@ -90,28 +97,38 @@ def plot_matches(src_img: np.ndarray, matches: np.ndarray, max_distance: float):
     return filtered_matches
 
 def ransac(matches: np.ndarray, threshold: float, iters: int) -> Tuple[np.ndarray, np.ndarray]:
-    best_inliers = np.array([])
+    best_inliers_1 = np.array([])
+    best_inliers_2 = np.array([])
     best_F = None
     max_inliers = 0
     
+    matches_1 = matches[:,:2]
+    matches_2 = matches[:,2:]
+    
     for _ in range(iters):
-        points = random_point(matches)
-        F = fundamental(points)
+        points_1, points_2 = random_points(matches_1, matches_2, k=8)
+        F = fundamental(points_1, points_2)
         
-        if np.linalg.matrix_rank(F) < 2:
-            continue
+        inliers_1 = []
+        inliers_2 = []
         
-        distances = sampson_distance(F, matches)
-        inliers = matches[distances < threshold]
+        for one, two in zip(matches_1, matches_2):
+            one_homo = np.append(one, 1)
+            two_homo = np.append(two, 1)
+            distances = sampson_distance(F, one_homo, two_homo)
+            if distances < threshold:
+                inliers_1.append(one)
+                inliers_2.append(two)
         
-        if len(inliers) > max_inliers:
-            best_inliers = inliers
-            max_inliers = len(inliers)
-            best_F = fundamental(best_inliers)
-            #best_F = F 
+        if len(inliers_1) > max_inliers:
+            best_inliers_1 = inliers_1.copy()
+            best_inliers_2 = inliers_2.copy()
+            max_inliers = len(inliers_1)
+    
+    best_F = fundamental(best_inliers_1, best_inliers_2) 
 
     print(f"inliers/matches: {max_inliers}/{len(matches)}")
-    return best_inliers, best_F
+    return best_inliers_1, best_inliers_2, best_F
 
 def find_homography(pts_src: np.ndarray, pts_dst: np.ndarray) -> np.ndarray:
     n = pts_src.shape[0]
