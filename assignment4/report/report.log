@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.7.27)  26 SEP 2024 23:18
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.7.27)  26 SEP 2024 23:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -442,68 +442,98 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 [3]
 Overfull \vbox (8.10794pt too high) has occurred while \output is active []
 
- [4 </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_-30-45.pdf> </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_-30-135.pdf> </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_-30-225.pdf> </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_-30-315.pdf> </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_30-45.pdf> </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_30-135.pdf>] [5 </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_30-225.pdf> </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_30-315.pdf>]
-</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-45.pdf, id=283, 1084.05pt x 1084.05pt>
+ [4 </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_-30-45.pdf> </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_-30-135.pdf> </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_-30-225.pdf> </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_-30-315.pdf> </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_30-45.pdf> </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_30-135.pdf>]
+</home/madhia/computer_vision/assignment4/implementation/q1-2/output/et1_t.jpg, id=222, 598.235pt x 723.70375pt>
+File: /home/madhia/computer_vision/assignment4/implementation/q1-2/output/et1_t.jpg Graphic file (type jpg)
+<use /home/madhia/computer_vision/assignment4/implementation/q1-2/output/et1_t.jpg>
+Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q1-2/output/et1_t.jpg  used on input line 284.
+(pdftex.def)             Requested size: 193.47577pt x 234.05247pt.
+</home/madhia/computer_vision/assignment4/implementation/q1-2/output/et2_t.jpg, id=223, 541.02126pt x 735.74875pt>
+File: /home/madhia/computer_vision/assignment4/implementation/q1-2/output/et2_t.jpg Graphic file (type jpg)
+<use /home/madhia/computer_vision/assignment4/implementation/q1-2/output/et2_t.jpg>
+Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q1-2/output/et2_t.jpg  used on input line 289.
+(pdftex.def)             Requested size: 193.47577pt x 263.10677pt.
+ [5 </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_30-225.pdf> </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_30-315.pdf> </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et1_t.jpg> </home/madhia/computer_vision/assignment4/implementation/q1-2/output/et2_t.jpg>]
+</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-45.pdf, id=285, 1084.05pt x 1084.05pt>
 File: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-45.pdf Graphic file (type pdf)
 <use /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-45.pdf>
-Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-45.pdf  used on input line 374.
+Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-45.pdf  used on input line 383.
 (pdftex.def)             Requested size: 193.47577pt x 193.46645pt.
-</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-135.pdf, id=284, 1084.05pt x 1084.05pt>
+</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-135.pdf, id=286, 1084.05pt x 1084.05pt>
 File: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-135.pdf Graphic file (type pdf)
 <use /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-135.pdf>
-Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-135.pdf  used on input line 379.
+Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-135.pdf  used on input line 388.
 (pdftex.def)             Requested size: 193.47577pt x 193.46645pt.
-</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-225.pdf, id=285, 1084.05pt x 1084.05pt>
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-225.pdf, id=287, 1084.05pt x 1084.05pt>
 File: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-225.pdf Graphic file (type pdf)
 <use /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-225.pdf>
-Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-225.pdf  used on input line 388.
+Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-225.pdf  used on input line 397.
 (pdftex.def)             Requested size: 193.47577pt x 193.46645pt.
-</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-315.pdf, id=286, 1084.05pt x 1084.05pt>
+</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-315.pdf, id=288, 1084.05pt x 1084.05pt>
 File: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-315.pdf Graphic file (type pdf)
 <use /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-315.pdf>
-Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-315.pdf  used on input line 393.
+Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-315.pdf  used on input line 402.
 (pdftex.def)             Requested size: 193.47577pt x 193.46645pt.
-</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-45.pdf, id=287, 1084.05pt x 1084.05pt>
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-45.pdf, id=289, 1084.05pt x 1084.05pt>
 File: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-45.pdf Graphic file (type pdf)
 <use /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-45.pdf>
-Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-45.pdf  used on input line 402.
+Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-45.pdf  used on input line 411.
 (pdftex.def)             Requested size: 193.47577pt x 193.46645pt.
-</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-135.pdf, id=288, 1084.05pt x 1084.05pt>
+</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-135.pdf, id=290, 1084.05pt x 1084.05pt>
 File: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-135.pdf Graphic file (type pdf)
 <use /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-135.pdf>
-Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-135.pdf  used on input line 407.
+Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-135.pdf  used on input line 416.
 (pdftex.def)             Requested size: 193.47577pt x 193.46645pt.
-
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-225.pdf, id=289, 1084.05pt x 1084.05pt>
+</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-225.pdf, id=291, 1084.05pt x 1084.05pt>
 File: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-225.pdf Graphic file (type pdf)
 <use /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-225.pdf>
-Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-225.pdf  used on input line 416.
+Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-225.pdf  used on input line 425.
 (pdftex.def)             Requested size: 193.47577pt x 193.46645pt.
-</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-315.pdf, id=290, 1084.05pt x 1084.05pt>
+</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-315.pdf, id=292, 1084.05pt x 1084.05pt>
 File: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-315.pdf Graphic file (type pdf)
 <use /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-315.pdf>
-Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-315.pdf  used on input line 421.
+Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-315.pdf  used on input line 430.
 (pdftex.def)             Requested size: 193.47577pt x 193.46645pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[6 </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-45.pdf> </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-135.pdf> </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-225.pdf> </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-315.pdf>] [7 </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-45.pdf> </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-135.pdf> </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-225.pdf> </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-315.pdf>] (./report.aux) ) 
+</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain1_t.jpg, id=293, 3400.705pt x 2516.40125pt>
+File: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain1_t.jpg Graphic file (type jpg)
+<use /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain1_t.jpg>
+Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain1_t.jpg  used on input line 440.
+(pdftex.def)             Requested size: 193.47577pt x 143.14455pt.
+</home/madhia/computer_vision/assignment4/implementation/q3/output/fountain2_t.jpg, id=294, 3169.8425pt x 2190.1825pt>
+File: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain2_t.jpg Graphic file (type jpg)
+<use /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain2_t.jpg>
+Package pdftex.def Info: /home/madhia/computer_vision/assignment4/implementation/q3/output/fountain2_t.jpg  used on input line 445.
+(pdftex.def)             Requested size: 193.47577pt x 133.6778pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[6] [7 </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-45.pdf> </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-135.pdf> </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-225.pdf> </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-315.pdf> </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-45.pdf> </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-135.pdf>] [8 </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-225.pdf> </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-315.pdf> </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain1_t.jpg> </home/madhia/computer_vision/assignment4/implementation/q3/output/fountain2_t.jpg>] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 6950 strings out of 478287
- 121930 string characters out of 5849289
+ 6979 strings out of 478287
+ 124002 string characters out of 5849289
  503467 words of memory out of 5000000
- 25064 multiletter control sequences out of 15000+600000
+ 25088 multiletter control sequences out of 15000+600000
  476244 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  68i,8n,77p,309b,504s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrsl10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hfbrsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/hfbright/hftl10.pfb>
-Output written on report.pdf (7 pages, 4927571 bytes).
+Output written on report.pdf (8 pages, 7984892 bytes).
 PDF statistics:
- 582 PDF objects out of 1000 (max. 8388607)
- 138 compressed objects within 2 object streams
+ 589 PDF objects out of 1000 (max. 8388607)
+ 140 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 114 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 134 words of extra memory for PDF output out of 10000 (max. 10000000)
 
