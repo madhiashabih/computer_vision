@@ -7,13 +7,14 @@ import random
 import numpy.linalg as la
 from applyhomography import applyhomography
 
-def load_data(matches_file: str, image_file: str) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+def load_data(matches_file: str, image_file: str, image_file_2: str) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Load match data and images."""
     data = np.loadtxt(matches_file)
     src_pts, dst_pts = data[:, :2], data[:, 2:]
-    img = cv2.imread(image_file, cv2.IMREAD_COLOR)
+    src_img = cv2.imread(image_file, cv2.IMREAD_COLOR)
+    dst_img = cv2.imread(image_file_2, cv2.IMREAD_COLOR)
     matches = np.hstack((src_pts, dst_pts))
-    return matches, img, img
+    return matches, src_img, dst_img
 
 def process_matches(matches: np.ndarray, src_img: np.ndarray, max_distance: float = 150) -> np.ndarray:
     """Process and plot matches."""
