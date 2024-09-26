@@ -3,10 +3,104 @@ import matplotlib.pyplot as plt
 import numpy as np
 from typing import List, Tuple
 plt.rcParams['figure.figsize'] = [15, 15]
-from mpl_toolkits.mplot3d import Axes3D
 import random
+import numpy.linalg as la
+from applyhomography import applyhomography
 
-##### Question 1 #####
+def load_data(matches_file: str, image_file: str) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Load match data and images."""
+    data = np.loadtxt(matches_file)
+    src_pts, dst_pts = data[:, :2], data[:, 2:]
+    img = cv2.imread(image_file, cv2.IMREAD_COLOR)
+    matches = np.hstack((src_pts, dst_pts))
+    return matches, img, img
+
+def process_matches(matches: np.ndarray, src_img: np.ndarray, max_distance: float = 150) -> np.ndarray:
+    """Process and plot matches."""
+    filtered_matches = filter_matches(matches, max_distance=max_distance)
+    plot_matches(src_img, filtered_matches, max_distance)
+    return filtered_matches
+
+def compute_fundamental_matrix(src_img, matches: np.ndarray, threshold: float = 1, iters: int = 2000) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Compute fundamental matrix using RANSAC."""
+    inliers_1, inliers_2, F = ransac(matches, threshold=threshold, iters=iters)
+    inliers = np.hstack((inliers_1, inliers_2))
+    plot_matches(src_img, inliers, max_distance=150)
+    return inliers_1, inliers_2, F
+
+def compute_essential_matrix(F: np.ndarray, K: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Compute essential matrix and perform SVD."""
+    E = K.T @ F @ K
+    U, S, Vt = np.linalg.svd(E)
+    
+    if np.linalg.det(U) * np.linalg.det(Vt) < 0:
+        E = -E
+        U = -U if np.linalg.det(U) < 0 else U
+        Vt = -Vt if np.linalg.det(Vt) < 0 else Vt
+    
+    return E, U, S, Vt
+
+def compute_projection_matrices(K: np.ndarray, U: np.ndarray, Vt: np.ndarray) -> Tuple[np.ndarray, List[np.ndarray]]:
+    """Compute projection matrices."""
+    R = np.eye(3)
+    P = K @ np.hstack([R, np.zeros((3, 1))])
+    
+    W = np.array([[0, -1, 0], [1, 0, 0], [0, 0, 1]])
+    u3 = U[:, 2].reshape(-1, 1)
+    
+    potential_P_primes = [
+        K @ np.hstack([U @ W @ Vt, u3]),
+        K @ np.hstack([U @ W @ Vt, -u3]),
+        K @ np.hstack([U @ W.T @ Vt, u3]),
+        K @ np.hstack([U @ W.T @ Vt, -u3])
+    ]
+    
+    return P, potential_P_primes
+
+def find_valid_projection_matrix(P: np.ndarray, potential_P_primes: List[np.ndarray], inliers_1: np.ndarray, inliers_2: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    """Find valid projection matrix using chirality condition."""
+    n1 = np.array([0, 0, 1]).reshape(-1, 1)
+    C1 = np.zeros((3, 1))
+    
+    for P_possible_prime in potential_P_primes:
+        X = triangulate_point(P, P_possible_prime, inliers_1[0], inliers_2[0])
+        R_possible_prime = P_possible_prime[:,:3]
+        C2 = -np.linalg.inv(R_possible_prime) @ P_possible_prime[:, 3]
+        n2 = R_possible_prime.T @ np.array([0, 0, 1])
+        
+        if check_chirality(X.reshape(-1,1), n1, C1, n2.reshape(-1,1), C2.reshape(-1,1)):
+            return P_possible_prime, R_possible_prime
+    
+    return None, None
+
+def compute_rectification_transforms(P: np.ndarray, P_prime: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    """Compute rectification transforms."""
+    K1, R1, c1 = decomposeP(P)
+    K2, R2, c2 = decomposeP(P_prime)
+    
+    Kn = 0.5 * (K1 + K2)
+    k = R1.T @ np.array([0, 0, 1])
+    
+    r1 = (c2 - c1) / la.norm(c2 - c1)
+    r2 = np.cross(k, r1) / la.norm(np.cross(k, r1))
+    r3 = np.cross(r1, r2)
+    Rn = np.vstack((r1, r2, r3))
+
+    T1 = Kn @ Rn @ R1.T @ la.inv(K1)
+    T2 = Kn @ Rn @ R2.T @ la.inv(K2)
+    
+    return T1, T2
+
+def apply_rectification(src_img: np.ndarray, dst_img: np.ndarray, T1: np.ndarray, T2: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    """Apply rectification transforms to images."""
+    _, _, transformed_1 = applyhomography(src_img, T1)
+    _, _, transformed_2 = applyhomography(dst_img, T2)
+    return transformed_1, transformed_2
+
+def save_images(transformed_1: np.ndarray, transformed_2: np.ndarray, output_path_1: str, output_path_2: str):
+    """Save transformed images."""
+    cv2.imwrite(output_path_1, transformed_1)
+    cv2.imwrite(output_path_2, transformed_2)
 
 def filter_matches(matches: np.ndarray, max_distance: float) -> np.ndarray:
     print("Shape of matches:", matches.shape)
