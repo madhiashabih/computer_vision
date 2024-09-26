@@ -5,7 +5,7 @@ from typing import List, Tuple
 plt.rcParams['figure.figsize'] = [15, 15]
 from mpl_toolkits.mplot3d import Axes3D
 import random
-from functions import plot_matches, ransac, decomposeP, triangulate_point, check_chirality, triangulate_point_array, plot_3d_points, is_point_in_front, filter_matches
+from functions import plot_matches, ransac, triangulate_point, draw_plot_3d, check_chirality, filter_matches
 
 
 def main():
@@ -15,15 +15,16 @@ def main():
     src_pts, dst_pts = data[:, :2], data[:, 2:]
     
     src_img = cv2.imread('ET/et1.jpg', cv2.IMREAD_COLOR)
+    dst_img = cv2.imread('ET/et1.jpg', cv2.IMREAD_COLOR)
     matches = np.hstack((src_pts, dst_pts))
     
     # Plot matches
-    matches = filter_matches(matches, max_distance)
-    plot_matches(src_img, matches, max_distance=150)
+    matches = filter_matches(matches, max_distance= 150)
+    plot_matches(src_img, matches, 150)
     
     ########## Q1b ##########
     # RANSAC
-    inliers_1, inliers_2, F = ransac(filtered_matches, threshold=1, iters=2000)
+    inliers_1, inliers_2, F = ransac(matches, threshold=1, iters=2000)
     inliers = np.hstack((inliers_1, inliers_2))
     plot_matches(src_img, inliers, max_distance=150)
     print("\nFundamental matrix F:")
@@ -80,21 +81,31 @@ def main():
     n1 = np.eye(3).T @ np.array([0, 0, 1]).reshape(-1, 1) # result: 3x1 array
     C1 = np.zeros((3, 1))
     
-    P_prime = none
+    P_prime = None
     for P_possible_prime in potential_P_primes:
         X = triangulate_point(P, P_possible_prime, inliers_1[0], inliers_2[0])
-        cam1 = is_point_in_front(P, inliers_1)
-        cam2 = is_point_in_front(P_possible_prime, inliers_2)
         
-        if cam1 and cam2:
+        R = P_possible_prime[:,:3]
+        C2 = -np.linalg.inv(R) @ P_possible_prime[:, 3]
+        n2 = R.T @ np.array([0, 0, 1])
+        
+        print(f"X: {X}")
+        print(f"n1: {n1}")
+        print(f"C1: {C1}")
+        print(f"n2: {n2}")
+        print(f"C2: {C2}")
+        
+        if check_chirality(X.reshape(-1,1), n1, C1, n2.reshape(-1,1), C2.reshape(-1,1)):
             P_prime = P_possible_prime
             
     print("\nP-prime")
-    print(P_prime)       
+    print(P_prime)        
      
     ########## Q1e ##########    
         
-    plot_3d_points(X, P, P_possible_prime)
+    inliers_1 = np.array(inliers_1)
+    inliers_2 = np.array(inliers_2)
+    draw_plot_3d(inliers_1, inliers_2, P, P_prime, src_img, dst_img, "et_3d")
 
 if __name__ == "__main__":
     main()

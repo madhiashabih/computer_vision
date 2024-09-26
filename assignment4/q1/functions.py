@@ -6,9 +6,6 @@ plt.rcParams['figure.figsize'] = [15, 15]
 from mpl_toolkits.mplot3d import Axes3D
 import random
 
-def calculate_distance(x1: float, y1: float, x2: float, y2: float) -> float:
-    return np.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-
 def filter_matches(matches: np.ndarray, max_distance: float) -> np.ndarray:
     print("Shape of matches:", matches.shape)
     return matches[np.linalg.norm(matches[:, :2] - matches[:, 2:], axis=1) <= max_distance]
@@ -115,31 +112,6 @@ def ransac(matches: np.ndarray, threshold: float, iters: int) -> Tuple[np.ndarra
     print(f"inliers/matches: {max_inliers}/{len(matches)}")
     return best_inliers_1, best_inliers_2, best_F
 
-def find_homography(pts_src: np.ndarray, pts_dst: np.ndarray) -> np.ndarray:
-    n = pts_src.shape[0]
-    A = np.zeros((2*n, 12))
-    
-    for i, ((x, y), (X, Y, Z)) in enumerate(zip(pts_src, pts_dst)):
-        A[2*i] = [0, 0, 0, 0, -X, -Y, -Z, -1, y*X, y*Y, y*Z, y]
-        A[2*i+1] = [X, Y, Z, 1, 0, 0, 0, 0, -x*X, -x*Y, -x*Z, -x]
-    
-    _, _, Vh = np.linalg.svd(A)
-    return Vh[-1].reshape(3, 4)
-
-def decomposeP(P: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-    W = np.array([[0, 0, 1], [0, 1, 0], [1, 0, 0]])
-    
-    Qt, Rt = np.linalg.qr((W @ P[:, :3]).T)
-    K = W @ Rt.T @ W
-    R = W @ Qt.T
-    
-    D = np.diag(np.sign(np.diag(K)))
-    K = K @ D
-    R = D @ R
-    
-    c = -R.T @ np.linalg.inv(K) @ P[:, 3]
-    
-    return K, R, c
 
 def triangulate_point(P1: np.ndarray, P2: np.ndarray, x1: np.ndarray, x2: np.ndarray) -> np.ndarray:
     A = np.vstack([
@@ -153,66 +125,107 @@ def triangulate_point(P1: np.ndarray, P2: np.ndarray, x1: np.ndarray, x2: np.nda
     X = V[-1]
     return X[:3] / X[3]
 
-def triangulate_point_array(P, P_prime, src_pts, dst_pts):
-    
-    num_points = src_pts.shape[0]
-    X = np.zeros((num_points, 4))  # Homogeneous 3D points
-    
-    for i in range(num_points):
-        x1, y1 = src_pts[i]
-        x2, y2 = dst_pts[i]
-
-        # Create the A matrix for the homogeneous equation system
-        A = np.zeros((4, 4))
-        A[0] = x1 * P[2] - P[0]
-        A[1] = y1 * P[2] - P[1]
-        A[2] = x2 * P_prime[2] - P_prime[0]
-        A[3] = y2 * P_prime[2] - P_prime[1]
-
-        # Solve using SVD
-        _, _, V = np.linalg.svd(A)
-        X_homogeneous = V[-1]
-        
-        # Normalize the 3D point (convert to inhomogeneous)
-        X[i] = X_homogeneous / X_homogeneous[-1]
-    
-    return X # Return the inhomogeneous 3D points
 
 def check_chirality(X: np.ndarray, n1: np.ndarray, C1: np.ndarray, n2: np.ndarray, C2: np.ndarray) -> bool:
     test1 = np.dot(n1.T, (X - C1)) > 0
     test2 = np.dot(n2.T, (X - C2)) > 0
     return bool(test1 and test2)
 
-def plot_3d_points(X, P1, P2):
+def draw_camera(ax, C, R, label, colour='k', axis_length=1, shape='o'):
+    axes = np.array([np.dot(R.T, [axis_length, 0, 0]) + C,
+                     np.dot(R.T, [0, axis_length, 0]) + C,
+                     np.dot(R.T, [0, 0, axis_length]) + C])
+
+    # Fix y-axis.
+    axes[1] = flip_point(C, axes[1])
+
+    ax.scatter(C[0], C[1], C[2],
+               marker=shape, color=colour, s=axis_length*10, label=f"Camera {label}")
+
+    colours = ['r', 'g', 'b']
+    labels = ["x-axis", "y-axis", "z-axis"]
+
+    for i in range(3):
+        ax.plot([C[0], axes[i][0]],
+                [C[1], axes[i][1]],
+                [C[2], axes[i][2]], 
+                f"{colours[i]}-", linewidth=1, label=labels[i])
+
+
+def draw_plot_3d(inliers1, inliers2, P1, P2, image1, image2, filename):
     fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
+    ax = fig.add_subplot(projection="3d")
     
-    # Plot the 3D points
-    ax.scatter(X[:, 0], X[:, 1], X[:, 2], c='b', marker='o', s=1)
-    
-    # Plot camera positions
-    plot_camera(ax, P1, 'Camera 1', color='r')
-    plot_camera(ax, P2, 'Camera 2', color='g')
-    
-    # Set equal scaling for the three axes
-    ax.set_box_aspect([1, 1, 1])
+    _, R1, c1 = decomposeP(P1)
+    _, R2, c2 = decomposeP(P2)
+
+    for i in range(len(inliers1)):
+        point3d = triangulate_point(P1, P2, inliers1[i], inliers2[i])
+        bgr = image1[int(inliers1[i, 1]), int(inliers1[i, 0])]
+        colour = [(bgr[2] / 255, bgr[1] / 255, bgr[0] / 255)]
+        ax.scatter(point3d[0], point3d[1], point3d[2], c=colour, s=1)
+
+    draw_camera(ax, c1, R1, 1, 'k', shape='^')
+    draw_camera(ax, c2, R2, 2, 'k', shape='v')
+
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.set_zlabel('Z')
-    ax.set_title('3D Reconstruction')
-    
-    plt.show()
+    ax.set_xlim(-2.5, 2.5)
+    ax.set_ylim(-2, 4)
+    ax.set_zlim(0, 7)
+    ax.set_aspect('equal')
 
-def plot_camera(ax, P, label, color):
-    # Extract camera center and direction
-    camera_center = -np.linalg.inv(P[:, :3]) @ P[:, 3]
-    ax.scatter(camera_center[0], camera_center[1], camera_center[2], c=color, marker='^', label=label)
-    # Optionally, draw the direction of the camera
+    handles, labels = plt.gca().get_legend_handles_labels()
+    by_label = dict(zip(labels, handles))
+    plt.legend(by_label.values(), by_label.keys())
+    for h in [30,-30]:
+        for v in [45, 135, 225, 315]:
+            ax.view_init(h, v)
+            plt.savefig(f"{filename}_{h}-{v}.pdf")
+    # plt.show()
+    plt.close()
     
-def is_point_in_front(P, X):
-    R = P[:, :3]
-    C = -np.linalg.inv(R) @ P[:, 3]
+def decomposeP(P):
+    '''
+        The input P is assumed to be a 3-by-4 homogeneous camera matrix.
+        The function returns a homogeneous 3-by-3 calibration matrix K,
+        a 3-by-3 rotation matrix R and a 3-by-1 vector c such that
+        K*R*[eye(3), -c] = P.
+
+    '''
+
+    W = np.array([[0, 0, 1],
+                  [0, 1, 0],
+                  [1, 0, 0]])
+
+    # calculate K and R up to sign
+    Qt, Rt = np.linalg.qr((W.dot(P[:,0:3])).T)
+    K = W.dot(Rt.T.dot(W))
+    R = W.dot(Qt.T)
+
+    # correct for negative focal length(s) if necessary
+    D = np.array([[1, 0, 0],
+                  [0, 1, 0],
+                  [0, 0, 1]])
+    if K[0,0] < 0:
+        D[0,0] = -1
+    if K[1,1] < 0:
+        D[1,1] = -1
+    if K[2,2] < 0:
+        D[2,2] = -1
+    K = K.dot(D)
+    R = D.dot(R)
+
+    # calculate c
+    c = -R.T.dot(np.linalg.inv(K).dot(P[:,3]))
+
+    return K, R, c
+
+def flip_point(origin, point):
+    diff = origin - point
+    flipped = point + 2 * diff
+
+    return flipped
     
-    n = R.T @ np.array([0, 0, 1])
-    
-    return n.T @ (X[:3] - C) > 0
+
