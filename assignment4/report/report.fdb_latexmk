@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1727385339 "/home/madhia/computer_vision/assignment4/report/report.tex" "report.pdf" "report" 1727385340
+["pdflatex"] 1727385533 "/home/madhia/computer_vision/assignment4/report/report.tex" "report.pdf" "report" 1727385534
   "/etc/texmf/web2c/texmf.cnf" 1710496023 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/madhia/computer_vision/assignment4/implementation/q1-2/output/Figure_1.png" 1727169984 999809 23003c51d4e044aaa2eb05994ad2f0d2 ""
   "/home/madhia/computer_vision/assignment4/implementation/q1-2/output/Figure_2.png" 1727372945 713265 f8b70ea8dc835c5240e804e8b2e9f8cc ""
@@ -12,7 +12,15 @@
   "/home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_30-225.pdf" 1727378252 86420 51c463ca82b09e528a14f20dbbb7f68c ""
   "/home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_30-315.pdf" 1727378253 86298 a2408e5ba63d3d24a6926ffcee9090b9 ""
   "/home/madhia/computer_vision/assignment4/implementation/q1-2/output/et_3d_30-45.pdf" 1727378251 86506 3f536c01b92372219f43e934d008834a ""
-  "/home/madhia/computer_vision/assignment4/report/report.tex" 1727385339 14642 1dcc06f7ab94ad4075e4713863c426b5 ""
+  "/home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-135.pdf" 1727382492 227622 75e3c433bab22e111b006c36b335e54b ""
+  "/home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-225.pdf" 1727382495 227544 0bed6a0ded284fc71e9207c078b149b8 ""
+  "/home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-315.pdf" 1727382497 227553 74ebd26b0dddb9f60f798cc13f6a6f78 ""
+  "/home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_-30-45.pdf" 1727382490 227134 7f284621004991145afd091b080ac34e ""
+  "/home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-135.pdf" 1727382482 227857 722c42a1f81b2c13a9943012b9d1790b ""
+  "/home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-225.pdf" 1727382485 227550 b07bd04b1b2dcec3bc7c9fb0c8407fbb ""
+  "/home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-315.pdf" 1727382487 227877 3974242ffa914860a87be7e5847241a6 ""
+  "/home/madhia/computer_vision/assignment4/implementation/q3/output/fountain_3d_30-45.pdf" 1727382480 227937 d37846f7ed9f821ed849dca56d5a0e7e ""
+  "/home/madhia/computer_vision/assignment4/report/report.tex" 1727385533 16771 c9bcc66fa708c6f77e90da2b5fde1d43 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cmbright/cmbr10.tfm" 1136768653 1304 95ad082f6791446dc43df559d5c79878 ""
@@ -86,8 +94,8 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1644012257 39432 7155514e09a3d69036fac785183a21c2 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1722082410 4379155 98693266ff65f58d9f98aff394de12d2 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1722082430 2799502 e08242dd25ac3531d310d33313ca9cae ""
-  "report.aux" 1727385340 3480 90db8c21d558758aa8766e1344dca2a5 "pdflatex"
-  "report.tex" 1727385339 14642 1dcc06f7ab94ad4075e4713863c426b5 ""
+  "report.aux" 1727385534 4569 a547cc7e979b08d5da642ac913c84282 "pdflatex"
+  "report.tex" 1727385533 16771 c9bcc66fa708c6f77e90da2b5fde1d43 ""
   (generated)
   "report.aux"
   "report.log"
