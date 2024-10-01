@@ -12,7 +12,6 @@ def transform(input, output, target_size=(150, 210)):
     for image in os.listdir(input):
         if image.lower().endswith(('.png', '.jpg', '.jpeg')):
             image_path = os.path.join(input, image)
-            print(image_path)
             with Image.open(image_path) as img:
                 # Convert to grayscale
                 img = img.convert('L')
@@ -22,7 +21,6 @@ def transform(input, output, target_size=(150, 210)):
                         
                 # Save the preprocessed image
                 output_path = os.path.join(output, f"{image}")
-                print(f"output path: {output_path}")
                 img.save(output_path)
                         
                 # Convert image to numpy array and flatten
