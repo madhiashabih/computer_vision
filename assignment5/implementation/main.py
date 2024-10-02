@@ -3,7 +3,7 @@ from torchvision.transforms import transforms
 from helper import transform
 # a) Resize and/or crop all the images to a fixed size.
 input = "in/cropped_faces/"
-output = "in/cropped_faces_transformed/"
+output = "in/q1/faces_transformed/"
 image_data= transform(input, output)
 
 print(f"Preprocessed {len(image_data)} images.")
