@@ -67,7 +67,7 @@ def calculate_X(vectors, x):
     return X
     
 def find_svd(X):
-    U, s, VT = np.linalg.svd(X)
+    U, s, Vt = np.linalg.svd(X, full_matrices = False)
     return U, s, Vt
 
 def get_U_alpha(U, alpha):
@@ -75,7 +75,7 @@ def get_U_alpha(U, alpha):
         raise ValueError("α cannot be larger than the number of columns in U")
     return U[:, :alpha]
 
-def plot_singular(X):
+def plot_singular(s, X):
     rank = np.linalg.matrix_rank(X)
     print(f"Rank of X: {rank}")
 
@@ -94,4 +94,4 @@ def plot_singular(X):
 
     # Show the plot
     plt.tight_layout()
-    plt.show()
+    plt.show() 

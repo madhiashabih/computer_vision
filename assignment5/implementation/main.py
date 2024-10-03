@@ -36,11 +36,10 @@ print(f"X: {X}")
 print(f"X rows, columns: {X.shape[0]} {X.shape[1]}")
 
 # Find basis U_a
-rounded_X = 
 U, s, VT = find_svd(X)
 U_alpha = get_U_alpha(U, 2)
 print(f"U alpha: {U_alpha}")
-#plot_singular(X[1])
+plot_singular(s,X)
 
 ########### d) Reconstruct a few of the images from their feature vector representations (y in the lecture slides) and
 # display them next to the originals, for some idea of how effective your dimensionality reduction is. ##########
