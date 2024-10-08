@@ -2,6 +2,9 @@ import os
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+import glob
+from sklearn.cluster import KMeans
 
 def transform(input, output, target_size=(150, 210)):
     if not os.path.exists(output):
@@ -58,7 +61,7 @@ def calculate_x(vectors, avg_value):
     x = vectors - avg_value
     return x
 
-def calculate_X(vectors, x):
+def calculate_X(vectors, x): 
     # Calculate X = (1/sqrt(n)) * x
     n = vectors.shape[0]  # number of vectors (columns)
     print(f"number of vectors (columns): {n}")
@@ -86,6 +89,7 @@ def plot_singular(s, X):
     plt.xlabel('Index')
     plt.ylabel('Singular Value')
     plt.yscale('log')  # Use log scale for y-axis
+    plt.ylim(10**2, 10**4)
     plt.grid(True)
 
     # Add rank information to the plot
@@ -94,4 +98,72 @@ def plot_singular(s, X):
 
     # Show the plot
     plt.tight_layout()
-    plt.show() 
+    plt.show()
+
+def calculate_y(U_alpha, f, a):
+    return U_alpha.T @ (f - a)
+
+def calculate_fhat(a, U_alpha, y):
+    return a + U_alpha @ y
+
+def vector_to_image(vector, image_shape, output_path):
+    """
+    Converts a flattened vector back into an image with the specified shape.
+
+    Args:
+        vector (np.array): The flattened vector representing the image.
+        image_shape (tuple): Shape of the original image (height, width, channels).
+        output_path (str): Path to save the reconstructed image.
+
+    Returns:
+        None
+    """
+    # Reshape the vector into the original image shape
+    img_array = vector.reshape(image_shape)
+
+    # Convert the NumPy array back to an image
+    img = Image.fromarray(img_array.astype('uint8'), 'RGB')
+
+    # Save the reconstructed image
+    img.save(output_path)
+    print(f"Image saved at: {output_path}")
+ 
+# Source: https://medium.com/@aybukeyalcinerr/bag-of-visual-words-bovw-db9500331b2f    
+# A k-means clustering algorithm who takes 2 parameter which is number 
+# of cluster(k) and the other is descriptors list(unordered 1d array)
+# Returns an array that holds central points.
+
+def read_sift_descriptors(base_folder, subfolders):
+    all_descriptors = []
+    
+    for subfolder in subfolders:
+        folder_path = os.path.join(base_folder, subfolder)
+        file_pattern = os.path.join(folder_path, "*_descr.txt")
+        
+        for file_path in glob.glob(file_pattern):
+            X = np.loadtxt(file_path)
+            all_descriptors.append(X)
+    return np.vstack(all_descriptors)
+
+
+def kmeans(k, descriptor_list):
+    """
+    Performs K-means clustering on the descriptor list.
+    
+    Args:
+    k (int): Number of clusters.
+    descriptor_list (list): A list of descriptors.
+    
+    Returns:
+    array: Central points (visual words) of the clusters.
+    """
+    # Convert descriptor_list to a 2D array for KMeans
+    descriptor_array = np.array(descriptor_list).reshape(-1, 1)  # Reshape for KMeans
+    kmeans = KMeans(n_clusters=k, n_init=10)
+    kmeans.fit(descriptor_array)
+    visual_words = kmeans.cluster_centers_
+    return visual_words
+
+
+
+
