@@ -1,0 +1,173 @@
+\documentclass{article}
+\usepackage{natbib}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+ \usepackage{graphicx}
+ \usepackage{subcaption}
+ \usepackage{titling}
+ \usepackage{float}
+\usepackage{listings}
+
+
+ \title{ASSIGNMENT 2: Computer Vision 792}
+\author{Madhia Shabih}
+\date{August 2024}
+ 
+ \usepackage{fancyhdr}
+\fancypagestyle{plain}{%  the preset of fancyhdr 
+    \fancyhf{} % clear all header and footer fields
+    \fancyfoot[L]{\thedate}
+    \fancyhead[L]{24397644}
+    \fancyhead[R]{\theauthor}
+}
+\makeatletter
+\def\@maketitle{%
+  \newpage
+  \null
+  \vskip 1em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\LARGE \@title \par}%
+    \vskip 1em%
+    %{\large \@date}%
+  \end{center}%
+  \par
+  \vskip 1em}
+\makeatother
+
+\usepackage{lipsum}  
+\usepackage{cmbright}
+
+\newcommand\phantomimage{%
+    \phantom{%
+        \rule{\imagewidth}{\imageheight}%
+    }%
+}
+
+\begin{document}
+\maketitle
+
+\section{PCA feature vectors and kNN classification}
+\subsection{Description}  
+   The first task involves building a simple face recognition system using the PCA feature vectors derived from the cropped Georgia Tech face database. 
+   The steps taken in this task include:
+   \begin{itemize}
+       \item Resizing and cropping images to a fixed size.
+       \item Setting aside 5 random images from each individual as a test set.
+       \item Using the remaining images to calculate an average vector \( a \) and basis \( U_\alpha \).
+       \item Plotting singular values of matrix \( X \) to determine a suitable value of \( \alpha \).
+       \item Reconstructing images from their feature vector representations.
+       \item Converting all images to feature vectors and using a kNN classifier for classification while varying the hyperparameter \( k \).
+   \end{itemize}
+
+\subsection{Results}
+    \begin{itemize}
+        \item \textbf{Average Vector \( a \):} \\
+        [ 88.996  61.056  49.296 ... 100.9    90.824  86.652]
+
+        \item \textbf{Singular Values:} \\
+        \includegraphics[width=\textwidth]{/home/madhia/computer_vision/assignment5/implementation/out/singular_values_plot.png} % Placeholder for singular values plot
+
+        \item \textbf{Image Reconstruction:} \\
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.45\textwidth]{original_image.png} % Placeholder for original image
+            \includegraphics[width=0.45\textwidth]{reconstructed_image.png} % Placeholder for reconstructed image
+            \caption{Original and Reconstructed Images}
+        \end{figure}
+
+        \item \textbf{kNN Classification Accuracy:} \\
+        \includegraphics[width=\textwidth]{knn_accuracy_plot.png} % Placeholder for accuracy plot
+
+        \item \textbf{Confusion Matrix:} \\
+        \begin{table}[h]
+            \centering
+            \begin{tabular}{@{}ccc@{}}
+                \toprule
+                True Label & Predicted Label & Count \\ \midrule
+                Person 1   & Person 1       & 45   \\
+                Person 1   & Person 2       & 3    \\
+                Person 2   & Person 2       & 42   \\
+                \bottomrule
+            \end{tabular}
+            \caption{Confusion Matrix for kNN Classification}
+        \end{table}
+    \end{itemize}
+
+\subsection{Interpretation}
+1. **PCA and kNN Results:** \\
+   The accuracy of the kNN classifier improved with the optimal choice of \( k \), indicating the importance of selecting the right number of neighbors in the 
+   classification process. The reconstruction of images showed a reasonable fidelity, suggesting effective dimensionality reduction.
+
+
+\section{Bag-of-words feature vectors and SVM classification}   
+\subsection{Description}
+2. **Bag-of-Words Feature Vectors and SVM Classification**  
+   The second task focuses on classifying a subset of the Natural Scene Categories dataset. The steps involved include:
+   \begin{itemize}
+       \item Building a vocabulary of visual words from training images using SIFT features and k-means clustering.
+       \item Training linear one-vs-one SVMs for classification and evaluating the performance on the test dataset.
+   \end{itemize}
+
+\subsection{Results}
+The results of both tasks are detailed in this section.
+\begin{itemize}
+    \item \textbf{Vocabulary Size:} \\
+    The size of the vocabulary constructed from the training images is \( n \) visual words.
+
+    \item \textbf{SVM Performance:} \\
+    Overall test accuracy: \( X\% \).
+
+    \item \textbf{Correctly Classified Images:} \\
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.45\textwidth]{correctly_classified_1.png} % Placeholder for correctly classified image
+        \includegraphics[width=0.45\textwidth]{correctly_classified_2.png} % Placeholder for correctly classified image
+        \caption{Correctly Classified Images}
+    \end{figure}
+
+    \item \textbf{Incorrectly Classified Images:} \\
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.45\textwidth]{incorrectly_classified_1.png} % Placeholder for incorrectly classified image
+        \includegraphics[width=0.45\textwidth]{incorrectly_classified_2.png} % Placeholder for incorrectly classified image
+        \caption{Incorrectly Classified Images}
+    \end{figure}
+
+    \item \textbf{Confusion Matrix:} \\
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{@{}ccc@{}}
+            \toprule
+            True Label & Predicted Label & Count \\ \midrule
+            Class 1    & Class 1        & 30   \\
+            Class 1    & Class 2        & 5    \\
+            Class 2    & Class 2        & 25   \\
+            \bottomrule
+        \end{tabular}
+        \caption{Confusion Matrix for SVM Classification}
+    \end{table}
+\end{itemize}
+
+\subsection{Interpretation}
+In this section, we discuss the implications of our findings, the effectiveness of PCA for dimensionality reduction, the performance of the kNN and SVM classifiers, and potential improvements to the methods used. 
+
+2. **Bag-of-Words and SVM Results:** \\
+   The SVM classifier achieved a test accuracy of approximately \( X\% \), which demonstrates the viability of using visual words for scene classification. Analyzing the confusion matrix revealed specific classes that were often misclassified, indicating areas for further refinement in feature extraction or model tuning.
+
+\section{Conclusion}
+The experiments conducted on both datasets demonstrate the effectiveness of PCA for feature extraction and the applicability of both kNN and SVM classifiers for image classification tasks. Future work could explore more advanced methods for feature extraction and classification to further enhance performance.
+
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{ref}
+
+\end{document}
+

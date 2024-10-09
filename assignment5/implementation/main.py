@@ -2,23 +2,29 @@ import os
 import numpy as np 
 import argparse
 from helper import transform, process_images, average_values, calculate_X, calculate_x, find_svd, plot_singular, get_U_alpha, calculate_y, calculate_fhat, vector_to_image, kmeans, read_sift_descriptors
+import joblib
+import subprocess
 
-def q1():
-    print("Running function q1...")
+def transforms():
     ########## a) Resize and/or crop all the images to a fixed size. ##########
-    # input = "in/cropped_faces/"
-    # output = "in/q1/faces_transformed/"
-    # image_data= transform(input, output)
+    input = "in/cropped_faces/"
+    output = "in/q1/faces_transformed/"
+    image_data= transform(input, output)
 
-    # print(f"Preprocessed {len(image_data)} images.")
-    # print(f"Image data shape: {image_data.shape}")
+    print(f"Preprocessed {len(image_data)} images.")
+    print(f"Image data shape: {image_data.shape}")
 
     ########### b) Select 5 random images of each person, and put them aside as a test set. ###########
 
     ########### c) Of the images remaining, select 5 random images of each person. Then use these 250 images to find
     # an average vector a and basis Uα. Plot the singular values of the matrix X (defined in the lecture
     # slides) in order to pick a suitable value of α. ############
+    
+    # RUN ./create_test_train.sh
 
+def q1():
+    print("Running function q1...")
+    
     input = "in/q1/train_set"
 
     # Stack column of images into one long vector
@@ -77,27 +83,35 @@ def q2():
     print(f"Number of descriptors: {len(sift_descriptors)}")
     
     print(f"Size of each descriptor: {len(sift_descriptors[0])}")
-    
 
     # Now you can perform k-means clustering
-    # k = 50  # Number of clusters
-    # visual_words = kmeans(k, descriptor_list)
+    k = 50  # Number of clusters
+    visual_words = kmeans(k, sift_descriptors)
+    
+    # Save the KMeans model
+    model_path = "kmeans_model.joblib"
+    joblib.dump(visual_words, model_path)
+    print(f"KMeans model saved at {model_path}")
 
-    # print("Visual Words (Central Points):")
-    # print(visual_words)
+    print("Visual Words (Central Points):")
+    print(visual_words)
     # #  3. that’s our visual vocabulary fixed: a set of k 128D cluster centres
     #  4. we can now represent any image (in the training set or otherwise) as a normalised histo
     # gram of these words (why normalised?)
     
+    
+    
 def main():
     parser = argparse.ArgumentParser(description="Run specific functions based on command-line arguments.")
-    parser.add_argument("args", type=int, choices=[1, 2], help="Choose 1 to run q1 or 2 to run q2.")
+    parser.add_argument("args", type=int, choices=[0, 1, 2], help="Choose 0, 1 to run transforms, q1 or 2 to run q2.")
     
     # Parse the arguments
     arguments = parser.parse_args()
 
     # Run the corresponding function
-    if arguments.args == 1:
+    if arguments.args == 0:
+        transforms()
+    elif arguments.args == 1:
         q1()
     elif arguments.args == 2:
         q2()

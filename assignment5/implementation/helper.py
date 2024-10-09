@@ -6,7 +6,7 @@ import os
 import glob
 from sklearn.cluster import KMeans
 
-def transform(input, output, target_size=(150, 210)):
+def transform(input, output, target_size=(150, 150)):
     if not os.path.exists(output):
         os.makedirs(output)
 
@@ -16,10 +16,7 @@ def transform(input, output, target_size=(150, 210)):
     for image in os.listdir(input):
         if image.lower().endswith(('.jpg')):
             image_path = os.path.join(input, image)
-            with Image.open(image_path) as img:
-                # Convert to grayscale
-                img = img.convert('L')
-                        
+            with Image.open(image_path) as img:        
                 # Resize the image
                 img = img.resize(target_size, Image.LANCZOS)
                         
@@ -27,8 +24,8 @@ def transform(input, output, target_size=(150, 210)):
                 output_path = os.path.join(output, f"{image}")
                 img.save(output_path)
                         
-                # Convert image to numpy array and flatten
-                img_array = np.array(img).flatten()
+                # Convert image to numpy array
+                img_array = np.array(img)
                 image_data.append(img_array)
 
 
@@ -98,7 +95,8 @@ def plot_singular(s, X):
 
     # Show the plot
     plt.tight_layout()
-    plt.show()
+    plt.savefig("out/singular_values_plot.png")
+
 
 def calculate_y(U_alpha, f, a):
     return U_alpha.T @ (f - a)
@@ -158,9 +156,8 @@ def kmeans(k, descriptor_list):
     array: Central points (visual words) of the clusters.
     """
     # Convert descriptor_list to a 2D array for KMeans
-    descriptor_array = np.array(descriptor_list).reshape(-1, 1)  # Reshape for KMeans
-    kmeans = KMeans(n_clusters=k, n_init=10)
-    kmeans.fit(descriptor_array)
+    kmeans = KMeans(n_clusters=k, n_init=42)
+    kmeans.fit(descriptor_list)
     visual_words = kmeans.cluster_centers_
     return visual_words
 
