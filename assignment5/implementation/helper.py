@@ -32,6 +32,7 @@ def transform(input, output, target_size=(150, 150)):
     return np.array(image_data, dtype=np.float32)
 
 def image_to_vector(image_path):
+    # Convert to grayscale
     img = Image.open(image_path).convert("L")
     img_array = np.array(img)  
     r, c = img_array.shape
@@ -83,7 +84,7 @@ def plot_singular(s, X):
     plt.xlabel('Index')
     plt.ylabel('Singular Value')
     plt.yscale('log')  # Use log scale for y-axis
-    plt.ylim(10**2, 10**4)
+    plt.ylim(1, 10**4)
     plt.grid(True)
 
     # Add rank information to the plot
@@ -108,12 +109,26 @@ def calculate_y(U_alpha, f, a):
     return results
 
 def calculate_fhat(a, U_alpha, y):
-    return a + U_alpha @ y
+    f_hat_list = []
 
-def vector_to_image(vector, image_shape=(150, 150, 3)):
-    img_array_reconstructed = vector.reshape(image_shape)
-    reconstructed_img = Image.fromarray(img_array_reconstructed.astype(np.uint8))
-    reconstructed_img.save('out/reconstructed_image.jpg')
+    for y_i in y:
+        # Compute f_hat = a + U_alpha @ y_i
+        f_hat = a + U_alpha @ y_i  # Shape: (22500, 1)
+        f_hat_list.append(f_hat)
+        
+    return f_hat_list
+
+def vector_to_image(vector, rows, cols):
+    # Reshape the vector back to a 2D array
+    img_array = vector.reshape((cols, rows)).T
+    
+    # Convert the array to uint8 type
+    img_array = img_array.astype(np.uint8)
+    
+    # Create an image from the array
+    img = Image.fromarray(img_array, mode='L')
+    
+    return img
     
  
 # Source: https://medium.com/@aybukeyalcinerr/bag-of-visual-words-bovw-db9500331b2f    

@@ -73,8 +73,13 @@ def q1():
     
 
     fhat = calculate_fhat(50, U_alpha, y)
+    print()
+    print(f"fhat: ")
+    print("Number of fhat:", len(fhat))  # Should be 250
+    print("Shape of each fhat matrix:", fhat[0].shape)  # Should be (22500, 1)
 
-    vector_to_image(fhat, (150, 210), "~/computer_vision/assignment5/reconstructed_image.png")
+    image = vector_to_image(fhat[1], 150, 150)
+    image.save("out/reconstructed_image.png")
 
     # Display them next to the originals, for some idea of how effective your dimensionality reduction is.
 
