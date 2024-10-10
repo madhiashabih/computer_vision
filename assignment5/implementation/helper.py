@@ -96,7 +96,16 @@ def plot_singular(s, X):
 
 
 def calculate_y(U_alpha, f, a):
-    return U_alpha.T @ (f - a)
+    results = []
+    for x in f:
+        # Compute (x - a)
+        x_minus_a = x - a  # Shape: (22500, 1)
+        
+        # Compute transpose(U_a) * (x - a), resulting in shape (50, 1)
+        result = U_alpha.T @ x_minus_a  # Matrix multiplication
+        results.append(result)
+     
+    return results
 
 def calculate_fhat(a, U_alpha, y):
     return a + U_alpha @ y

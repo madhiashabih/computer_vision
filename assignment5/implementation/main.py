@@ -68,7 +68,8 @@ def q1():
     y = calculate_y(U_alpha, vectors, 50)
     print()
     print(f"y: ")
-    print(f"y rows, columns: {y.shape[0]} {y.shape[1]}")
+    print("Number of y:", len(y))  # Should be 250
+    print("Shape of each y matrix:", y[0].shape)  # Should be (50, 1)
     
 
     fhat = calculate_fhat(50, U_alpha, y)
