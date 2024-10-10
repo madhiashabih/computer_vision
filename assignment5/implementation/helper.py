@@ -32,14 +32,12 @@ def transform(input, output, target_size=(150, 150)):
     return np.array(image_data, dtype=np.float32)
 
 def image_to_vector(image_path):
-    img = Image.open(image_path)
+    img = Image.open(image_path).convert("L")
+    img_array = np.array(img)  
+    r, c = img_array.shape
     
-    if img.mode != 'RGB':
-        img = img.convert('RGB')
+    vector = img_array.flatten('F').reshape(-1,1)
     
-    vector = np.array(img)
-    # print(f"p*q of matrix: {vector.shape[0] * vector.shape[1]}")   
-    vector = vector.flatten()
     return vector
 
 def process_images(folder_path):
@@ -58,13 +56,13 @@ def calculate_x(vectors, avg_value):
     x = vectors - avg_value
     return x
 
-def calculate_X(vectors, x): 
+def calculate_X(x): 
     # Calculate X = (1/sqrt(n)) * x
-    n = vectors.shape[0]  # number of vectors (columns)
-    print(f"number of vectors (columns): {n}")
-    X = (1 / np.sqrt(n)) * x
-    
-    return X
+    n = len(x)  # number of vectors (columns)
+    matrix = np.column_stack(x)
+    scaling_factor = 1/np.sqrt(n)
+    X = scaling_factor * matrix 
+    return X 
     
 def find_svd(X):
     U, s, Vt = np.linalg.svd(X, full_matrices = False)
@@ -77,7 +75,6 @@ def get_U_alpha(U, alpha):
 
 def plot_singular(s, X):
     rank = np.linalg.matrix_rank(X)
-    print(f"Rank of X: {rank}")
 
     # Plot the singular values
     plt.figure(figsize=(10, 6))
@@ -104,27 +101,11 @@ def calculate_y(U_alpha, f, a):
 def calculate_fhat(a, U_alpha, y):
     return a + U_alpha @ y
 
-def vector_to_image(vector, image_shape, output_path):
-    """
-    Converts a flattened vector back into an image with the specified shape.
-
-    Args:
-        vector (np.array): The flattened vector representing the image.
-        image_shape (tuple): Shape of the original image (height, width, channels).
-        output_path (str): Path to save the reconstructed image.
-
-    Returns:
-        None
-    """
-    # Reshape the vector into the original image shape
-    img_array = vector.reshape(image_shape)
-
-    # Convert the NumPy array back to an image
-    img = Image.fromarray(img_array.astype('uint8'), 'RGB')
-
-    # Save the reconstructed image
-    img.save(output_path)
-    print(f"Image saved at: {output_path}")
+def vector_to_image(vector, image_shape=(150, 150, 3)):
+    img_array_reconstructed = vector.reshape(image_shape)
+    reconstructed_img = Image.fromarray(img_array_reconstructed.astype(np.uint8))
+    reconstructed_img.save('out/reconstructed_image.jpg')
+    
  
 # Source: https://medium.com/@aybukeyalcinerr/bag-of-visual-words-bovw-db9500331b2f    
 # A k-means clustering algorithm who takes 2 parameter which is number 

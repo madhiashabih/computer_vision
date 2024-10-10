@@ -1,12 +1,14 @@
 import os
 import numpy as np 
 import argparse
-from helper import transform, process_images, average_values, calculate_X, calculate_x, find_svd, plot_singular, get_U_alpha, calculate_y, calculate_fhat, vector_to_image, kmeans, read_sift_descriptors
+from helper import transform, process_images, image_to_vector, average_values, calculate_X, calculate_x, find_svd, plot_singular, get_U_alpha, calculate_y, calculate_fhat, vector_to_image, kmeans, read_sift_descriptors
 import joblib
 import subprocess
 
 def transforms():
-    ########## a) Resize and/or crop all the images to a fixed size. ##########
+    print("Running transforms...")
+    
+    # Resize and/or crop all the images to a fixed size.
     input = "in/cropped_faces/"
     output = "in/q1/faces_transformed/"
     image_data= transform(input, output)
@@ -14,51 +16,66 @@ def transforms():
     print(f"Preprocessed {len(image_data)} images.")
     print(f"Image data shape: {image_data.shape}")
 
-    ########### b) Select 5 random images of each person, and put them aside as a test set. ###########
+    # Select 5 random images of each person, and put them aside as a test set.
 
-    ########### c) Of the images remaining, select 5 random images of each person. Then use these 250 images to find
-    # an average vector a and basis Uα. Plot the singular values of the matrix X (defined in the lecture
-    # slides) in order to pick a suitable value of α. ############
-    
     # RUN ./create_test_train.sh
 
 def q1():
     print("Running function q1...")
     
+    # Use these 250 images to find an average vector a and basis Uα. 
+    
     input = "in/q1/train_set"
 
     # Stack column of images into one long vector
     vectors = process_images(input)
-    print(f"Stacked columns of matrix into one long vector, vectors[1]: {vectors[1]}")
+    print(f"vectors:")
+    print(f"Size of column vector[1] (should be 22500): {vectors[1].shape[0]}")
+    print("Number of elements in the list (should be 250):", len(vectors))
 
     # Find average
     avg_value = average_values(vectors)
-    print(f"Average values: {avg_value}")
+    print()
+    print(f"Size of average value vectors (should be 22500): {avg_value.shape[0]}")
 
     # Calculate xi
     x = calculate_x(vectors, avg_value)
-    print(f"x: {x}")
-    print(f"x rows, columns: {x.shape[0]} {x.shape[1]}")
+    print()
+    print("x:")
+    print(f"Rows of x[1] (should be 22500): {x[1].shape[0]}")
+    print(f"Columns of x[1] (should be 1): {x[1].shape[1]}")
+    print("Number of elements in the list (should be 250):", len(x))
 
     # Calculate X
-    X = calculate_X(vectors, x)
-    print(f"X: {X}")
-    print(f"X rows, columns: {X.shape[0]} {X.shape[1]}")
+    X = calculate_X(x)
+    print()
+    print(f"X:")
+    print(f"Size of X  : row (should be 22500): {X.shape[0]}, column (should be 250): {X.shape[1]}")
+    
 
     # Find basis U_a
     U, s, VT = find_svd(X)
     U_alpha = get_U_alpha(U, 50)
-    print(f"U alpha: {U_alpha}")
+    print()
+    print(f"U alpha: ")
+    print(f"Size of U_alpha  : row (should be ?): {U_alpha.shape[0]}, column (should be 50): {U_alpha.shape[1]}")
+    
+    # Plot the singular values of the matrix X in order to pick a suitable value of α.
     plot_singular(s,X)
 
-    ########### d) Reconstruct a few of the images from their feature vector representations (y in the lecture slides) and
-    # display them next to the originals, for some idea of how effective your dimensionality reduction is. ##########
+    # Reconstruct a few of the images from their feature vector representations (y in the lecture slides) 
+    
     y = calculate_y(U_alpha, vectors, 50)
-    print(f"y: {y}")
+    print()
+    print(f"y: ")
+    print(f"y rows, columns: {y.shape[0]} {y.shape[1]}")
+    
 
     fhat = calculate_fhat(50, U_alpha, y)
 
     vector_to_image(fhat, (150, 210), "~/computer_vision/assignment5/reconstructed_image.png")
+
+    # Display them next to the originals, for some idea of how effective your dimensionality reduction is.
 
     ########## e) Convert all the images to feature vectors. You should use the same a and Uα from part (c), found with
     # 5 images of each person. But now, for the purposes of classification, there will be 10 training vectors
@@ -102,6 +119,7 @@ def q2():
     
     
 def main():
+    
     parser = argparse.ArgumentParser(description="Run specific functions based on command-line arguments.")
     parser.add_argument("args", type=int, choices=[0, 1, 2], help="Choose 0, 1 to run transforms, q1 or 2 to run q2.")
     
