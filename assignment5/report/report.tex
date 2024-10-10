@@ -13,6 +13,14 @@
  \usepackage{titling}
  \usepackage{float}
 \usepackage{listings}
+\usepackage{amsmath}
+\usepackage{algorithm}    % For algorithms
+\usepackage{algpseudocode} % For pseudocode in algorithms    % If you need to include images or plots
+\usepackage{amsfonts} 
+\usepackage{amsmath} 
+
+\newcommand{\FUNCTION}[1]{\textbf{Function} \textsc{#1}}
+\newcommand{\ENDFUNCTION}{\textbf{End Function}}
 
 
  \title{ASSIGNMENT 2: Computer Vision 792}
@@ -58,7 +66,7 @@
    The first task involves building a simple face recognition system using the PCA feature vectors derived from the cropped Georgia Tech face database. 
    The steps taken in this task include:
    \begin{itemize}
-       \item Resizing and cropping images to a fixed size.
+       \item Resizing and cropping images to a fixed size of 150 by 150.
        \item Setting aside 5 random images from each individual as a test set.
        \item Using the remaining images to calculate an average vector \( a \) and basis \( U_\alpha \).
        \item Plotting singular values of matrix \( X \) to determine a suitable value of \( \alpha \).
@@ -66,27 +74,101 @@
        \item Converting all images to feature vectors and using a kNN classifier for classification while varying the hyperparameter \( k \).
    \end{itemize}
 
+   In my implementation of the \texttt{feature\_vector} in \texttt{helper.py} function, I perform the substantial implementation to process and analyze image data. 
+   Here's an explanation of my approach:
+
+   \subsubsection{Image Processing and Vectorization}
+   First, I process the input images and convert them into vectors:
+   \begin{equation}
+   \text{vectors} = \text{process\_images}(\text{input})
+   \end{equation}
+   Each vector in this list represents an image, flattened into a column vector of size 67500 (which corresponds to a $150 \times 150$ image).
+   
+   \subsubsection{Average Vector Calculation}
+   Next, I calculate the average vector across all images:
+   \begin{equation}
+   \text{avg\_value} = \frac{1}{N} \sum_{i=1}^{N} \text{vectors}_i
+   \end{equation}
+   where $N$ is the number of images (250 in this case).
+   
+   \subsubsection{Centered Data Matrix Calculation}
+   I then calculate the centered data matrix $X$ by subtracting the average vector from each image vector:
+   \begin{equation}
+   x_i = \text{vectors}_i - \text{avg\_value}
+   \end{equation}
+   \begin{equation}
+   X = \frac{1}{\sqrt{N}} [x_1 \, | \, x_2 \, | \, \cdots \, | \, x_N]
+   \end{equation}
+   
+   \subsubsection{Singular Value Decomposition (SVD)}
+   I perform SVD on the centered data matrix $X$:
+   \begin{equation}
+   X = U\Sigma V^T
+   \end{equation}
+   
+   \subsubsection{Basis Selection}
+   I select the first $\alpha$ columns of $U$ as my basis $U_\alpha$. In this implementation, $\alpha = 50$:
+   \begin{equation}
+   U_\alpha = [u_1 \, | \, u_2 \, | \, \cdots \, | \, u_\alpha]
+   \end{equation}
+   
+   \subsubsection{Feature Vector Calculation}
+   I calculate the feature vectors $y$ for each image:
+   \begin{equation}
+   y_i = U_\alpha^T x_i
+   \end{equation}
+   
+   \subsubsection{Image Reconstruction}
+   Finally, I reconstruct the images from their feature vector representations:
+   \begin{equation}
+   \hat{f}_i = U_\alpha y_i + \text{avg\_value}
+   \end{equation}
+   These reconstructed images are then saved for visual comparison with the originals.
+   
+   \subsubsection{Output}
+   The function returns the reconstructed images $\hat{f}$ and the basis $U_\alpha$, which can be used for further analysis or classification tasks.
+   
 \subsection{Results}
     \begin{itemize}
-        \item \textbf{Average Vector \( a \):} \\
-        [ 88.996  61.056  49.296 ... 100.9    90.824  86.652]
-
         \item \textbf{Singular Values:} \\
         \includegraphics[width=\textwidth]{/home/madhia/computer_vision/assignment5/implementation/out/singular_values_plot.png} % Placeholder for singular values plot
 
         \item \textbf{Image Reconstruction:} \\
-        \begin{figure}[h]
+        \begin{figure}[H]
             \centering
-            \includegraphics[width=0.45\textwidth]{original_image.png} % Placeholder for original image
-            \includegraphics[width=0.45\textwidth]{reconstructed_image.png} % Placeholder for reconstructed image
+            \includegraphics[scale = 0.9]{/home/madhia/computer_vision/assignment5/implementation/in/q1/test_set/s01_01.jpg} % Placeholder for original image
+            \includegraphics[scale = 0.9]{/home/madhia/computer_vision/assignment5/implementation/out/test_set/reconstructed_0.jpg} % Placeholder for reconstructed image
             \caption{Original and Reconstructed Images}
         \end{figure}
 
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale = 0.9]{/home/madhia/computer_vision/assignment5/implementation/in/q1/test_set/s04_01.jpg} % Placeholder for original image
+            \includegraphics[scale = 0.9]{/home/madhia/computer_vision/assignment5/implementation/out/test_set/reconstructed_16.jpg} % Placeholder for reconstructed image
+            \caption{Original and Reconstructed Images}
+        \end{figure}
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale = 0.9]{/home/madhia/computer_vision/assignment5/implementation/in/q1/test_set/s05_01.jpg} % Placeholder for original image
+            \includegraphics[scale = 0.9]{/home/madhia/computer_vision/assignment5/implementation/out/test_set/reconstructed_31.jpg} % Placeholder for reconstructed image
+            \caption{Original and Reconstructed Images}
+        \end{figure}
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale = 0.9]{/home/madhia/computer_vision/assignment5/implementation/in/q1/test_set/s22_01.jpg} % Placeholder for original image
+            \includegraphics[scale = 0.9]{/home/madhia/computer_vision/assignment5/implementation/out/test_set/reconstructed_110.jpg} % Placeholder for reconstructed image
+            \caption{Original and Reconstructed Images}
+        \end{figure}
+
+    
+
         \item \textbf{kNN Classification Accuracy:} \\
-        \includegraphics[width=\textwidth]{knn_accuracy_plot.png} % Placeholder for accuracy plot
+        \includegraphics[width=\textwidth]{/home/madhia/computer_vision/assignment5/implementation/out/k-means.png} % Placeholder for accuracy plot
 
         \item \textbf{Confusion Matrix:} \\
-        \begin{table}[h]
+        \begin{table}[H]
             \centering
             \begin{tabular}{@{}ccc@{}}
                 \toprule
@@ -107,13 +189,51 @@
 
 
 \section{Bag-of-words feature vectors and SVM classification}   
-\subsection{Description}
-2. **Bag-of-Words Feature Vectors and SVM Classification**  
+\subsection{Description}  
    The second task focuses on classifying a subset of the Natural Scene Categories dataset. The steps involved include:
    \begin{itemize}
        \item Building a vocabulary of visual words from training images using SIFT features and k-means clustering.
        \item Training linear one-vs-one SVMs for classification and evaluating the performance on the test dataset.
    \end{itemize}
+
+   \textbf{Function q2():}
+
+   This function performs the following steps:
+   
+   \begin{enumerate}
+       \item \textbf{SIFT Feature Detection:}
+       \begin{itemize}
+           \item The function begins by detecting SIFT (Scale-Invariant Feature Transform) features in all images from the training set.
+           \item It uses a predefined base folder "in/sift/" and a list of subfolders representing different image categories (e.g., Coast, Forest, Highway, etc.).
+       \end{itemize}
+   
+       \item \textbf{Reading SIFT Descriptors:}
+       \begin{itemize}
+           \item The function calls a method \texttt{read\_sift\_descriptors()} to read all SIFT descriptors from the specified folders.
+           \item It then prints the total number of descriptors and the size of each descriptor.
+       \end{itemize}
+   
+       \item \textbf{K-means Clustering:}
+       \begin{itemize}
+           \item The function performs k-means clustering on the SIFT descriptors.
+           \item It uses $k=50$ clusters to create visual words.
+       \end{itemize}
+   
+       \item \textbf{Model Saving:}
+       \begin{itemize}
+           \item The resulting KMeans model (visual words) is saved using joblib.
+           \item The model is saved to a file named "kmeans\_model.joblib".
+       \end{itemize}
+   
+       \item \textbf{Output:}
+       \begin{itemize}
+           \item Finally, the function prints the visual words (central points of the clusters).
+       \end{itemize}
+   \end{enumerate}
+   
+   This process essentially creates a visual vocabulary from the SIFT features of the training images, which can be used for image classification or retrieval tasks.
+
+
 
 \subsection{Results}
 The results of both tasks are detailed in this section.
@@ -125,7 +245,7 @@ The results of both tasks are detailed in this section.
     Overall test accuracy: \( X\% \).
 
     \item \textbf{Correctly Classified Images:} \\
-    \begin{figure}[h]
+    \begin{figure}[H]
         \centering
         \includegraphics[width=0.45\textwidth]{correctly_classified_1.png} % Placeholder for correctly classified image
         \includegraphics[width=0.45\textwidth]{correctly_classified_2.png} % Placeholder for correctly classified image

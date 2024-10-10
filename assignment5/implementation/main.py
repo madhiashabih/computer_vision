@@ -1,9 +1,9 @@
-import os
 import numpy as np 
 import argparse
-from helper import transform, feature_vector
-from knn import euclidean_distance, get_neighbors, predict_classification
-import subprocess
+from helper import transform, feature_vector, plot_knn, read_sift_descriptors, kmeans
+import numpy as np
+from sklearn.cluster import KMeans
+import joblib
 
 def transforms():
     print("Running transforms...")
@@ -30,10 +30,11 @@ def q1():
 
     fhat_1, U_alpha = feature_vector(input, output, None)
 
-    ########## e) Convert all the images to feature vectors. You should use the same a and Uα from part (c), found with
-    # 5 images of each person. But now, for the purposes of classification, there will be 10 training vectors
-    # and 5 test vectors per person. Use a kNN classifier to identify the test vectors, and plot accuracy as
-    # a function of the hyperparameter k ∈ {1,2,...,10} #########
+    # Convert all the images to feature vectors. 
+    
+    input = "in/q1/display"
+    output = "out/display/"
+    fhat_2, _ = feature_vector(input, output, U_alpha)
     
     input = "in/q1/train_set_2"
     output = "out/train_set_2/"
@@ -55,10 +56,7 @@ def q1():
     y_test = np.repeat(np.arange(50),5)
     print("y_test size:", y_test.shape)
     
-    # row0 = X_train[0].T.flatten()
-    # for row in X_train:
-    #     distance = euclidean_distance(row0, row.T.flatten())
-   
+    # Use a kNN classifier to identify the test vectors, and plot accuracy as a function of the hyperparameter k ∈ {1,2,...,10}
     # Create 2D array
     X_train_columns = np.hstack(X_train_list)
     
@@ -66,16 +64,21 @@ def q1():
     
     print("X_train")
     print(f"X train shape {X_train.shape}")
-     
-    #prediction = predict_classification()
-   
     
+    # Step 1: Perform K-means Clustering
+    inertias = []
 
+    for k in range(1, 11):  # Testing k from 1 to 10
+        kmeans = KMeans(n_clusters=k, random_state=0)
+        kmeans.fit(X_train)
+        inertias.append(kmeans.inertia_)  # Store the inertia
+
+    plot_knn(inertias)
 
 def q2():
     print("Running function q2...")
-    ##### Question 2 #####
-    # 1. detect SIFT features in all images from the training set
+
+    # Detect SIFT features in all images from the training set
     # Define the base folder and subfolders
     base_folder = "in/sift/"
     subfolders = [
@@ -91,7 +94,7 @@ def q2():
     
     print(f"Size of each descriptor: {len(sift_descriptors[0])}")
 
-    # Now you can perform k-means clustering
+    # Perform k-means clustering
     k = 50  # Number of clusters
     visual_words = kmeans(k, sift_descriptors)
     
@@ -102,10 +105,6 @@ def q2():
 
     print("Visual Words (Central Points):")
     print(visual_words)
-    # #  3. that’s our visual vocabulary fixed: a set of k 128D cluster centres
-    #  4. we can now represent any image (in the training set or otherwise) as a normalised histo
-    # gram of these words (why normalised?)
-    
     
     
 def main():

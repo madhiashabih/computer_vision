@@ -61,7 +61,7 @@ def feature_vector(input, output, U_alpha):
     
 
     # Find basis U_a
-    a = 20
+    a = 50
     U, s, VT = find_svd(X)
     
     if U_alpha is None:
@@ -101,7 +101,6 @@ def feature_vector(input, output, U_alpha):
 def image_to_vector(image_path):
     img = Image.open(image_path)
     img_array = np.array(img)  
-    r, c, _ = img_array.shape
     
     vector = img_array.flatten('F').reshape(-1,1)
     
@@ -184,19 +183,40 @@ def calculate_fhat(a, U_alpha, y):
         
     return f_hat_list
 
+# def vector_to_image(vector, rows, cols):
+#     # Reshape the vector back to a 2D array
+#     img_array = vector.reshape((3, cols, rows)).transpose(2, 1, 0)
+    
+#     # Convert the array to uint8 type
+#     img_array = img_array.astype(np.uint8)
+    
+#     # Create an image from the array
+#     img = Image.fromarray(img_array, mode='RGB')
+    
+#     return img
+
 def vector_to_image(vector, rows, cols):
-    # Reshape the vector back to a 2D array
+    # Reshape the vector into a (rows, cols, 3) array (standard RGB format)
     img_array = vector.reshape((3, cols, rows)).transpose(2, 1, 0)
     
-    # Convert the array to uint8 type
-    img_array = img_array.astype(np.uint8)
+    # Convert the array to uint8 type (clip values between 0 and 255)
+    img_array = np.clip(img_array, 0, 255).astype(np.uint8)
     
     # Create an image from the array
     img = Image.fromarray(img_array, mode='RGB')
     
     return img
 
-
+def plot_knn(inertias):
+    # Step 2: Plot the Elbow method
+    plt.figure()
+    plt.plot(range(1, 11), inertias, marker='o')
+    plt.title('K-means Clustering of Data')
+    plt.xlabel('Number of Clusters')
+    plt.ylabel('Inertia')
+    plt.xticks(range(1, 11))  # Set x-ticks to range 1-10 for better readability
+    plt.grid()
+    plt.savefig("out/k-means.png")
     
  
 # Source: https://medium.com/@aybukeyalcinerr/bag-of-visual-words-bovw-db9500331b2f    
