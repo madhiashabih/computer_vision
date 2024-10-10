@@ -1,8 +1,8 @@
 import os
 import numpy as np 
 import argparse
-from helper import transform, process_images, image_to_vector, average_values, calculate_X, calculate_x, find_svd, plot_singular, get_U_alpha, calculate_y, calculate_fhat, vector_to_image, kmeans, read_sift_descriptors
-import joblib
+from helper import transform, feature_vector
+from knn import euclidean_distance, get_neighbors, predict_classification
 import subprocess
 
 def transforms():
@@ -25,68 +25,52 @@ def q1():
     
     # Use these 250 images to find an average vector a and basis Uα. 
     
-    input = "in/q1/train_set"
+    input = "in/q1/train_set_1"
+    output = "out/train_set_1/"
 
-    # Stack column of images into one long vector
-    vectors = process_images(input)
-    print(f"vectors:")
-    print(f"Size of column vector[1] (should be 22500): {vectors[1].shape[0]}")
-    print("Number of elements in the list (should be 250):", len(vectors))
-
-    # Find average
-    avg_value = average_values(vectors)
-    print()
-    print(f"Size of average value vectors (should be 22500): {avg_value.shape[0]}")
-
-    # Calculate xi
-    x = calculate_x(vectors, avg_value)
-    print()
-    print("x:")
-    print(f"Rows of x[1] (should be 22500): {x[1].shape[0]}")
-    print(f"Columns of x[1] (should be 1): {x[1].shape[1]}")
-    print("Number of elements in the list (should be 250):", len(x))
-
-    # Calculate X
-    X = calculate_X(x)
-    print()
-    print(f"X:")
-    print(f"Size of X  : row (should be 22500): {X.shape[0]}, column (should be 250): {X.shape[1]}")
-    
-
-    # Find basis U_a
-    U, s, VT = find_svd(X)
-    U_alpha = get_U_alpha(U, 50)
-    print()
-    print(f"U alpha: ")
-    print(f"Size of U_alpha  : row (should be ?): {U_alpha.shape[0]}, column (should be 50): {U_alpha.shape[1]}")
-    
-    # Plot the singular values of the matrix X in order to pick a suitable value of α.
-    plot_singular(s,X)
-
-    # Reconstruct a few of the images from their feature vector representations (y in the lecture slides) 
-    
-    y = calculate_y(U_alpha, vectors, 50)
-    print()
-    print(f"y: ")
-    print("Number of y:", len(y))  # Should be 250
-    print("Shape of each y matrix:", y[0].shape)  # Should be (50, 1)
-    
-
-    fhat = calculate_fhat(50, U_alpha, y)
-    print()
-    print(f"fhat: ")
-    print("Number of fhat:", len(fhat))  # Should be 250
-    print("Shape of each fhat matrix:", fhat[0].shape)  # Should be (22500, 1)
-
-    image = vector_to_image(fhat[1], 150, 150)
-    image.save("out/reconstructed_image.png")
-
-    # Display them next to the originals, for some idea of how effective your dimensionality reduction is.
+    fhat_1, U_alpha = feature_vector(input, output, None)
 
     ########## e) Convert all the images to feature vectors. You should use the same a and Uα from part (c), found with
     # 5 images of each person. But now, for the purposes of classification, there will be 10 training vectors
     # and 5 test vectors per person. Use a kNN classifier to identify the test vectors, and plot accuracy as
     # a function of the hyperparameter k ∈ {1,2,...,10} #########
+    
+    input = "in/q1/train_set_2"
+    output = "out/train_set_2/"
+    fhat_2, _ = feature_vector(input, output, U_alpha)
+    
+    input = "in/q1/test_set"
+    output = "out/test_set/"
+    X_test, _ = feature_vector(input, output, U_alpha)
+    
+    X_train_list = fhat_1 + fhat_2
+    print(f"train_set: ")
+    print("Number of elements in train_set:", len(X_train_list))  # Should be 500
+    print("Shape of each train_set matrix:", X_train_list[0].shape)  # Should be (67500, 1)
+    
+    y_train = np.repeat(np.arange(50),5)
+    y_train = np.concatenate((y_train, y_train))
+    print("Updated y_train size after doubling:", y_train.shape) 
+    
+    y_test = np.repeat(np.arange(50),5)
+    print("y_test size:", y_test.shape)
+    
+    # row0 = X_train[0].T.flatten()
+    # for row in X_train:
+    #     distance = euclidean_distance(row0, row.T.flatten())
+   
+    # Create 2D array
+    X_train_columns = np.hstack(X_train_list)
+    
+    X_train = X_train_columns.T
+    
+    print("X_train")
+    print(f"X train shape {X_train.shape}")
+     
+    #prediction = predict_classification()
+   
+    
+
 
 def q2():
     print("Running function q2...")

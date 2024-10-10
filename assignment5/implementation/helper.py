@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import os
 import glob
 from sklearn.cluster import KMeans
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
 
 def transform(input, output, target_size=(150, 150)):
     if not os.path.exists(output):
@@ -31,11 +33,75 @@ def transform(input, output, target_size=(150, 150)):
 
     return np.array(image_data, dtype=np.float32)
 
+def feature_vector(input, output, U_alpha):
+    # Stack column of images into one long vector
+    vectors = process_images(input)
+    print(f"vectors:")
+    print(f"Size of column vector[1] (should be 22500): {vectors[1].shape[0]}")
+    print("Number of elements in the list (should be 250):", len(vectors))
+
+    # Find average
+    avg_value = average_values(vectors)
+    print()
+    print(f"Size of average value vectors (should be 22500): {avg_value.shape[0]}")
+
+    # Calculate xi
+    x = calculate_x(vectors, avg_value)
+    print()
+    print("x:")
+    print(f"Rows of x[1] (should be 22500): {x[1].shape[0]}")
+    print(f"Columns of x[1] (should be 1): {x[1].shape[1]}")
+    print("Number of elements in the list (should be 250):", len(x))
+
+    # Calculate X
+    X = calculate_X(x)
+    print()
+    print(f"X:")
+    print(f"Size of X  : row (should be 22500): {X.shape[0]}, column (should be 250): {X.shape[1]}")
+    
+
+    # Find basis U_a
+    a = 20
+    U, s, VT = find_svd(X)
+    
+    if U_alpha is None:
+        U_alpha = get_U_alpha(U, a)
+        print()
+        print(f"U alpha: ")
+        print(f"Size of U_alpha  : row (should be ?): {U_alpha.shape[0]}, column (should be 50): {U_alpha.shape[1]}")
+    
+    # Plot the singular values of the matrix X in order to pick a suitable value of α.
+    plot_singular(s,X)
+
+    # Reconstruct a few of the images from their feature vector representations (y in the lecture slides) 
+    
+    y = calculate_y(U_alpha, vectors, a)
+    print()
+    print(f"y: ")
+    print("Number of y:", len(y))  # Should be 250
+    print("Shape of each y matrix:", y[0].shape)  # Should be (50, 1)
+    
+
+    fhat = calculate_fhat(a, U_alpha, y)
+    print()
+    print(f"fhat: ")
+    print("Number of fhat:", len(fhat))  # Should be 250
+    print("Shape of each fhat matrix:", fhat[0].shape)  # Should be (22500, 1)
+
+
+    # Display them next to the originals, for some idea of how effective your dimensionality reduction is.
+    
+    for i, f in enumerate(fhat):
+        image = vector_to_image(f, 150, 150)
+        image.save(f"{output}reconstructed_{i}.jpg")
+        
+    return fhat, U_alpha
+        
+
 def image_to_vector(image_path):
-    # Convert to grayscale
-    img = Image.open(image_path).convert("L")
+    img = Image.open(image_path)
     img_array = np.array(img)  
-    r, c = img_array.shape
+    r, c, _ = img_array.shape
     
     vector = img_array.flatten('F').reshape(-1,1)
     
@@ -84,7 +150,7 @@ def plot_singular(s, X):
     plt.xlabel('Index')
     plt.ylabel('Singular Value')
     plt.yscale('log')  # Use log scale for y-axis
-    plt.ylim(1, 10**4)
+    plt.ylim(10**2, 10**4)
     plt.grid(True)
 
     # Add rank information to the plot
@@ -120,15 +186,17 @@ def calculate_fhat(a, U_alpha, y):
 
 def vector_to_image(vector, rows, cols):
     # Reshape the vector back to a 2D array
-    img_array = vector.reshape((cols, rows)).T
+    img_array = vector.reshape((3, cols, rows)).transpose(2, 1, 0)
     
     # Convert the array to uint8 type
     img_array = img_array.astype(np.uint8)
     
     # Create an image from the array
-    img = Image.fromarray(img_array, mode='L')
+    img = Image.fromarray(img_array, mode='RGB')
     
     return img
+
+
     
  
 # Source: https://medium.com/@aybukeyalcinerr/bag-of-visual-words-bovw-db9500331b2f    
